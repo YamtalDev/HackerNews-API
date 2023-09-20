@@ -1,11 +1,14 @@
 package com.akamai.MiniHackerNews.service.impl;
 
-import java.util.List;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 import com.akamai.MiniHackerNews.schema.NewsPost;
 import com.akamai.MiniHackerNews.service.NewsPostService;
 import com.akamai.MiniHackerNews.dto.NewsPostUserRequestDTO;
 import com.akamai.MiniHackerNews.exception.ResourceNotFoundException;
+import com.akamai.MiniHackerNews.exception.ValidationException;
 import com.akamai.MiniHackerNews.repository.NewsPostRepository;
 
 /******************************************************************************
@@ -30,16 +33,24 @@ public class NewsPostServiceImpl implements NewsPostService
     public NewsPost saveNewsPost(NewsPostUserRequestDTO newsPostDTO)
     {
         NewsPost newsPost = new NewsPost();
+        newsPost.setLink(newsPostDTO.getLink());
         newsPost.setTitle(newsPostDTO.getTitle());
         newsPost.setUserName(newsPostDTO.getUserName());
-        newsPost.setLink(newsPostDTO.getLink());
-        return newsPostRepository.save(newsPost);
+
+        try
+        {
+            return (newsPostRepository.save(newsPost));
+        }
+        catch (DataIntegrityViolationException exception)
+        {
+            throw (new ValidationException("Invalid input data."));
+        }
     }
 
     @Override
-    public List<NewsPost> getAllPosts()
+    public Page<NewsPost> getAllPosts(Pageable pageable)
     {
-        return (newsPostRepository.findAll());
+        return (newsPostRepository.findAll(pageable));
     }
 
     @Override
@@ -49,14 +60,21 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     @Override
-    public NewsPost updatePost(NewsPostUserRequestDTO newPost, Long post_id)
+    public NewsPost updatePost(NewsPostUserRequestDTO newsPostDTO, Long post_id)
     {
         NewsPost existingPost = getPostById(post_id);
+        existingPost.setLink(newsPostDTO.getLink());
+        existingPost.setTitle(newsPostDTO.getTitle());
+        existingPost.setUserName(newsPostDTO.getUserName());
 
-        existingPost.setLink(newPost.getLink());
-        existingPost.setTitle(newPost.getTitle());
-        existingPost.setUserName(newPost.getUserName());
-        return (newsPostRepository.save(existingPost));
+        try
+        {
+            return (newsPostRepository.save(existingPost));
+        }
+        catch (DataIntegrityViolationException exception)
+        {
+            throw (new ValidationException("Invalid input data."));
+        }
     }
 
     @Override
@@ -70,13 +88,29 @@ public class NewsPostServiceImpl implements NewsPostService
     {
         NewsPost existingPost = getPostById(post_id);
         existingPost.setVotes(existingPost.getVotes() + 1);
-        return (newsPostRepository.save(existingPost));
+
+        try
+        {
+            return (newsPostRepository.save(existingPost));
+        }
+        catch(DataIntegrityViolationException exception)
+        {
+            throw new ValidationException("Maximum votes reached.");
+        }
     }
 
     public NewsPost downvotePost(Long post_id)
     {
         NewsPost existingPost = getPostById(post_id);
         existingPost.setVotes(existingPost.getVotes() - 1);
-        return (newsPostRepository.save(existingPost));
+
+        try
+        {
+            return (newsPostRepository.save(existingPost));
+        }
+        catch(DataIntegrityViolationException exception)
+        {
+            throw new ValidationException("Cannot downvote below zero.");
+        }
     }
 }

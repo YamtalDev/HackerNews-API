@@ -1,10 +1,10 @@
 package com.akamai.MiniHackerNews.controller;
 
-import java.util.List;
-
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Pageable;
 import com.akamai.MiniHackerNews.schema.NewsPost;
 import com.akamai.MiniHackerNews.service.NewsPostService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,14 +47,15 @@ public class NewsPostController
     }
 
     @GetMapping("/news")
-    public List<NewsPost> getAllPosts()
+    public ResponseEntity<Page<NewsPost>> getAllPosts(Pageable pageable)
     {
-        return (newsService.getAllPosts());
+        Page<NewsPost> newsPosts = newsService.getAllPosts(pageable);
+        return (new ResponseEntity<>(newsPosts, HttpStatus.OK));
     }
 
     @GetMapping("/news/{post_id}")
     public ResponseEntity<NewsPost> getPostById
-    (@PathVariable("post_id") Long post_id)
+    (@Valid @PathVariable("post_id") Long post_id)
     {
         return (new ResponseEntity<NewsPost>
         (newsService.getPostById(post_id), HttpStatus.OK));
@@ -62,7 +63,7 @@ public class NewsPostController
 
     @PutMapping("/news/{post_id}")
     public ResponseEntity<NewsPost> updatePost
-    (@Valid @RequestBody NewsPostUserRequestDTO updatedPost, @PathVariable("post_id") Long post_id)
+    (@Valid @RequestBody NewsPostUserRequestDTO updatedPost, @Valid @PathVariable("post_id") Long post_id)
     {
         return (new ResponseEntity<NewsPost>
         (newsService.updatePost(updatedPost, post_id), HttpStatus.OK));
@@ -70,7 +71,7 @@ public class NewsPostController
 
     @DeleteMapping("/news/{post_id}")
     public ResponseEntity<String> deletePost
-    (@PathVariable("post_id") Long post_id)
+    (@Valid @PathVariable("post_id") Long post_id)
     {
         newsService.deletePost(post_id);
         return (new ResponseEntity<String>("Post deleted", HttpStatus.OK));
@@ -78,7 +79,7 @@ public class NewsPostController
 
     @PutMapping("/news/{post_id}/upvote")
     public ResponseEntity<NewsPost> upvotePost
-    (@PathVariable("post_id") Long post_id)
+    (@Valid @PathVariable("post_id") Long post_id)
     {
         return (new ResponseEntity<NewsPost>
         (newsService.upvotePost(post_id), HttpStatus.OK));
@@ -86,7 +87,7 @@ public class NewsPostController
 
     @PutMapping("/news/{post_id}/downvote")
     public ResponseEntity<NewsPost> downvotePost
-    (@PathVariable("post_id") Long post_id)
+    (@Valid @PathVariable("post_id") Long post_id)
     {
         return (new ResponseEntity<NewsPost>
         (newsService.downvotePost(post_id), HttpStatus.OK));
