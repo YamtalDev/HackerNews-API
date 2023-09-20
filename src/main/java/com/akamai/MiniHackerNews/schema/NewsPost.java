@@ -5,14 +5,26 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import jakarta.validation.constraints.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.URL;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+/******************************************************************************
+ * @author Tal Aharon
+ * @version 1.0.0
+ * @license MIT
+ * @since 19/9/2023
+ * @description:  
+******************************************************************************/
+
 @Data
 @Entity
+@JsonInclude
+@SuperBuilder
 @DynamicUpdate
 @NoArgsConstructor
 @AllArgsConstructor

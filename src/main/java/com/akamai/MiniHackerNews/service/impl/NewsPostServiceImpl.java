@@ -8,12 +8,20 @@ import com.akamai.MiniHackerNews.dto.NewsPostUserRequestDTO;
 import com.akamai.MiniHackerNews.exception.ResourceNotFoundException;
 import com.akamai.MiniHackerNews.repository.NewsPostRepository;
 
+/******************************************************************************
+ * @author Tal Aharon
+ * @version 1.0.0
+ * @license MIT
+ * @since 19/9/2023
+ * @description:  
+******************************************************************************/
+
 @Service
-public class NewsPostServiceImp implements NewsPostService
+public class NewsPostServiceImpl implements NewsPostService
 {
     private NewsPostRepository newsPostRepository;
 
-    public NewsPostServiceImp(NewsPostRepository newsPostRepository)
+    public NewsPostServiceImpl(NewsPostRepository newsPostRepository)
     {
         this.newsPostRepository = newsPostRepository;
     }

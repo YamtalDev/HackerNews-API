@@ -2,22 +2,28 @@ package com.akamai.MiniHackerNews.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.akamai.MiniHackerNews.dto.NewsPostUserRequestDTO;
 import com.akamai.MiniHackerNews.schema.NewsPost;
 import com.akamai.MiniHackerNews.service.NewsPostService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import com.akamai.MiniHackerNews.dto.NewsPostUserRequestDTO;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+/******************************************************************************
+ * @author Tal Aharon
+ * @version 1.0.0
+ * @license MIT
+ * @since 19/9/2023
+ * @description : 
 
-import jakarta.validation.Valid;
+******************************************************************************/
 
 // @CrossOrigin
 // Use it if you want to set up front end that fetches the server

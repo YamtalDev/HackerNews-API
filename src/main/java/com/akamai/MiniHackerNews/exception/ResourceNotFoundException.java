@@ -4,8 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /******************************************************************************
- * Custom exception for resource not found scenarios.
+ * @author Tal Aharon
+ * @version 1.0.0
+ * @license MIT
+ * @since 19/9/2023
+ * @description : Custom exception for resource not found scenarios.
 ******************************************************************************/
+
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class ResourceNotFoundException extends RuntimeException
 {

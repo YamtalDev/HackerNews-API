@@ -5,6 +5,14 @@ import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 
+/******************************************************************************
+ * @author Tal Aharon
+ * @version 1.0.0
+ * @license MIT
+ * @since 19/9/2023
+ * @description : 
+
+******************************************************************************/
 public class NewsPostUserRequestDTO
 {
     @Column(name = "title", nullable = false)

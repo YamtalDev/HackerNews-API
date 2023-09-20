@@ -5,6 +5,14 @@ import java.util.List;
 import com.akamai.MiniHackerNews.dto.NewsPostUserRequestDTO;
 import com.akamai.MiniHackerNews.schema.NewsPost;
 
+/******************************************************************************
+ * @author Tal Aharon
+ * @version 1.0.0
+ * @license MIT
+ * @since 19/9/2023
+ * @description:  
+******************************************************************************/
+
 public interface NewsPostService
 {
     List<NewsPost> getAllPosts();
