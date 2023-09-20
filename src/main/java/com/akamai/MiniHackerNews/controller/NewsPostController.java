@@ -66,7 +66,22 @@ public class NewsPostController
     (@PathVariable("post_id") Long post_id)
     {
         newsService.deletePost(post_id);
-        return (new ResponseEntity<String>("Post deleted successfully", HttpStatus.OK));
+        return (new ResponseEntity<String>("Post deleted", HttpStatus.OK));
     }
 
+    @PutMapping("/{post_id}/upvote")
+    public ResponseEntity<NewsPost> upvotePost
+    (@PathVariable("post_id") Long post_id)
+    {
+        return (new ResponseEntity<NewsPost>
+        (newsService.upvotePost(post_id), HttpStatus.OK));
+    }
+
+    @PutMapping("/{post_id}/downvote")
+    public ResponseEntity<NewsPost> downvotePost
+    (@PathVariable("post_id") Long post_id)
+    {
+        return (new ResponseEntity<NewsPost>
+        (newsService.downvotePost(post_id), HttpStatus.OK));
+    }
 }

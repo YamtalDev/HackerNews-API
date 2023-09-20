@@ -18,7 +18,7 @@ public class NewsPost
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Max(value = Long.MAX_VALUE, message = "Maximum capacity of posts")
-    private long post_id;
+    private Long post_id;
 
     @Column(name = "title", nullable = false)
     @NotBlank(message = "Title is required")

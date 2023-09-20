@@ -15,7 +15,6 @@ public class NewsPostServiceImp implements NewsPostService
 
     public NewsPostServiceImp(NewsPostRepository newsPostRepository)
     {
-        super();
         this.newsPostRepository = newsPostRepository;
     }
 
@@ -42,11 +41,10 @@ public class NewsPostServiceImp implements NewsPostService
     {
         NewsPost existingPost = getPostById(post_id);
 
-        existingPost.setText(newPost.getText());
+        existingPost.setLink(newPost.getLink());
         existingPost.setTitle(newPost.getTitle());
-        existingPost.setUpVotes(newPost.getUpVotes());
-        existingPost.setDownVotes(newPost.getDownVotes());
-        existingPost.setUpdatedTime(newPost.getUpdatedTime());
+        existingPost.setVotes(newPost.getVotes());
+        existingPost.setUserName(newPost.getUserName());
         existingPost.setCreationTime(newPost.getCreationTime());
 
         return (existingPost);
@@ -57,5 +55,19 @@ public class NewsPostServiceImp implements NewsPostService
     {
         getPostById(post_id);
         newsPostRepository.deleteById(post_id);
+    }
+
+    public NewsPost upvotePost(Long post_id)
+    {
+        NewsPost post = getPostById(post_id);
+        post.setVotes(post.getVotes() + 1);
+        return updatePost(post, post_id);
+    }
+
+    public NewsPost downvotePost(Long post_id)
+    {
+        NewsPost post = getPostById(post_id);
+        post.setVotes(post.getVotes() - 1);
+        return updatePost(post, post_id);
     }
 }

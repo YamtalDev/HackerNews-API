@@ -9,5 +9,7 @@ public interface NewsPostService
     void deletePost(Long post_id);
     NewsPost getPostById(Long post_id);
     NewsPost saveNewsPost(NewsPost newsPost);
+    public NewsPost upvotePost(Long post_id);
+    public NewsPost downvotePost(Long post_id);
     NewsPost updatePost(NewsPost newPost, Long post_id);
 }
