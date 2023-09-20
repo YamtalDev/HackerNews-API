@@ -17,7 +17,7 @@ import com.akamai.MiniHackerNews.service.NewsPostService;
 import jakarta.validation.Valid;
 
 // @CrossOrigin
-// use it only if you want to set up front end that fetches the server
+// Use it if you want to set up front end that fetches the server
 @RestController
 @RequestMapping("/api/news")
 public class NewsPostController
