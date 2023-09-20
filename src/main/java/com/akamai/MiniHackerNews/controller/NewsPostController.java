@@ -2,6 +2,7 @@ package com.akamai.MiniHackerNews.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +24,8 @@ public class NewsPostController
     {
         this.newsService = newsService;
     }
-
+    
+    @PostMapping("")
     public ResponseEntity<NewsPost> saveNewsPost(@Valid @RequestBody NewsPost newsPost)
     {
         return (new ResponseEntity<NewsPost>(newsService.saveNewsPost(newsPost), HttpStatus.CREATED));

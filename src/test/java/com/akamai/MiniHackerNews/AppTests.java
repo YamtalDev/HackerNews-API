@@ -3,28 +3,16 @@ package com.akamai.MiniHackerNews;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.http.MediaType;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AppTests
 {
+    @Test
+    public void testGetAllContentEndpoint() throws Exception
+    {
 
-    // @Autowired
-    // private MockMvc mockMvc;
-
-    // @Test
-    // public void testGetAllContentEndpoint() throws Exception {
-    //     mockMvc.perform(MockMvcRequestBuilders.get("/api/content"))
-    //         .andExpect(MockMvcResultMatchers.status().isOk())
-    //         .andExpect(MockMvcResultMatchers.jsonPath("$[*].id").exists())
-    //         .andExpect(MockMvcResultMatchers.jsonPath("$[*].title").exists())
-    //         .andExpect(MockMvcResultMatchers.jsonPath("$[*].desc").exists());
-    // }
+    }
 
     // @Test
     // public void testCreateContentEndpoint() throws Exception {
