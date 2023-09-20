@@ -57,5 +57,19 @@ public class NewsPost
     @Column(name = "votes")
     @Min(value = 0, message = "Votes must be a non-negative value")
     @Max(value = Integer.MAX_VALUE, message = "Maximum votes reached")
-    private int votes = 0;
+    private int votes;
+
+    @PreUpdate
+    public void preUpdate()
+    {
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PrePersist
+    public void prePersist()
+    {
+        votes = 0;
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
 }
