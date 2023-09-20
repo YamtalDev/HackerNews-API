@@ -46,41 +46,4 @@ public class NewsPostController
     {
         return (new ResponseEntity<NewsPost>(newsService.getPostById(post_id), HttpStatus.OK));
     }
-
-
-
-    // @GetMapping("/{id}")
-    // public NewsPost findById(@PathVariable Integer id)
-    // {
-    //     return repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Content not found"));
-    // }
-
-    // @PostMapping("")
-    // @ResponseStatus(HttpStatus.CREATED)
-    // public void create(@Valid @RequestBody NewsPost content)
-    // {
-    //     repository.save(content);
-    // }
-
-    // // Create a costume exception my content not found exception
-    // @PutMapping("/{id}")
-    // @ResponseStatus(HttpStatus.NO_CONTENT)
-    // public void update(@Valid @RequestBody NewsPost content, @PathVariable Integer id)
-    // {
-    //     if(repository.existsById(id))
-    //     {
-    //         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Content not found");
-    //     }
-
-    //     repository.save(content);
-    // }
-
-
-    // @DeleteMapping("/{id}")
-    // @ResponseStatus(HttpStatus.NO_CONTENT)
-    // public void delete(@PathVariable Integer id)
-    // {
-
-    //     repository.delete(id);
-    // }
 }
