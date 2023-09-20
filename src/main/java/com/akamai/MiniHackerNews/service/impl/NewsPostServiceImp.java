@@ -1,5 +1,7 @@
 package com.akamai.MiniHackerNews.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.akamai.MiniHackerNews.model.NewsPost;
@@ -21,5 +23,11 @@ public class NewsPostServiceImp implements NewsPostService
     public NewsPost saveNewsPost(NewsPost newsPost)
     {
         return (newsPostRepository.save(newsPost));
+    }
+
+    @Override
+    public List<NewsPost> getAllPosts()
+    {
+        return (newsPostRepository.findAll());
     }
 }

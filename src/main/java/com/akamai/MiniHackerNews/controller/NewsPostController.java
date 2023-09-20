@@ -1,7 +1,10 @@
 package com.akamai.MiniHackerNews.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,11 +34,11 @@ public class NewsPostController
         return (new ResponseEntity<NewsPost>(newsService.saveNewsPost(newsPost), HttpStatus.CREATED));
     }
 
-    // @GetMapping("")
-    // public List<NewsPost> findAll()
-    // {
-    //     return (repository.findAll());
-    // }
+    @GetMapping("")
+    public List<NewsPost> getAllPosts()
+    {
+        return (newsService.getAllPosts());
+    }
 
     // @GetMapping("/{id}")
     // public NewsPost findById(@PathVariable Integer id)
