@@ -51,4 +51,11 @@ public class NewsPostServiceImp implements NewsPostService
 
         return (existingPost);
     }
+
+    @Override
+    public void deletePost(Long post_id)
+    {
+        getPostById(post_id);
+        newsPostRepository.deleteById(post_id);
+    }
 }

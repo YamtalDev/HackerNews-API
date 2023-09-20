@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,4 +60,13 @@ public class NewsPostController
         return (new ResponseEntity<NewsPost>
         (newsService.updatePost(newsPost, post_id), HttpStatus.OK));
     }
+
+    @DeleteMapping("{post_id}")
+    public ResponseEntity<String> deletePost
+    (@PathVariable("post_id") Long post_id)
+    {
+        newsService.deletePost(post_id);
+        return (new ResponseEntity<String>("Post deleted successfully", HttpStatus.OK));
+    }
+
 }
