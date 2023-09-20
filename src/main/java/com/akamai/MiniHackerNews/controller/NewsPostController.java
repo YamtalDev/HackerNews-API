@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,21 +30,33 @@ public class NewsPostController
         this.newsService = newsService;
     }
     
-    @PostMapping("")
-    public ResponseEntity<NewsPost> saveNewsPost(@Valid @RequestBody NewsPost newsPost)
+    @PostMapping()
+    public ResponseEntity<NewsPost> saveNewsPost
+    (@Valid @RequestBody NewsPost newsPost)
     {
-        return (new ResponseEntity<NewsPost>(newsService.saveNewsPost(newsPost), HttpStatus.CREATED));
+        return (new ResponseEntity<NewsPost>
+        (newsService.saveNewsPost(newsPost), HttpStatus.CREATED));
     }
 
-    @GetMapping("")
+    @GetMapping()
     public List<NewsPost> getAllPosts()
     {
         return (newsService.getAllPosts());
     }
 
-    @GetMapping("/{post_id}")
-    public ResponseEntity<NewsPost> getPostById(@PathVariable("post_id") Long post_id)
+    @GetMapping("{post_id}")
+    public ResponseEntity<NewsPost> getPostById
+    (@PathVariable("post_id") Long post_id)
     {
-        return (new ResponseEntity<NewsPost>(newsService.getPostById(post_id), HttpStatus.OK));
+        return (new ResponseEntity<NewsPost>
+        (newsService.getPostById(post_id), HttpStatus.OK));
+    }
+
+    @PutMapping("{post_id}")
+    public ResponseEntity<NewsPost> updatePost
+    (@Valid @RequestBody NewsPost newsPost, @PathVariable("post_id") Long post_id)
+    {
+        return (new ResponseEntity<NewsPost>
+        (newsService.updatePost(newsPost, post_id), HttpStatus.OK));
     }
 }
