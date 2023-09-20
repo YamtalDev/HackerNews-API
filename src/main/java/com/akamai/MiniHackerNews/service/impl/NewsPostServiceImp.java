@@ -35,12 +35,6 @@ public class NewsPostServiceImp implements NewsPostService
     @Override
     public NewsPost getPostById(Long post_id)
     {
-        Optional<NewsPost> post = newsPostRepository.findById(post_id);
-        if(!post.isPresent())
-        {
-            throw new ResourceNotFoundException("post_id", post, "post");
-        }
-
-        return (post.get());
+        return (newsPostRepository.findById(post_id).orElseThrow(() -> new ResourceNotFoundException("post_id", post_id, "post")));
     }
 }
