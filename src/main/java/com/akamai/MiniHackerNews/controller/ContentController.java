@@ -18,6 +18,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.akamai.MiniHackerNews.model.Content;
 import com.akamai.MiniHackerNews.repository.ContentCollectionRepository;
 
+import jakarta.validation.Valid;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/api/content")
@@ -44,7 +46,7 @@ public class ContentController
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody Content content)
+    public void create(@Valid @RequestBody Content content)
     {
         repository.save(content);
     }
@@ -52,7 +54,7 @@ public class ContentController
     // Create a costume exception my content not found exception
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Content content, @PathVariable Integer id)
+    public void update(@Valid @RequestBody Content content, @PathVariable Integer id)
     {
         if(repository.existsById(id))
         {
