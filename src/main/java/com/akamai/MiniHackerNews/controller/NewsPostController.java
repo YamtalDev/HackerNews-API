@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.akamai.MiniHackerNews.model.NewsPost;
+import com.akamai.MiniHackerNews.dto.NewsPostUserRequestDTO;
+import com.akamai.MiniHackerNews.schema.NewsPost;
 import com.akamai.MiniHackerNews.service.NewsPostService;
 
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ import jakarta.validation.Valid;
 // @CrossOrigin
 // Use it if you want to set up front end that fetches the server
 @RestController
-@RequestMapping("/api/news")
+@RequestMapping("/api")
 public class NewsPostController
 {
     private NewsPostService newsService;
@@ -31,21 +32,21 @@ public class NewsPostController
         this.newsService = newsService;
     }
     
-    @PostMapping()
+    @PostMapping("/news")
     public ResponseEntity<NewsPost> saveNewsPost
-    (@Valid @RequestBody NewsPost newsPost)
+    (@Valid @RequestBody NewsPostUserRequestDTO newsPost)
     {
         return (new ResponseEntity<NewsPost>
         (newsService.saveNewsPost(newsPost), HttpStatus.CREATED));
     }
 
-    @GetMapping()
+    @GetMapping("/news")
     public List<NewsPost> getAllPosts()
     {
         return (newsService.getAllPosts());
     }
 
-    @GetMapping("{post_id}")
+    @GetMapping("/news/{post_id}")
     public ResponseEntity<NewsPost> getPostById
     (@PathVariable("post_id") Long post_id)
     {
@@ -53,15 +54,15 @@ public class NewsPostController
         (newsService.getPostById(post_id), HttpStatus.OK));
     }
 
-    @PutMapping("{post_id}")
+    @PutMapping("/news/{post_id}")
     public ResponseEntity<NewsPost> updatePost
-    (@Valid @RequestBody NewsPost newsPost, @PathVariable("post_id") Long post_id)
+    (@Valid @RequestBody NewsPostUserRequestDTO updatedPost, @PathVariable("post_id") Long post_id)
     {
         return (new ResponseEntity<NewsPost>
-        (newsService.updatePost(newsPost, post_id), HttpStatus.OK));
+        (newsService.updatePost(updatedPost, post_id), HttpStatus.OK));
     }
 
-    @DeleteMapping("{post_id}")
+    @DeleteMapping("/news/{post_id}")
     public ResponseEntity<String> deletePost
     (@PathVariable("post_id") Long post_id)
     {
@@ -69,7 +70,7 @@ public class NewsPostController
         return (new ResponseEntity<String>("Post deleted", HttpStatus.OK));
     }
 
-    @PutMapping("/{post_id}/upvote")
+    @PutMapping("/news/{post_id}/upvote")
     public ResponseEntity<NewsPost> upvotePost
     (@PathVariable("post_id") Long post_id)
     {
@@ -77,7 +78,7 @@ public class NewsPostController
         (newsService.upvotePost(post_id), HttpStatus.OK));
     }
 
-    @PutMapping("/{post_id}/downvote")
+    @PutMapping("/news/{post_id}/downvote")
     public ResponseEntity<NewsPost> downvotePost
     (@PathVariable("post_id") Long post_id)
     {

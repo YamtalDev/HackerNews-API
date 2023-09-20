@@ -1,13 +1,21 @@
-package com.akamai.MiniHackerNews.model;
+package com.akamai.MiniHackerNews.schema;
 
 import lombok.Data;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import jakarta.validation.constraints.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Data
 @Entity
+@DynamicUpdate
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "News-Post")
 /******************************************************************************
  * News post model represents a post for the Mini Hacker News system.
@@ -30,17 +38,24 @@ public class NewsPost
     @Size(min = 3, max = 20, message = "User name must be between 3 to 20 characters")
     private String userName;
 
-    @Column(name = "creation_time")
-    @PastOrPresent(message = "Creation time must be in the past or present")
-    private LocalDateTime creationTime;
-
-    @Column(name = "votes")
-    @Min(value = 0, message = "Votes must be a non-negative value")
-    @Max(value = Integer.MAX_VALUE, message = "Maximum votes reached")
-    private int votes;
-
+    @NotBlank
     @Column(name = "link")
     @URL(message = "Invalid URL. Please provide a valid HTTP or HTTPS URL.")
     @Size(min = 10, max = 1024, message = "Link must be between 10 to 1024 characters long")
     private String link;
+
+    @CreatedDate
+    @Column(name = "creation_time", updatable = false)
+    @PastOrPresent(message = "Creation time must be in the past or present")
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_time")
+    @PastOrPresent(message = "Updating time must be in the past or present")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "votes")
+    @Min(value = 0, message = "Votes must be a non-negative value")
+    @Max(value = Integer.MAX_VALUE, message = "Maximum votes reached")
+    private int votes = 0;
 }
