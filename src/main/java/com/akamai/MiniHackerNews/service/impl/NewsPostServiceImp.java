@@ -1,9 +1,10 @@
 package com.akamai.MiniHackerNews.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-
+import com.akamai.MiniHackerNews.exception.ResourceNotFoundException;
 import com.akamai.MiniHackerNews.model.NewsPost;
 import com.akamai.MiniHackerNews.repository.NewsPostRepository;
 import com.akamai.MiniHackerNews.service.NewsPostService;
@@ -29,5 +30,17 @@ public class NewsPostServiceImp implements NewsPostService
     public List<NewsPost> getAllPosts()
     {
         return (newsPostRepository.findAll());
+    }
+
+    @Override
+    public NewsPost getPostById(Long post_id)
+    {
+        Optional<NewsPost> post = newsPostRepository.findById(post_id);
+        if(!post.isPresent())
+        {
+            throw new ResourceNotFoundException("post_id", post, "post");
+        }
+
+        return (post.get());
     }
 }

@@ -5,6 +5,7 @@ import com.akamai.MiniHackerNews.model.NewsPost;
 
 public interface NewsPostService
 {
-    NewsPost saveNewsPost(NewsPost newsPost);
     List<NewsPost> getAllPosts();
+    NewsPost getPostById(Long post_id);
+    NewsPost saveNewsPost(NewsPost newsPost);
 }
