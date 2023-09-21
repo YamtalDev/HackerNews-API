@@ -1,4 +1,4 @@
-package com.akamai.MiniHackerNews.dto;
+package com.akamai.MiniHackerNews.schema.dto;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Size;
@@ -13,27 +13,27 @@ import org.hibernate.validator.constraints.URL;
  * @description : 
 
 ******************************************************************************/
-public class NewsPostRequestDTO
+public class NewsPostRequest
 {
-    @Column(name = "title", nullable = false)
-    @NotBlank(message = "Title is required")
-    @Size(min = 1, max = 255, message = "Post title must be between 1 and 255 characters")
-    private String title;
+    @Column(name = "post", nullable = false)
+    @NotBlank(message = "Post is required")
+    @Size(min = 1, max = 1024, message = "Post must be between 1 and 1024 characters")
+    private String post;
 
     @Column(name = "user_name", nullable = false)
     @NotBlank(message = "User name is required")
     @Size(min = 3, max = 20, message = "User name must be between 3 to 20 characters")
     private String userName;
 
-    @NotBlank
     @Column(name = "link")
+    @NotBlank(message = "Url is required.")
     @URL(message = "Invalid URL. Please provide a valid HTTP or HTTPS URL.")
     @Size(min = 10, max = 1024, message = "Link must be between 10 to 1024 characters long")
     private String link;
 
-    public String getTitle()
+    public String getPost()
     {
-        return title;
+        return post;
     }
 
     public String getUserName()

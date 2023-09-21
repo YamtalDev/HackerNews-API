@@ -4,8 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import com.akamai.MiniHackerNews.schema.NewsPost;
+import com.akamai.MiniHackerNews.schema.dto.NewsPostRequest;
 import com.akamai.MiniHackerNews.service.NewsPostService;
-import com.akamai.MiniHackerNews.dto.NewsPostRequestDTO;
 import com.akamai.MiniHackerNews.exception.ResourceNotFoundException;
 import com.akamai.MiniHackerNews.exception.ValidationException;
 import com.akamai.MiniHackerNews.repository.NewsPostRepository;
@@ -27,15 +27,15 @@ public class NewsPostServiceImpl implements NewsPostService
     {
         this.newsPostRepository = newsPostRepository;
     }
-
+    
     @Override
-    public NewsPost saveNewsPost(NewsPostRequestDTO newsPostDTO)
+    public NewsPost saveNewsPost(NewsPostRequest newsPostDTO) throws DataIntegrityViolationException
     {
         NewsPost newsPost = new NewsPost();
         newsPost.setLink(newsPostDTO.getLink());
-        newsPost.setTitle(newsPostDTO.getTitle());
+        newsPost.setPost(newsPostDTO.getPost());
         newsPost.setUserName(newsPostDTO.getUserName());
-
+        
         try
         {
             return (newsPostRepository.save(newsPost));
@@ -45,37 +45,7 @@ public class NewsPostServiceImpl implements NewsPostService
             throw (new ValidationException("Invalid input data."));
         }
     }
-
-    @Override
-    public Page<NewsPost> getAllPosts(Pageable pageable)
-    {
-        return (newsPostRepository.findAll(pageable));
-    }
-
-    @Override
-    public NewsPost getPostById(Long post_id)
-    {
-        return (newsPostRepository.findById(post_id).orElseThrow(() -> new ResourceNotFoundException("post_id", post_id, "post")));
-    }
-
-    @Override
-    public NewsPost updatePost(NewsPostRequestDTO newsPostDTO, Long post_id)
-    {
-        NewsPost existingPost = getPostById(post_id);
-        existingPost.setLink(newsPostDTO.getLink());
-        existingPost.setTitle(newsPostDTO.getTitle());
-        existingPost.setUserName(newsPostDTO.getUserName());
-
-        try
-        {
-            return (newsPostRepository.save(existingPost));
-        }
-        catch (DataIntegrityViolationException exception)
-        {
-            throw (new ValidationException("Invalid input data."));
-        }
-    }
-
+    
     @Override
     public void deletePost(Long post_id)
     {
@@ -84,38 +54,67 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     @Override
+    public NewsPost getPostById(Long post_id) throws ResourceNotFoundException
+    {
+        return (newsPostRepository.findById(post_id).orElseThrow(() -> 
+        new ResourceNotFoundException("post_id", post_id, "post")));
+    }
+
+    @Override
+    public Page<NewsPost> getAllPosts(Pageable pageable)
+    {
+        return (newsPostRepository.findAll(pageable));
+    }
+
+    @Override
+    public NewsPost updatePost(NewsPostRequest newsPostDTO, Long post_id) throws DataIntegrityViolationException, ResourceNotFoundException
+    {
+        try
+        {
+            NewsPost existingPost = getPostById(post_id);
+            existingPost.setLink(newsPostDTO.getLink());
+            existingPost.setPost(newsPostDTO.getPost());
+            existingPost.setUserName(newsPostDTO.getUserName());
+            return (newsPostRepository.save(existingPost));
+        }
+        catch (DataIntegrityViolationException |  ResourceNotFoundException exception)
+        {
+            throw (new ValidationException("Invalid input data."));
+        }
+    }
+
+
+    @Override
     public Page<NewsPost> getPostsByRankDesc(Pageable pageable)
     {
         return (newsPostRepository.findByOrderByRankDesc(pageable));
     }
 
     @Override
-    public NewsPost upvotePost(Long post_id)
+    public NewsPost upvotePost(Long post_id) throws DataIntegrityViolationException, ResourceNotFoundException
     {
-        NewsPost existingPost = getPostById(post_id);
-        existingPost.setVotes(existingPost.getVotes() + 1);
-
         try
         {
+            NewsPost existingPost = getPostById(post_id);
+            existingPost.setVotes(existingPost.getVotes() + 1);
             return (newsPostRepository.save(existingPost));
         }
-        catch(DataIntegrityViolationException exception)
+        catch(DataIntegrityViolationException | ResourceNotFoundException exception)
         {
             throw new ValidationException("Maximum votes reached.");
         }
     }
 
     @Override
-    public NewsPost downvotePost(Long post_id)
+    public NewsPost downvotePost(Long post_id) throws DataIntegrityViolationException, ResourceNotFoundException
     {
-        NewsPost existingPost = getPostById(post_id);
-        existingPost.setVotes(existingPost.getVotes() - 1);
-
         try
         {
+            NewsPost existingPost = getPostById(post_id);
+            existingPost.setVotes(existingPost.getVotes() - 1);
             return (newsPostRepository.save(existingPost));
         }
-        catch(DataIntegrityViolationException exception)
+        catch(DataIntegrityViolationException | ResourceNotFoundException exception)
         {
             throw new ValidationException("Cannot downvote below zero.");
         }

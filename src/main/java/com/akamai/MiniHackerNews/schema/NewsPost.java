@@ -39,21 +39,21 @@ public class NewsPost
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Max(value = Long.MAX_VALUE, message = "Maximum capacity of posts")
+    @Max(value = Long.MAX_VALUE, message = "Maximum posts capacity reached.")
     private Long post_id;
 
-    @Column(name = "title", nullable = false)
-    @NotBlank(message = "Title is required")
-    @Size(min = 1, max = 255, message = "Post title must be between 1 and 255 characters")
-    private String title;
+    @Column(name = "post", nullable = false)
+    @NotBlank(message = "Post is required")
+    @Size(min = 1, max = 1024, message = "Post must be between 1 and 1024 characters")
+    private String post;
 
     @Column(name = "user_name", nullable = false)
     @NotBlank(message = "User name is required")
     @Size(min = 3, max = 20, message = "User name must be between 3 to 20 characters")
     private String userName;
 
-    @NotBlank
     @Column(name = "link")
+    @NotBlank(message = "Url is required.")
     @URL(message = "Invalid URL. Please provide a valid HTTP or HTTPS URL.")
     @Size(min = 10, max = 1024, message = "Link must be between 10 to 1024 characters long")
     private String link;
@@ -87,7 +87,7 @@ public class NewsPost
     public void preUpdate()
     {
         updatedAt = LocalDateTime.now();
-        postTime = ChronoUnit.SECONDS.between(createdAt, updatedAt) / 3600;
+        postTime = ChronoUnit.SECONDS.between(createdAt, updatedAt) / 36000;
         rank = votes / Math.pow((postTime + 2), 1.8);
     }
 

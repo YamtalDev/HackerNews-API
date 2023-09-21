@@ -6,11 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Pageable;
 import com.akamai.MiniHackerNews.schema.NewsPost;
+import com.akamai.MiniHackerNews.schema.dto.NewsPostRequest;
+
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CacheConfig;
-import com.akamai.MiniHackerNews.dto.NewsPostRequestDTO;
+
 import com.akamai.MiniHackerNews.service.NewsPostService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -47,7 +49,7 @@ public class NewsPostController
     
     @PostMapping("/news")
     public ResponseEntity<NewsPost> saveNewsPost
-    (@Valid @RequestBody NewsPostRequestDTO newsPost)
+    (@Valid @RequestBody NewsPostRequest newsPost)
     {
         return (new ResponseEntity<NewsPost>
         (newsService.saveNewsPost(newsPost), HttpStatus.CREATED));
@@ -72,7 +74,7 @@ public class NewsPostController
     @CachePut(key = "#post_id")
     @PutMapping("/news/{post_id}")
     public ResponseEntity<NewsPost> updatePost
-    (@Valid @RequestBody NewsPostRequestDTO updatedPost, @Valid @PathVariable("post_id") Long post_id)
+    (@Valid @RequestBody NewsPostRequest updatedPost, @Valid @PathVariable("post_id") Long post_id)
     {
         return (new ResponseEntity<NewsPost>
         (newsService.updatePost(updatedPost, post_id), HttpStatus.OK));
