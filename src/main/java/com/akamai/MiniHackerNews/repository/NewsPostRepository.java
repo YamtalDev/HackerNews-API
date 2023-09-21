@@ -3,7 +3,7 @@ package com.akamai.MiniHackerNews.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import com.akamai.MiniHackerNews.schema.NewsPost;
+import com.akamai.MiniHackerNews.schema.NewsPostEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /******************************************************************************
@@ -14,9 +14,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @description :
 
 ******************************************************************************/
-public interface NewsPostRepository extends JpaRepository<NewsPost, Long> 
+public interface NewsPostRepository extends JpaRepository<NewsPostEntity, Long> 
 {
-    Page<NewsPost> findAll(Pageable pageable);
-    Page<NewsPost> findByOrderByRankDesc(Pageable pageable);
+    Page<NewsPostEntity> findAll(Pageable pageable);
+    Page<NewsPostEntity> findByOrderByRankDesc(Pageable pageable);
 
 }

@@ -42,4 +42,8 @@ public class NewsPostResponse
     @Min(value = 0, message = "Votes must be a non-negative value")
     @Max(value = Integer.MAX_VALUE, message = "Maximum votes reached")
     private int votes;
+
+    public String getVote() {
+        return null;
+    }
 }

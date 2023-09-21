@@ -35,7 +35,7 @@ import org.springframework.data.annotation.LastModifiedDate;
  * News post model represents a post for the Mini Hacker News system.
  * Each news post contains a title, text, creation time, updated time, and vote counts.
 ******************************************************************************/
-public class NewsPost
+public class NewsPostEntity
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

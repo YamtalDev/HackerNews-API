@@ -3,8 +3,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
-import com.akamai.MiniHackerNews.schema.NewsPost;
+import com.akamai.MiniHackerNews.schema.NewsPostEntity;
 import com.akamai.MiniHackerNews.schema.dto.NewsPostRequest;
+import com.akamai.MiniHackerNews.schema.dto.NewsPostResponse;
 import com.akamai.MiniHackerNews.service.NewsPostService;
 import com.akamai.MiniHackerNews.exception.ResourceNotFoundException;
 import com.akamai.MiniHackerNews.exception.ValidationException;
@@ -21,6 +22,7 @@ import com.akamai.MiniHackerNews.repository.NewsPostRepository;
 @Service
 public class NewsPostServiceImpl implements NewsPostService
 {
+    private ModelMapper modelMapper;
     private NewsPostRepository newsPostRepository;
 
     public NewsPostServiceImpl(NewsPostRepository newsPostRepository)
@@ -29,9 +31,9 @@ public class NewsPostServiceImpl implements NewsPostService
     }
     
     @Override
-    public NewsPost saveNewsPost(NewsPostRequest newsPostDTO) throws DataIntegrityViolationException
+    public NewsPostResponse saveNewsPost(NewsPostRequest newsPostDTO) throws DataIntegrityViolationException
     {
-        NewsPost newsPost = new NewsPost();
+        NewsPostEntity newsPost = new NewsPostEntity();
         newsPost.setLink(newsPostDTO.getLink());
         newsPost.setPost(newsPostDTO.getPost());
         newsPost.setUserName(newsPostDTO.getUserName());
@@ -54,24 +56,24 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     @Override
-    public NewsPost getPostById(Long post_id) throws ResourceNotFoundException
+    public NewsPostResponse getPostById(Long post_id) throws ResourceNotFoundException
     {
         return (newsPostRepository.findById(post_id).orElseThrow(() -> 
         new ResourceNotFoundException("post_id", post_id, "post")));
     }
 
     @Override
-    public Page<NewsPost> getAllPosts(Pageable pageable)
+    public Page<NewsPostResponse> getAllPosts(Pageable pageable)
     {
         return (newsPostRepository.findAll(pageable));
     }
 
     @Override
-    public NewsPost updatePost(NewsPostRequest newsPostDTO, Long post_id) throws DataIntegrityViolationException, ResourceNotFoundException
+    public NewsPostResponse updatePost(NewsPostRequest newsPostDTO, Long post_id) throws DataIntegrityViolationException, ResourceNotFoundException
     {
         try
         {
-            NewsPost existingPost = getPostById(post_id);
+            NewsPostEntity existingPost = getPostById(post_id);
             existingPost.setLink(newsPostDTO.getLink());
             existingPost.setPost(newsPostDTO.getPost());
             existingPost.setUserName(newsPostDTO.getUserName());
@@ -85,17 +87,17 @@ public class NewsPostServiceImpl implements NewsPostService
 
 
     @Override
-    public Page<NewsPost> getPostsByRankDesc(Pageable pageable)
+    public Page<NewsPostResponse> getPostsByRankDesc(Pageable pageable)
     {
         return (newsPostRepository.findByOrderByRankDesc(pageable));
     }
 
     @Override
-    public NewsPost upvotePost(Long post_id) throws DataIntegrityViolationException, ResourceNotFoundException
+    public NewsPostResponse upvotePost(Long post_id) throws DataIntegrityViolationException, ResourceNotFoundException
     {
         try
         {
-            NewsPost existingPost = getPostById(post_id);
+            NewsPostEntity existingPost = getPostById(post_id);
             existingPost.setVotes(existingPost.getVotes() + 1);
             return (newsPostRepository.save(existingPost));
         }
@@ -106,11 +108,11 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     @Override
-    public NewsPost downvotePost(Long post_id) throws DataIntegrityViolationException, ResourceNotFoundException
+    public NewsPostResponse downvotePost(Long post_id) throws DataIntegrityViolationException, ResourceNotFoundException
     {
         try
         {
-            NewsPost existingPost = getPostById(post_id);
+            NewsPostEntity existingPost = getPostById(post_id);
             existingPost.setVotes(existingPost.getVotes() - 1);
             return (newsPostRepository.save(existingPost));
         }
