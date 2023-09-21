@@ -1,9 +1,7 @@
 package com.akamai.MiniHackerNews.controller;
 
-
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Pageable;
@@ -11,13 +9,11 @@ import com.akamai.MiniHackerNews.schema.NewsPost;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheEvict;
-
-import java.util.List;
-
 import org.springframework.cache.annotation.CacheConfig;
 import com.akamai.MiniHackerNews.dto.NewsPostRequestDTO;
 import com.akamai.MiniHackerNews.service.NewsPostService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,7 +57,7 @@ public class NewsPostController
     public ResponseEntity<Page<NewsPost>> getAllPosts(Pageable pageable)
     {
         Page<NewsPost> newsPosts = newsService.getAllPosts(pageable);
-        return (new ResponseEntity<>(newsPosts, HttpStatus.OK));
+        return (new ResponseEntity<Page<NewsPost>>(newsPosts, HttpStatus.OK));
     }
 
     @Cacheable(key = "#post_id")
@@ -91,7 +87,7 @@ public class NewsPostController
         return (new ResponseEntity<String>("Post deleted", HttpStatus.OK));
     }
 
-    @PutMapping("/news/{post_id}/upvote")
+    @PatchMapping("/news/{post_id}/upvote")
     public ResponseEntity<NewsPost> upvotePost
     (@Valid @PathVariable("post_id") Long post_id)
     {
@@ -99,7 +95,7 @@ public class NewsPostController
         (newsService.upvotePost(post_id), HttpStatus.OK));
     }
 
-    @PutMapping("/news/{post_id}/downvote")
+    @PatchMapping("/news/{post_id}/downvote")
     public ResponseEntity<NewsPost> downvotePost
     (@Valid @PathVariable("post_id") Long post_id)
     {
@@ -109,9 +105,8 @@ public class NewsPostController
 
     @Cacheable("anato")
     @GetMapping("/news/top-posts")
-    public ResponseEntity<List<NewsPost>> getTopPosts()
-    {
-        return (new ResponseEntity<List<NewsPost>>
-        (newsService.getTopPosts(), HttpStatus.OK));
+    public ResponseEntity<Page<NewsPost>> getTopPostsByRank(Pageable pageable) {
+        Page<NewsPost> newsPosts = newsService.getPostsByRankDesc(pageable);
+        return new ResponseEntity<>(newsPosts, HttpStatus.OK);
     }
 }

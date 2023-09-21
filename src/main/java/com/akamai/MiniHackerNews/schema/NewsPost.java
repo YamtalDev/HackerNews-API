@@ -30,7 +30,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @DynamicUpdate
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "News-Post")
+@Table(name = "Posts", indexes = @Index(name = "rank_index", columnList = "rank DESC"))
 /******************************************************************************
  * News post model represents a post for the Mini Hacker News system.
  * Each news post contains a title, text, creation time, updated time, and vote counts.

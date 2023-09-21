@@ -1,7 +1,4 @@
 package com.akamai.MiniHackerNews.service.impl;
-
-import java.util.List;
-
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -87,9 +84,9 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     @Override
-    public List<NewsPost> getTopPosts()
+    public Page<NewsPost> getPostsByRankDesc(Pageable pageable)
     {
-        return newsPostRepository.findTopByOrderByRankDesc();
+        return (newsPostRepository.findByOrderByRankDesc(pageable));
     }
 
     @Override
