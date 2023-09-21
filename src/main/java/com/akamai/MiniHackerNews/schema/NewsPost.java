@@ -3,6 +3,8 @@ package com.akamai.MiniHackerNews.schema;
 import lombok.Data;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -62,9 +64,19 @@ public class NewsPost
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "updated_time")
+    @Column(name = "updated_time", updatable = true)
     @PastOrPresent(message = "Updating time must be in the past or present")
     private LocalDateTime updatedAt;
+
+    @Min(value = 0, message = "post time must be a non-negative value")
+    @Max(value = Long.MAX_VALUE, message = "Maximum time reached")
+    @Column(name = "post_time", updatable = true)
+    private long postTime;
+
+    @Column(name = "rank")
+    @Min(value = 0, message = "Rank must be a non-negative value")
+    @Max(value = Long.MAX_VALUE, message = "Maximum rank reached")
+    private double rank;
 
     @Column(name = "votes")
     @Min(value = 0, message = "Votes must be a non-negative value")
@@ -75,6 +87,8 @@ public class NewsPost
     public void preUpdate()
     {
         updatedAt = LocalDateTime.now();
+        postTime = ChronoUnit.SECONDS.between(createdAt, updatedAt) / 3600;
+        rank = votes / Math.pow((postTime + 2), 1.8);
     }
 
     @PrePersist

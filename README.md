@@ -6,10 +6,13 @@ https://www.youtube.com/watch?v=PAQvxqocb6A&pp=ygUoc3ByaW5nIHJlc3QgYXBpIHVzaW5nI
 https://www.youtube.com/watch?v=ac12zNR-OsE&list=PLVuqGBBX_tP3KmownF68ifFmgPQt-ujBg
 
 https://www.youtube.com/watch?v=S2s28PCg4M4
+https://www.javaguides.net/2018/06/restful-api-design-best-practices.html
 
 If i had more time i would implement the comments count and posting of comments.
 Restrictions for 1 up vote and down vote at a time per user in a session.
 use a schema.sql to provide data base migration in the app.
+Indexing: Ensure that your database tables have appropriate indexes, especially on columns used in queries frequently. Indexes can significantly improve query performance.
+
 
 
 Database Optimization: As your application grows, database performance becomes critical. Make sure you're using appropriate indexes, caching mechanisms, and database connection pooling. You can also consider using Spring's support for database transactions.

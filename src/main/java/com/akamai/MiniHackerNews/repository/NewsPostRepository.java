@@ -1,10 +1,11 @@
 package com.akamai.MiniHackerNews.repository;
 
+
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.akamai.MiniHackerNews.schema.NewsPost;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /******************************************************************************
  * @author Tal Aharon
@@ -17,4 +18,5 @@ import com.akamai.MiniHackerNews.schema.NewsPost;
 public interface NewsPostRepository extends JpaRepository<NewsPost, Long> 
 {
     Page<NewsPost> findAll(Pageable pageable);
+    List<NewsPost> findTopByOrderByRankDesc();
 }

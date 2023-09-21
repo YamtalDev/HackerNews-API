@@ -1,5 +1,6 @@
 spring:
   datasource:
+    # Please fill in your password, username, local MySQL data base url fields
     url: jdbc:mysql://localhost:3306/akamai?useSSL=false&serverTimezone=UTC
     password: '!Tal@2410'
     username: anato
@@ -17,3 +18,12 @@ spring:
   sql:
     init:
       mode: never
+  cache:
+    # My nickname
+    cache-names: anato
+    caffeine:
+    # 600 entities to cache is chosen because in the web site the maximun number 
+    # of posts that are loaded at once is 583
+    # 45 min just seems resonable for me, caffein was chosen as a cache mechanism 
+    # because it is easy to integrate, quick to implement and efficient.
+      spec: maximumSize=600, expireAfterAccess=45m

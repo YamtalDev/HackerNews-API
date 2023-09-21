@@ -1,12 +1,14 @@
 package com.akamai.MiniHackerNews.service.impl;
 
+import java.util.List;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import com.akamai.MiniHackerNews.schema.NewsPost;
 import com.akamai.MiniHackerNews.service.NewsPostService;
-import com.akamai.MiniHackerNews.dto.NewsPostUserRequestDTO;
+import com.akamai.MiniHackerNews.dto.NewsPostRequestDTO;
 import com.akamai.MiniHackerNews.exception.ResourceNotFoundException;
 import com.akamai.MiniHackerNews.exception.ValidationException;
 import com.akamai.MiniHackerNews.repository.NewsPostRepository;
@@ -30,7 +32,7 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     @Override
-    public NewsPost saveNewsPost(NewsPostUserRequestDTO newsPostDTO)
+    public NewsPost saveNewsPost(NewsPostRequestDTO newsPostDTO)
     {
         NewsPost newsPost = new NewsPost();
         newsPost.setLink(newsPostDTO.getLink());
@@ -60,7 +62,7 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     @Override
-    public NewsPost updatePost(NewsPostUserRequestDTO newsPostDTO, Long post_id)
+    public NewsPost updatePost(NewsPostRequestDTO newsPostDTO, Long post_id)
     {
         NewsPost existingPost = getPostById(post_id);
         existingPost.setLink(newsPostDTO.getLink());
@@ -84,6 +86,13 @@ public class NewsPostServiceImpl implements NewsPostService
         newsPostRepository.deleteById(post_id);
     }
 
+    @Override
+    public List<NewsPost> getTopPosts()
+    {
+        return newsPostRepository.findTopByOrderByRankDesc();
+    }
+
+    @Override
     public NewsPost upvotePost(Long post_id)
     {
         NewsPost existingPost = getPostById(post_id);
@@ -99,6 +108,7 @@ public class NewsPostServiceImpl implements NewsPostService
         }
     }
 
+    @Override
     public NewsPost downvotePost(Long post_id)
     {
         NewsPost existingPost = getPostById(post_id);

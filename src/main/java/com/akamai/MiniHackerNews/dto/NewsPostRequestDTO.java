@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.URL;
  * @description : 
 
 ******************************************************************************/
-public class NewsPostUserRequestDTO
+public class NewsPostRequestDTO
 {
     @Column(name = "title", nullable = false)
     @NotBlank(message = "Title is required")
