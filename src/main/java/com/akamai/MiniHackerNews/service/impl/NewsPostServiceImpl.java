@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.akamai.MiniHackerNews.schema.NewsPostEntity;
+import com.akamai.MiniHackerNews.schema.NewsPostSchema;
 import com.akamai.MiniHackerNews.schema.dto.NewsPostRequestDTO;
 import com.akamai.MiniHackerNews.schema.dto.NewsPostResponseDTO;
 import com.akamai.MiniHackerNews.service.NewsPostService;
@@ -39,7 +39,7 @@ public class NewsPostServiceImpl implements NewsPostService
     @Override
     public NewsPostResponseDTO saveNewsPost(NewsPostRequestDTO newsPostDTO) throws ValidationException
     {
-        NewsPostEntity newsPost = new NewsPostEntity();
+        NewsPostSchema newsPost = new NewsPostSchema();
         newsPost.setLink(newsPostDTO.getLink());
         newsPost.setPost(newsPostDTO.getPost());
         newsPost.setUserName(newsPostDTO.getUserName());
@@ -86,7 +86,7 @@ public class NewsPostServiceImpl implements NewsPostService
     {
         try
         {
-            NewsPostEntity existingPost = getPostEntityById(post_id);
+            NewsPostSchema existingPost = getPostEntityById(post_id);
             existingPost.setLink(newsPostDTO.getLink());
             existingPost.setPost(newsPostDTO.getPost());
             existingPost.setUserName(newsPostDTO.getUserName());
@@ -107,7 +107,7 @@ public class NewsPostServiceImpl implements NewsPostService
     {
         try
         {
-            NewsPostEntity existingPost = getPostEntityById(post_id);
+            NewsPostSchema existingPost = getPostEntityById(post_id);
             existingPost.setVotes(existingPost.getVotes() + 1);
             newsPostRepository.save(existingPost);
             return (existingPost.getVotes());
@@ -126,7 +126,7 @@ public class NewsPostServiceImpl implements NewsPostService
     {
         try
         {
-            NewsPostEntity existingPost = getPostEntityById(post_id);
+            NewsPostSchema existingPost = getPostEntityById(post_id);
             existingPost.setVotes(existingPost.getVotes() - 1);
             newsPostRepository.save(existingPost);
             return (existingPost.getVotes());
@@ -137,7 +137,7 @@ public class NewsPostServiceImpl implements NewsPostService
         }
     }
 
-    private NewsPostEntity getPostEntityById(Long post_id) throws ResourceNotFoundException
+    private NewsPostSchema getPostEntityById(Long post_id) throws ResourceNotFoundException
     {
         return (newsPostRepository.findById(post_id).orElseThrow(() -> 
         new ResourceNotFoundException("post_id", post_id, "post")));
