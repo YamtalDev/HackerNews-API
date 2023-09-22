@@ -29,9 +29,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.akamai.MiniHackerNews.schema.NewsPostSchema;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface NewsPostRepository extends JpaRepository<NewsPostSchema, Long> 
 {
     Page<NewsPostSchema> findAll(Pageable pageable);
+
+    @Query("SELECT p FROM NewsPostSchema p ORDER BY p.rank DESC")
     Page<NewsPostSchema> findByOrderByRankDesc(Pageable pageable);
 }

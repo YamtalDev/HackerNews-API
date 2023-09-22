@@ -27,6 +27,8 @@ package com.akamai.MiniHackerNews.schema.dto;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import jakarta.persistence.PreUpdate;
+
 public class NewsPostResponseDTO
 {
     private Long postId;
@@ -96,6 +98,7 @@ public class NewsPostResponseDTO
         this.postedBy = postedBy;
     }
 
+    @PreUpdate
     public void setTime(LocalDateTime time)
     {
         long timeElapsed = ChronoUnit.HOURS.between(time, LocalDateTime.now());

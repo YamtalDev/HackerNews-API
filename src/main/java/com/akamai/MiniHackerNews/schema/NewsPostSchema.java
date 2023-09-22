@@ -35,6 +35,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.data.annotation.CreatedDate;
 
+// Asynchronous Updates: If the score of posts changes due to upvotes, downvotes, or other factors, consider updating the scores asynchronously in the database. This way, you can still serve the current top posts from cache while the updates are being processed.
 
 @Data
 @Entity

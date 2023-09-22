@@ -32,10 +32,9 @@ import com.akamai.MiniHackerNews.schema.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import com.akamai.MiniHackerNews.service.NewsPostService;
+import org.springframework.dao.DataIntegrityViolationException;
 import com.akamai.MiniHackerNews.exception.ValidationException;
 import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException;
-
-import org.springframework.dao.DataIntegrityViolationException;
 
 @Service
 public class NewsPostServiceImpl implements NewsPostService
@@ -52,16 +51,12 @@ public class NewsPostServiceImpl implements NewsPostService
     @Override
     public NewsPostResponseDTO saveNewPost(NewsPostRequestDTO newsPostDTO) throws ValidationException
     {
-        NewsPostSchema newPost = new NewsPostSchema();
-        newPost.setPostedBy(newsPostDTO.getPostedBy());
-        newPost.setPost(newsPostDTO.getPost());
-        newPost.setLink(newsPostDTO.getLink());
-
         try
         {
+            NewsPostSchema newPost = modelMapper.map(newsPostDTO, NewsPostSchema.class);
             return (modelMapper.map(newsPostRepository.save(newPost), NewsPostResponseDTO.class));
         }
-        catch (DataIntegrityViolationException exception)
+        catch(DataIntegrityViolationException exception)
         {
             throw (new ValidationException("Invalid input data."));
         }
@@ -102,12 +97,10 @@ public class NewsPostServiceImpl implements NewsPostService
             NewsPostSchema existingPost = getPostEntityById(postId);
 
             existingPost.setTime();
-            existingPost.setLink(newsPostDTO.getLink());
-            existingPost.setPost(newsPostDTO.getPost());
-            existingPost.setPostedBy(newsPostDTO.getPostedBy());
+            modelMapper.map(newsPostDTO, existingPost);
             return (modelMapper.map(newsPostRepository.save(existingPost), NewsPostResponseDTO.class));
         }
-        catch (DataIntegrityViolationException |  NewsPostNotFoundException exception)
+        catch(DataIntegrityViolationException |  NewsPostNotFoundException exception)
         {
             throw (new ValidationException("Invalid input data."));
         }
@@ -119,12 +112,10 @@ public class NewsPostServiceImpl implements NewsPostService
         try
         {
             NewsPostSchema existingPost = getPostEntityById(postId);
-
-            existingPost.setLink(newsPostDTO.getLink());
-            existingPost.setPost(newsPostDTO.getPost());
+            modelMapper.map(newsPostDTO, existingPost);
             return (modelMapper.map(newsPostRepository.save(existingPost), NewsPostResponseDTO.class));
         }
-        catch (DataIntegrityViolationException |  NewsPostNotFoundException exception)
+        catch(DataIntegrityViolationException |  NewsPostNotFoundException exception)
         {
             throw (new ValidationException("Invalid input data."));
         }
