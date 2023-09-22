@@ -1,3 +1,27 @@
+/******************************************************************************
+MIT License
+
+Copyright (c) 2023 Tal Aharon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+******************************************************************************/
 package com.akamai.MiniHackerNews.schema;
 
 import lombok.Data;
@@ -11,13 +35,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.data.annotation.CreatedDate;
 
-/******************************************************************************
- * @author Tal Aharon
- * @version 1.0.0
- * @license MIT
- * @since 19/9/2023
- * @description:  
-******************************************************************************/
 
 @Data
 @Entity
@@ -45,7 +62,7 @@ public class NewsPostSchema
     @Size(min = 1, max = 1024, message = "Post must be between 1 and 1024 characters")
     private String post;
 
-    @NotBlank(message = "Url is required.")
+    @NotBlank(message = "Link url is required.")
     @Column(name = "link", updatable = true)
     @URL(message = "Invalid URL. Please provide a valid HTTP or HTTPS URL.")
     @Size(min = 10, max = 1024, message = "Link must be between 10 to 1024 characters long")
