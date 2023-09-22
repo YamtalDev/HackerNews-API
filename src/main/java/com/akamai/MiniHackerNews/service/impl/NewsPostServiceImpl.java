@@ -25,28 +25,17 @@ SOFTWARE.
 package com.akamai.MiniHackerNews.service.impl;
 
 import org.modelmapper.ModelMapper;
-
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Pageable;
-
 import com.akamai.MiniHackerNews.schema.*;
-
+import org.springframework.data.domain.Page;
 import com.akamai.MiniHackerNews.repository.*;
 import com.akamai.MiniHackerNews.schema.dto.*;
+import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 import com.akamai.MiniHackerNews.service.NewsPostService;
 import com.akamai.MiniHackerNews.exception.ValidationException;
 import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException;
 
 import org.springframework.dao.DataIntegrityViolationException;
-
-/******************************************************************************
- * @author Tal Aharon
- * @version 1.0.0
- * @license MIT
- * @since 19/9/2023
- * @description:
-******************************************************************************/
 
 @Service
 public class NewsPostServiceImpl implements NewsPostService

@@ -94,7 +94,7 @@ public class NewsPostController
     (@Validated @PathVariable("postId") Long postId)
     {
         return (new ResponseEntity<NewsPostResponseDTO>
-        (newsService.getPostById(postId), HttpStatus.OK));
+        (newsService.getPostById(postId), HttpStatus.FOUND));
     }
 
     @CachePut(key = "#post_id")
