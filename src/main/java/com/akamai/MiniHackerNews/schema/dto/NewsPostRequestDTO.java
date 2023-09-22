@@ -29,14 +29,6 @@ import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 
-/******************************************************************************
- * @author Tal Aharon
- * @version 1.0.0
- * @license MIT
- * @since 19/9/2023
- * @description : 
-
-******************************************************************************/
 public class NewsPostRequestDTO
 {
     @NotBlank(message = "User name is required")
@@ -55,18 +47,7 @@ public class NewsPostRequestDTO
     @Size(min = 10, max = 1024, message = "Link must be between 10 to 1024 characters long")
     private String link;
 
-    public String getPost()
-    {
-        return (post);
-    }
-
-    public String getLink()
-    {
-        return (link);
-    }
-
-    public String getPostedBy()
-    {
-        return (postedBy);
-    }
+    public String getPost(){return (post);}
+    public String getLink(){return (link);}
+    public String getPostedBy(){return (postedBy);}
 }

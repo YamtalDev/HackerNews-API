@@ -144,7 +144,8 @@ public class NewsPostServiceImpl implements NewsPostService
     /*************************************************************************
     * It can be a better approach to implement a specific query to the data base 
     * that will increment and decrement an entity vote directly without fetching the entity.
-    *************************************************************************/    @Override
+    *************************************************************************/
+    @Override
     public int downvotePost(Long postId) throws ValidationException
     {
         try

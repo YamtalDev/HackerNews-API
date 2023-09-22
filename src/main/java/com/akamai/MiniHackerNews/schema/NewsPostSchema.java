@@ -86,55 +86,18 @@ public class NewsPostSchema
     @Max(value = Integer.MAX_VALUE, message = "Maximum votes reached")
     private int votes;
 
-    public int getVotes()
-    {
-        return (votes);
-    }
+    public int getVotes(){return (votes);}
+    public String getPost(){return (post);}
+    public Long getPostId(){return (postId);}
+    public String getPostedBy(){return (postedBy);}
+    public String getTimeElapsed(){return (timeElapsed);}
 
-    public String getPost()
-    {
-        return (post);
-    }
+    public void upVote(){++this.votes;}
+    public void downVote(){--this.votes;}
 
-    public Long getPostId()
-    {
-        return (postId);
-    }
-
-    public String getPostedBy()
-    {
-        return (postedBy);
-    }
-
-    public String getTimeElapsed()
-    {
-        return (timeElapsed);
-    }
-
-    public void upVote()
-    {
-        ++this.votes;
-    }
-
-    public void downVote()
-    {
-        --this.votes;
-    }
-
-    public void setPost(String post)
-    {
-        this.post = post;
-    }
-
-    public void setLink(String link)
-    {
-        this.link = link;
-    }
-
-    public void setPostedBy(String posted_by)
-    {
-        this.postedBy = posted_by;
-    }
+    public void setPost(String post){this.post = post;}
+    public void setLink(String link){this.link = link;}
+    public void setPostedBy(String posted_by){this.postedBy = posted_by;}
 
     @PrePersist
     public void setTime()

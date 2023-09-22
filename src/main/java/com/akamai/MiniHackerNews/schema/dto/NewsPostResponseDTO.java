@@ -33,68 +33,19 @@ public class NewsPostResponseDTO
     private String timeElapsed;
     private int votes;
 
-    public NewsPostResponseDTO()
-    {
-        // Empty
-    }
+    public NewsPostResponseDTO(){/* Empty*/}
 
-    public int getVotes()
-    {
-        return (votes);
-    }
+    public int getVotes(){return (votes);}
+    public String getPost(){return (post);}
+    public String getLink(){return (link);}
+    public Long getPostId(){return (postId);}
+    public String getTimeElapsed(){return (timeElapsed);}
+    public String getPostedBy(){return (postedBy);}
 
-    public String getPost()
-    {
-        return (post);
-    }
-
-    public String getLink()
-    {
-        return (link);
-    }
-
-    public Long getPostId()
-    {
-        return (postId);
-    }
-
-    public String getTimeElapsed()
-    {
-        return (timeElapsed);
-    }
-
-    public String getPostedBy()
-    {
-        return (postedBy);
-    }
-
-    public void setLink(String link)
-    {
-        this.link = link;
-    }
-
-    public void setPost(String post)
-    {
-        this.post = post;
-    }
-
-    public void setVotes(int votes)
-    {
-        this.votes = votes;
-    }
-
-    public void setPostId(Long postId)
-    {
-        this.postId = postId;
-    }
-
-    public void setPostedBy(String postedBy)
-    {
-        this.postedBy = postedBy;
-    }
-
-    public void setTimeElapsed(String timeElapsed)
-    {
-        this.timeElapsed = timeElapsed;
-    }
+    public void setLink(String link){this.link = link;}
+    public void setPost(String post){this.post = post;}
+    public void setVotes(int votes){this.votes = votes;}
+    public void setPostId(Long postId){this.postId = postId;}
+    public void setPostedBy(String postedBy){this.postedBy = postedBy;}
+    public void setTimeElapsed(String timeElapsed){this.timeElapsed = timeElapsed;}
 }
