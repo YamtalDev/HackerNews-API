@@ -100,7 +100,7 @@ public class NewsPostController
     (@Valid @PathVariable("post_id") Long post_id)
     {
         return (new ResponseEntity<String>
-        (newsService.upvotePost(post_id).getVote() + " 👍", HttpStatus.OK));
+        (newsService.upvotePost(post_id) + " 👍", HttpStatus.OK));
     }
 
     @PatchMapping("/news/{post_id}/downvote")
@@ -108,7 +108,7 @@ public class NewsPostController
     (@Valid @PathVariable("post_id") Long post_id)
     {
         return (new ResponseEntity<String>
-        (newsService.upvotePost(post_id).getVote() + " 👎", HttpStatus.OK));
+        (newsService.downvotePost(post_id) + " 👎", HttpStatus.OK));
     }
 
 }

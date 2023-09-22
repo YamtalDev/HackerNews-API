@@ -18,5 +18,4 @@ public interface NewsPostRepository extends JpaRepository<NewsPostEntity, Long>
 {
     Page<NewsPostEntity> findAll(Pageable pageable);
     Page<NewsPostEntity> findByOrderByRankDesc(Pageable pageable);
-
 }
