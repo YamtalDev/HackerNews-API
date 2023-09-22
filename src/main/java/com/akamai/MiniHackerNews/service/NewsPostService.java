@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.akamai.MiniHackerNews.schema.dto.NewsPostRequestDTO;
 import com.akamai.MiniHackerNews.schema.dto.NewsPostResponseDTO;
+import com.akamai.MiniHackerNews.schema.dto.NewsUpdateRequestDTO;
 
 /******************************************************************************
  * @author Tal Aharon
@@ -23,4 +24,5 @@ public interface NewsPostService
     public NewsPostResponseDTO saveNewsPost(NewsPostRequestDTO newsPost);
     public Page<NewsPostResponseDTO> getPostsByRankDesc(Pageable pageable);
     public NewsPostResponseDTO updatePost(NewsPostRequestDTO newPost, Long post_id);
+    public NewsPostResponseDTO changePost(NewsUpdateRequestDTO newsPostDTO, Long post_id);
 }

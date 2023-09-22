@@ -2,17 +2,17 @@ package com.akamai.MiniHackerNews.service.impl;
 
 import org.modelmapper.ModelMapper;
 
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
-import com.akamai.MiniHackerNews.schema.NewsPostSchema;
-import com.akamai.MiniHackerNews.schema.dto.NewsPostRequestDTO;
-import com.akamai.MiniHackerNews.schema.dto.NewsPostResponseDTO;
+import com.akamai.MiniHackerNews.schema.*;
+
+import com.akamai.MiniHackerNews.repository.*;
+import com.akamai.MiniHackerNews.schema.dto.*;
 import com.akamai.MiniHackerNews.service.NewsPostService;
-import com.akamai.MiniHackerNews.exception.ResourceNotFoundException;
 import com.akamai.MiniHackerNews.exception.ValidationException;
-import com.akamai.MiniHackerNews.repository.NewsPostRepository;
+import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException;
 
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -21,7 +21,7 @@ import org.springframework.dao.DataIntegrityViolationException;
  * @version 1.0.0
  * @license MIT
  * @since 19/9/2023
- * @description:  
+ * @description:
 ******************************************************************************/
 
 @Service
@@ -35,18 +35,17 @@ public class NewsPostServiceImpl implements NewsPostService
         this.modelMapper = modelMapper;
         this.newsPostRepository = newsPostRepository;
     }
-    
+
     @Override
     public NewsPostResponseDTO saveNewsPost(NewsPostRequestDTO newsPostDTO) throws ValidationException
     {
-        NewsPostSchema newsPost = new NewsPostSchema();
-        newsPost.setLink(newsPostDTO.getLink());
-        newsPost.setPost(newsPostDTO.getPost());
-        newsPost.setUserName(newsPostDTO.getUserName());
-        
         try
         {
-            return (modelMapper.map(newsPostRepository.save(newsPost), NewsPostResponseDTO.class));
+            NewsPostSchema newPost = new NewsPostSchema();
+            newPost.setLink(newsPostDTO.getLink());
+            newPost.setPost(newsPostDTO.getPost());
+            newPost.setPostedBy(newsPostDTO.getPostedBy());
+            return (modelMapper.map(newsPostRepository.save(newPost), NewsPostResponseDTO.class));
         }
         catch (DataIntegrityViolationException exception)
         {
@@ -62,7 +61,7 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     @Override
-    public NewsPostResponseDTO getPostById(Long post_id) throws ResourceNotFoundException
+    public NewsPostResponseDTO getPostById(Long post_id) throws NewsPostNotFoundException
     {
         return (modelMapper.map(getPostEntityById(post_id),NewsPostResponseDTO.class));
     }
@@ -87,16 +86,36 @@ public class NewsPostServiceImpl implements NewsPostService
         try
         {
             NewsPostSchema existingPost = getPostEntityById(post_id);
+
+            existingPost.setCreationTime();
             existingPost.setLink(newsPostDTO.getLink());
             existingPost.setPost(newsPostDTO.getPost());
-            existingPost.setUserName(newsPostDTO.getUserName());
+            existingPost.setPostedBy(newsPostDTO.getPostedBy());
             return (modelMapper.map(newsPostRepository.save(existingPost), NewsPostResponseDTO.class));
         }
-        catch (DataIntegrityViolationException |  ResourceNotFoundException exception)
+        catch (DataIntegrityViolationException |  NewsPostNotFoundException exception)
         {
             throw (new ValidationException("Invalid input data."));
         }
     }
+
+    @Override
+    public NewsPostResponseDTO changePost(NewsUpdateRequestDTO newsPostDTO, Long post_id) throws ValidationException
+    {
+        try
+        {
+            NewsPostSchema existingPost = getPostEntityById(post_id);
+
+            existingPost.setLink(newsPostDTO.getLink());
+            existingPost.setPost(newsPostDTO.getPost());
+            return (modelMapper.map(newsPostRepository.save(existingPost), NewsPostResponseDTO.class));
+        }
+        catch (DataIntegrityViolationException |  NewsPostNotFoundException exception)
+        {
+            throw (new ValidationException("Invalid input data."));
+        }
+    }
+
 
     /*************************************************************************
     * It can be a better approach to implement a specific query to the data base 
@@ -108,11 +127,10 @@ public class NewsPostServiceImpl implements NewsPostService
         try
         {
             NewsPostSchema existingPost = getPostEntityById(post_id);
-            existingPost.setVotes(existingPost.getVotes() + 1);
-            newsPostRepository.save(existingPost);
-            return (existingPost.getVotes());
+            existingPost.upVote();
+            return (newsPostRepository.save(existingPost).getVotes());
         }
-        catch(DataIntegrityViolationException | ResourceNotFoundException exception)
+        catch(DataIntegrityViolationException | NewsPostNotFoundException exception)
         {
             throw (new ValidationException("Maximum votes reached."));
         }
@@ -127,31 +145,18 @@ public class NewsPostServiceImpl implements NewsPostService
         try
         {
             NewsPostSchema existingPost = getPostEntityById(post_id);
-            existingPost.setVotes(existingPost.getVotes() - 1);
-            newsPostRepository.save(existingPost);
-            return (existingPost.getVotes());
+            existingPost.downVote();
+            return (newsPostRepository.save(existingPost).getVotes());
         }
-        catch(DataIntegrityViolationException | ResourceNotFoundException exception)
+        catch(DataIntegrityViolationException | NewsPostNotFoundException exception)
         {
             throw (new ValidationException("Cannot downvote below zero."));
         }
     }
 
-    private NewsPostSchema getPostEntityById(Long post_id) throws ResourceNotFoundException
+    private NewsPostSchema getPostEntityById(Long post_id) throws NewsPostNotFoundException
     {
         return (newsPostRepository.findById(post_id).orElseThrow(() -> 
-        new ResourceNotFoundException("post_id", post_id, "post")));
+        new NewsPostNotFoundException("post_id", post_id, "post")));
     }
-
-    // public NewsPostResponse entityToResponse(NewsPostEntity entity)
-    // {
-    //     return (new NewsPostResponse(
-    //         entity.getPostId(),
-    //         entity.getPost(),
-    //         entity.getUserName(),
-    //         entity.getLink(),
-    //         entity.getPostTime(),
-    //         entity.getVotes())
-    //     );
-    // }
 }

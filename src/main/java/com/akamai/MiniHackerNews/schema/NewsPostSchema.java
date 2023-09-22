@@ -41,7 +41,7 @@ public class NewsPostSchema
     private String post;
 
     @NotBlank(message = "User name is required")
-    @Column(name = "posted_by", nullable = false, updatable = false)
+    @Column(name = "posted_by", nullable = false, updatable = true)
     @Size(min = 3, max = 20, message = "User name must be between 3 to 20 characters")
     private String posted_by;
 
@@ -52,16 +52,16 @@ public class NewsPostSchema
     private String link;
 
     @CreatedDate
-    @Column(name = "creation_time", updatable = false)
+    @Column(name = "creation_time", updatable = true)
     @PastOrPresent(message = "Creation time must be in the past or present")
     private LocalDateTime created_at;
 
-    @Column(name = "rank")
+    @Column(name = "rank", updatable = true)
     @Min(value = 0, message = "Rank must be a non-negative value")
     @Max(value = Long.MAX_VALUE, message = "Maximum rank reached")
     private double rank;
 
-    @Column(name = "votes")
+    @Column(name = "votes", updatable = true)
     @Min(value = 0, message = "Votes must be a non-negative value")
     @Max(value = Integer.MAX_VALUE, message = "Maximum votes reached")
     private int votes;
@@ -71,20 +71,19 @@ public class NewsPostSchema
     public Long getPostId(){return (post_id);}
     public String getPostedBy(){return (posted_by);}
 
-    public void setVotes(int vote){this.votes += vote;}
+    public void upVote(){++this.votes;}
+    public void downVote(){--this.votes;}
     public void setPost(String post){this.post = post;}
     public void setLink(String link){this.link = link;}
+
+    @PrePersist
+    public void setCreationTime(){this.created_at = LocalDateTime.now();}
+    public void setPostedBy(String posted_by){this.posted_by = posted_by;}
 
     @PreUpdate
     public void updateRank()
     {
         long postTime = ChronoUnit.HOURS.between(created_at, LocalDateTime.now());
         this.rank = votes / Math.pow((postTime + 2), 1.8);
-    }
-
-    @PrePersist
-    public void prePersist()
-    {
-        created_at = LocalDateTime.now();
     }
 }

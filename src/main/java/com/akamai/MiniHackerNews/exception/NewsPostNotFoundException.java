@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 ******************************************************************************/
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends RuntimeException
+public class NewsPostNotFoundException extends RuntimeException
 {
     private String fieldName;
     private Object fieldValue;
@@ -25,7 +25,7 @@ public class ResourceNotFoundException extends RuntimeException
      * @param resourceName The name of the resource that was not found.
     **************************************************************************/
 
-    public ResourceNotFoundException(String fieldName, Object fieldValue, String resourceName)
+    public NewsPostNotFoundException(String fieldName, Object fieldValue, String resourceName)
     {
         super(String.format("%s not found with %s: '%s'", resourceName, fieldName, fieldValue));
         this.fieldName = fieldName;
