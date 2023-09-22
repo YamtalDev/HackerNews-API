@@ -31,12 +31,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Pageable;
-
-import org.springframework.cache.annotation.CachePut;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CacheConfig;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.validation.annotation.Validated;
@@ -47,10 +44,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-
-
-
 
 @Validated
 @RestController
@@ -84,12 +77,13 @@ public class NewsPostController
     @GetMapping("/top-posts")
     public ResponseEntity<Page<NewsPostResponseDTO>> getTopPostsByRank(Pageable pageable)
     {
+        pageable = PageRequest.of(pageable.getPageNumber(), 30);
         Page<NewsPostResponseDTO> newsPosts = newsService.getPostsByRankDesc(pageable);
-        return (new ResponseEntity<Page<NewsPostResponseDTO>>(newsPosts, HttpStatus.OK));
+        return new ResponseEntity<>(newsPosts, HttpStatus.OK);
     }
 
-    @Cacheable(key = "#post_id")
     @GetMapping("/{postId}")
+    @Cacheable(cacheNames = "anato", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> getPostById
     (@Validated @PathVariable("postId") Long postId)
     {
@@ -97,7 +91,6 @@ public class NewsPostController
         (newsService.getPostById(postId), HttpStatus.FOUND));
     }
 
-    @CachePut(key = "#post_id")
     @PutMapping("/{postId}")
     public ResponseEntity<NewsPostResponseDTO> updatePost
     (@Validated @RequestBody NewsPostRequestDTO updatedPost, @Validated @PathVariable("postId") Long postId)
@@ -106,7 +99,6 @@ public class NewsPostController
         (newsService.updatePost(updatedPost, postId), HttpStatus.OK));
     }
 
-    @CacheEvict(key = "#post_id")
     @DeleteMapping("/{postId}")
     public ResponseEntity<String> deletePost
     (@Validated @PathVariable("postId") Long postId)
@@ -115,7 +107,7 @@ public class NewsPostController
         return (new ResponseEntity<String>("Post deleted", HttpStatus.OK));
     }
 
-    @PatchMapping("/{post_id}")
+    @PatchMapping("/{postId}")
     public ResponseEntity<NewsPostResponseDTO> changePost
     (@Validated @RequestBody NewsUpdateRequestDTO changedPost, @Validated @PathVariable("postId") Long postId)
     {
@@ -123,7 +115,7 @@ public class NewsPostController
         (newsService.changePost(changedPost, postId), HttpStatus.OK));
     }
 
-    @PatchMapping("/{post_id}/upvote")
+    @PatchMapping("/{postId}/upvote")
     public ResponseEntity<String> upvotePost
     (@Validated @PathVariable("postId") Long postId)
     {
@@ -131,7 +123,7 @@ public class NewsPostController
         ( "👍 " + newsService.upvotePost(postId), HttpStatus.OK));
     }
 
-    @PatchMapping("/{post_id}/downvote")
+    @PatchMapping("/{postId}/downvote")
     public ResponseEntity<String> downvotePost
     (@Validated @PathVariable("postId") Long postId)
     {
