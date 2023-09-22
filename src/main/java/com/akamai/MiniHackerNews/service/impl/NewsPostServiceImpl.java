@@ -7,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.akamai.MiniHackerNews.schema.NewsPostEntity;
-import com.akamai.MiniHackerNews.schema.dto.NewsPostRequest;
-import com.akamai.MiniHackerNews.schema.dto.NewsPostResponse;
+import com.akamai.MiniHackerNews.schema.dto.NewsPostRequestDTO;
+import com.akamai.MiniHackerNews.schema.dto.NewsPostResponseDTO;
 import com.akamai.MiniHackerNews.service.NewsPostService;
 import com.akamai.MiniHackerNews.exception.ResourceNotFoundException;
 import com.akamai.MiniHackerNews.exception.ValidationException;
@@ -37,7 +37,7 @@ public class NewsPostServiceImpl implements NewsPostService
     }
     
     @Override
-    public NewsPostResponse saveNewsPost(NewsPostRequest newsPostDTO) throws ValidationException
+    public NewsPostResponseDTO saveNewsPost(NewsPostRequestDTO newsPostDTO) throws ValidationException
     {
         NewsPostEntity newsPost = new NewsPostEntity();
         newsPost.setLink(newsPostDTO.getLink());
@@ -46,7 +46,7 @@ public class NewsPostServiceImpl implements NewsPostService
         
         try
         {
-            return (modelMapper.map(newsPostRepository.save(newsPost), NewsPostResponse.class));
+            return (modelMapper.map(newsPostRepository.save(newsPost), NewsPostResponseDTO.class));
         }
         catch (DataIntegrityViolationException exception)
         {
@@ -62,27 +62,27 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     @Override
-    public NewsPostResponse getPostById(Long post_id) throws ResourceNotFoundException
+    public NewsPostResponseDTO getPostById(Long post_id) throws ResourceNotFoundException
     {
-        return (modelMapper.map(getPostEntityById(post_id),NewsPostResponse.class));
+        return (modelMapper.map(getPostEntityById(post_id),NewsPostResponseDTO.class));
     }
 
     @Override
-    public Page<NewsPostResponse> getAllPosts(Pageable pageable)
+    public Page<NewsPostResponseDTO> getAllPosts(Pageable pageable)
     {
         return (newsPostRepository.findAll(pageable)).map
-        (entity -> modelMapper.map(entity, NewsPostResponse.class));
+        (entity -> modelMapper.map(entity, NewsPostResponseDTO.class));
     }
 
     @Override
-    public Page<NewsPostResponse> getPostsByRankDesc(Pageable pageable)
+    public Page<NewsPostResponseDTO> getPostsByRankDesc(Pageable pageable)
     {
         return (newsPostRepository.findByOrderByRankDesc(pageable).map
-        (entity -> modelMapper.map(entity, NewsPostResponse.class)));
+        (entity -> modelMapper.map(entity, NewsPostResponseDTO.class)));
     }
 
     @Override
-    public NewsPostResponse updatePost(NewsPostRequest newsPostDTO, Long post_id) throws ValidationException
+    public NewsPostResponseDTO updatePost(NewsPostRequestDTO newsPostDTO, Long post_id) throws ValidationException
     {
         try
         {
@@ -90,7 +90,7 @@ public class NewsPostServiceImpl implements NewsPostService
             existingPost.setLink(newsPostDTO.getLink());
             existingPost.setPost(newsPostDTO.getPost());
             existingPost.setUserName(newsPostDTO.getUserName());
-            return (modelMapper.map(newsPostRepository.save(existingPost), NewsPostResponse.class));
+            return (modelMapper.map(newsPostRepository.save(existingPost), NewsPostResponseDTO.class));
         }
         catch (DataIntegrityViolationException |  ResourceNotFoundException exception)
         {

@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.URL;
  * @description : 
 
 ******************************************************************************/
-public class NewsPostRequest
+public class NewsPostRequestDTO
 {
     @Column(name = "post", nullable = false)
     @NotBlank(message = "Post is required")
@@ -23,7 +23,7 @@ public class NewsPostRequest
     @Column(name = "user_name", nullable = false)
     @NotBlank(message = "User name is required")
     @Size(min = 3, max = 20, message = "User name must be between 3 to 20 characters")
-    private String userName;
+    private String posted_by;
 
     @Column(name = "link")
     @NotBlank(message = "Url is required.")
@@ -31,18 +31,7 @@ public class NewsPostRequest
     @Size(min = 10, max = 1024, message = "Link must be between 10 to 1024 characters long")
     private String link;
 
-    public String getPost()
-    {
-        return post;
-    }
-
-    public String getUserName()
-    {
-        return userName;
-    }
-
-    public String getLink()
-    {
-        return link;
-    }
+    public String getPost(){return (post);}
+    public String getLink(){return (link);}
+    public String getPostedBy(){return (posted_by);}
 }

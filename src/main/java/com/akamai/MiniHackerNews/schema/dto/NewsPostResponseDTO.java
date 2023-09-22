@@ -3,7 +3,7 @@ package com.akamai.MiniHackerNews.schema.dto;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-public class NewsPostResponse
+public class NewsPostResponseDTO
 {
     private Long post_id;
     private String post;
@@ -12,7 +12,7 @@ public class NewsPostResponse
     private String postTime;
     private int votes;
 
-    public NewsPostResponse(){}
+    public NewsPostResponseDTO(){}
 
     public int getVotes(){return (votes);}
     public String getPost(){return (post);}

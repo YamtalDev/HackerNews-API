@@ -6,12 +6,9 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import jakarta.validation.constraints.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.URL;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.annotation.CreatedDate;
 
 /******************************************************************************
@@ -24,11 +21,8 @@ import org.springframework.data.annotation.CreatedDate;
 
 @Data
 @Entity
-@JsonInclude
-@SuperBuilder
 @DynamicUpdate
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "Posts", indexes = @Index(name = "rank_index", columnList = "rank DESC"))
 /******************************************************************************
  * News post model represents a post for the Mini Hacker News system.
@@ -49,7 +43,7 @@ public class NewsPostEntity
     @NotBlank(message = "User name is required")
     @Column(name = "posted_by", nullable = false, updatable = false)
     @Size(min = 3, max = 20, message = "User name must be between 3 to 20 characters")
-    private String postedBy;
+    private String posted_by;
 
     @NotBlank(message = "Url is required.")
     @Column(name = "link", nullable = false, updatable = true)
@@ -60,7 +54,7 @@ public class NewsPostEntity
     @CreatedDate
     @Column(name = "creation_time", updatable = false)
     @PastOrPresent(message = "Creation time must be in the past or present")
-    private LocalDateTime createdAt;
+    private LocalDateTime created_at;
 
     @Column(name = "rank")
     @Min(value = 0, message = "Rank must be a non-negative value")
@@ -74,24 +68,23 @@ public class NewsPostEntity
 
     public int getVotes(){return (votes);}
     public String getPost(){return (post);}
-    public double getRank(){return (rank);}
     public Long getPostId(){return (post_id);}
-    public String getPostedBy(){return (postedBy);}
+    public String getPostedBy(){return (posted_by);}
 
-    public void setVotes(){++this.votes;}
+    public void setVotes(int vote){this.votes += vote;}
     public void setPost(String post){this.post = post;}
     public void setLink(String link){this.link = link;}
 
-    public void setRank(double rank)
+    @PreUpdate
+    public void updateRank()
     {
-        long postTime = ChronoUnit.HOURS.between(createdAt, LocalDateTime.now());
+        long postTime = ChronoUnit.HOURS.between(created_at, LocalDateTime.now());
         this.rank = votes / Math.pow((postTime + 2), 1.8);
     }
 
     @PrePersist
     public void prePersist()
     {
-        votes = 0;
-        createdAt = LocalDateTime.now();
+        created_at = LocalDateTime.now();
     }
 }

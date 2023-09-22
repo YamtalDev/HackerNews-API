@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import com.akamai.MiniHackerNews.schema.dto.NewsPostRequest;
-import com.akamai.MiniHackerNews.schema.dto.NewsPostResponse;
+import com.akamai.MiniHackerNews.schema.dto.NewsPostRequestDTO;
+import com.akamai.MiniHackerNews.schema.dto.NewsPostResponseDTO;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,49 +39,49 @@ import org.springframework.web.bind.annotation.RestController;
 public class NewsPostController
 {
     private NewsPostService newsService;
-    
+
     public NewsPostController(NewsPostService newsService)
     {
         this.newsService = newsService;
     }
     
     @PostMapping(value = "/news")
-    public ResponseEntity<NewsPostResponse> saveNewsPost(@Valid @RequestBody NewsPostRequest newsPost)
+    public ResponseEntity<NewsPostResponseDTO> saveNewsPost(@Valid @RequestBody NewsPostRequestDTO newsPost)
     {
-        return new ResponseEntity<NewsPostResponse>
+        return new ResponseEntity<NewsPostResponseDTO>
         (newsService.saveNewsPost(newsPost), HttpStatus.CREATED);
     }
 
     @GetMapping("/news")
-    public ResponseEntity<Page<NewsPostResponse>> getAllPosts(Pageable pageable)
+    public ResponseEntity<Page<NewsPostResponseDTO>> getAllPosts(Pageable pageable)
     {
-        Page<NewsPostResponse> newsPosts = newsService.getAllPosts(pageable);
-        return (new ResponseEntity<Page<NewsPostResponse>>(newsPosts, HttpStatus.OK));
+        Page<NewsPostResponseDTO> newsPosts = newsService.getAllPosts(pageable);
+        return (new ResponseEntity<Page<NewsPostResponseDTO>>(newsPosts, HttpStatus.OK));
     }
 
     @Cacheable("anato")
     @GetMapping("/news/top-posts")
-    public ResponseEntity<Page<NewsPostResponse>> getTopPostsByRank(Pageable pageable)
+    public ResponseEntity<Page<NewsPostResponseDTO>> getTopPostsByRank(Pageable pageable)
     {
-        Page<NewsPostResponse> newsPosts = newsService.getPostsByRankDesc(pageable);
+        Page<NewsPostResponseDTO> newsPosts = newsService.getPostsByRankDesc(pageable);
         return (new ResponseEntity<>(newsPosts, HttpStatus.OK));
     }
     
     @Cacheable(key = "#post_id")
     @GetMapping("/news/{post_id}")
-    public ResponseEntity<NewsPostResponse> getPostById
+    public ResponseEntity<NewsPostResponseDTO> getPostById
     (@Valid @PathVariable("post_id") Long post_id)
     {
-        return (new ResponseEntity<NewsPostResponse>
+        return (new ResponseEntity<NewsPostResponseDTO>
         (newsService.getPostById(post_id), HttpStatus.OK));
     }
 
     @CachePut(key = "#post_id")
     @PutMapping("/news/{post_id}")
-    public ResponseEntity<NewsPostResponse> updatePost
-    (@Valid @RequestBody NewsPostRequest updatedPost, @Valid @PathVariable("post_id") Long post_id)
+    public ResponseEntity<NewsPostResponseDTO> updatePost
+    (@Valid @RequestBody NewsPostRequestDTO updatedPost, @Valid @PathVariable("post_id") Long post_id)
     {
-        return (new ResponseEntity<NewsPostResponse>
+        return (new ResponseEntity<NewsPostResponseDTO>
         (newsService.updatePost(updatedPost, post_id), HttpStatus.OK));
     }
 
