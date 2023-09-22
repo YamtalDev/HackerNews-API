@@ -30,7 +30,7 @@ public class NewsPostServiceImpl implements NewsPostService
     private ModelMapper modelMapper;
     private NewsPostRepository newsPostRepository;
 
-    public NewsPostServiceImpl(NewsPostRepository newsPostRepository, ModelMapper modelMapper)
+    public NewsPostServiceImpl(ModelMapper modelMapper, NewsPostRepository newsPostRepository)
     {
         this.modelMapper = modelMapper;
         this.newsPostRepository = newsPostRepository;
@@ -46,8 +46,7 @@ public class NewsPostServiceImpl implements NewsPostService
         
         try
         {
-            return (modelMapper.map
-            (newsPostRepository.save(newsPost), NewsPostResponse.class));
+            return (modelMapper.map(newsPostRepository.save(newsPost), NewsPostResponse.class));
         }
         catch (DataIntegrityViolationException exception)
         {
@@ -74,7 +73,7 @@ public class NewsPostServiceImpl implements NewsPostService
         return (newsPostRepository.findAll(pageable)).map
         (entity -> modelMapper.map(entity, NewsPostResponse.class));
     }
-    
+
     @Override
     public Page<NewsPostResponse> getPostsByRankDesc(Pageable pageable)
     {
@@ -138,9 +137,21 @@ public class NewsPostServiceImpl implements NewsPostService
         }
     }
 
-    public NewsPostEntity getPostEntityById(Long post_id) throws ResourceNotFoundException
+    private NewsPostEntity getPostEntityById(Long post_id) throws ResourceNotFoundException
     {
         return (newsPostRepository.findById(post_id).orElseThrow(() -> 
         new ResourceNotFoundException("post_id", post_id, "post")));
     }
+
+    // public NewsPostResponse entityToResponse(NewsPostEntity entity)
+    // {
+    //     return (new NewsPostResponse(
+    //         entity.getPostId(),
+    //         entity.getPost(),
+    //         entity.getUserName(),
+    //         entity.getLink(),
+    //         entity.getPostTime(),
+    //         entity.getVotes())
+    //     );
+    // }
 }

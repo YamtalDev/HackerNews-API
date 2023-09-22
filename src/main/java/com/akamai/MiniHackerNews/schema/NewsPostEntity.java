@@ -98,4 +98,9 @@ public class NewsPostEntity
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
+
+    public Long getPostId()
+    {
+        return (post_id);
+    }
 }

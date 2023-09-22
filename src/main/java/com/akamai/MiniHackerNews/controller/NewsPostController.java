@@ -45,12 +45,11 @@ public class NewsPostController
         this.newsService = newsService;
     }
     
-    @PostMapping("/news")
-    public ResponseEntity<NewsPostResponse> saveNewsPost
-    (@Valid @RequestBody NewsPostRequest newsPost)
+    @PostMapping(value = "/news")
+    public ResponseEntity<NewsPostResponse> saveNewsPost(@Valid @RequestBody NewsPostRequest newsPost)
     {
-        return (new ResponseEntity<NewsPostResponse>
-        (newsService.saveNewsPost(newsPost), HttpStatus.CREATED));
+        return new ResponseEntity<NewsPostResponse>
+        (newsService.saveNewsPost(newsPost), HttpStatus.CREATED);
     }
 
     @GetMapping("/news")
@@ -110,5 +109,4 @@ public class NewsPostController
         return (new ResponseEntity<String>
         (newsService.downvotePost(post_id) + " 👎", HttpStatus.OK));
     }
-
 }
