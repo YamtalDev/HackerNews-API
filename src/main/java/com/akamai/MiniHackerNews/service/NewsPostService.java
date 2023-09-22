@@ -30,14 +30,6 @@ import com.akamai.MiniHackerNews.schema.dto.NewsPostRequestDTO;
 import com.akamai.MiniHackerNews.schema.dto.NewsPostResponseDTO;
 import com.akamai.MiniHackerNews.schema.dto.NewsUpdateRequestDTO;
 
-/******************************************************************************
- * @author Tal Aharon
- * @version 1.0.0
- * @license MIT
- * @since 19/9/2023
- * @description:  
-******************************************************************************/
-
 public interface NewsPostService
 {
     public int upvotePost(Long postId);

@@ -69,7 +69,12 @@ public class NewsPostSchema
 
     @CreatedDate
     @Column(name = "creation_time", updatable = true)
-    private LocalDateTime time;
+    private LocalDateTime creationTime;
+
+    @NotBlank(message = "Time elapsed is required")
+    @Column(name = "time_elapsed", updatable = true)
+    @Size(min = 3, max = 20, message = "Time elapsed must be between 3 to 20 characters long")
+    private String timeElapsed;
 
     @Column(name = "rank", updatable = true)
     @Min(value = 0, message = "Rank must be a non-negative value")
@@ -101,9 +106,9 @@ public class NewsPostSchema
         return (postedBy);
     }
 
-    public LocalDateTime getTime()
+    public String getTimeElapsed()
     {
-        return (time);
+        return (timeElapsed);
     }
 
     public void upVote()
@@ -134,13 +139,34 @@ public class NewsPostSchema
     @PrePersist
     public void setTime()
     {
-        this.time = LocalDateTime.now();
+        timeElapsed = "Just now";
+        this.creationTime = LocalDateTime.now();
     }
 
     @PreUpdate
     public void updateRank()
     {
-        long postTime = ChronoUnit.HOURS.between(time, LocalDateTime.now());
-        this.rank = votes / Math.pow((postTime + 2), 1.8);
+        long hoursFromCreation = ChronoUnit.HOURS.between(creationTime, LocalDateTime.now());
+        this.rank = votes / Math.pow((hoursFromCreation + 2), 1.8);
+    }
+
+    public void updateTimeElapsed()
+    {
+        long timeValue = 0;
+        String timeUnit = "";
+        long hoursFromCreation = ChronoUnit.HOURS.between(creationTime, LocalDateTime.now());
+
+        if(hoursFromCreation < 24)
+        {
+            timeValue = hoursFromCreation;
+            timeUnit = "hour";
+        }
+        else
+        {
+            timeValue = hoursFromCreation / 24;
+            timeUnit = "day";
+        }
+
+        this.timeElapsed = timeValue + " " + timeUnit + (timeValue == 1 ? "" : "s") + " ago";
     }
 }

@@ -24,18 +24,13 @@ SOFTWARE.
 ******************************************************************************/
 package com.akamai.MiniHackerNews.schema.dto;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
-import jakarta.persistence.PreUpdate;
-
 public class NewsPostResponseDTO
 {
     private Long postId;
     private String postedBy;
     private String post;
     private String link;
-    private String time;
+    private String timeElapsed;
     private int votes;
 
     public NewsPostResponseDTO()
@@ -63,9 +58,9 @@ public class NewsPostResponseDTO
         return (postId);
     }
 
-    public String getTime()
+    public String getTimeElapsed()
     {
-        return (time);
+        return (timeElapsed);
     }
 
     public String getPostedBy()
@@ -98,30 +93,8 @@ public class NewsPostResponseDTO
         this.postedBy = postedBy;
     }
 
-    @PreUpdate
-    public void setTime(LocalDateTime time)
+    public void setTimeElapsed(String timeElapsed)
     {
-        long timeElapsed = ChronoUnit.HOURS.between(time, LocalDateTime.now());
-        if(timeElapsed < 1)
-        {
-            this.time = "Just now";
-        }
-        else
-        {
-            long timeValue = 0;
-            String timeUnit = "";
-            if(timeElapsed < 24)
-            {
-                timeValue = timeElapsed;
-                timeUnit = "hour";
-            }
-            else
-            {
-                timeValue = timeElapsed / 24;
-                timeUnit = "day";
-            }
-
-            this.time = timeValue + " " + timeUnit + (timeValue == 1 ? "" : "s") + " ago";
-        }
+        this.timeElapsed = timeElapsed;
     }
 }

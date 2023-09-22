@@ -1,5 +1,6 @@
 package com.akamai.MiniHackerNews.service;
 
-public class AsyncUpdate {
-    
+public interface AsyncUpdate
+{
+    public void updateRanksAsync();
 }
