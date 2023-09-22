@@ -18,6 +18,13 @@ public class NewsUpdateRequestDTO
     @Size(min = 10, max = 1024, message = "Link must be between 10 to 1024 characters long")
     private String link;
 
-    public String getPost(){return (post);}
-    public String getLink(){return (link);}
+    public String getPost()
+    {
+        return (post);
+    }
+
+    public String getLink()
+    {
+        return (link);
+    }
 }

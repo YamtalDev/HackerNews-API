@@ -37,14 +37,15 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     @Override
-    public NewsPostResponseDTO saveNewsPost(NewsPostRequestDTO newsPostDTO) throws ValidationException
+    public NewsPostResponseDTO saveNewPost(NewsPostRequestDTO newsPostDTO) throws ValidationException
     {
+        NewsPostSchema newPost = new NewsPostSchema();
+        newPost.setPostedBy(newsPostDTO.getPostedBy());
+        newPost.setPost(newsPostDTO.getPost());
+        newPost.setLink(newsPostDTO.getLink());
+
         try
         {
-            NewsPostSchema newPost = new NewsPostSchema();
-            newPost.setLink(newsPostDTO.getLink());
-            newPost.setPost(newsPostDTO.getPost());
-            newPost.setPostedBy(newsPostDTO.getPostedBy());
             return (modelMapper.map(newsPostRepository.save(newPost), NewsPostResponseDTO.class));
         }
         catch (DataIntegrityViolationException exception)
@@ -54,16 +55,16 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     @Override
-    public void deletePost(Long post_id)
+    public void deletePost(Long postId)
     {
-        getPostById(post_id);
-        newsPostRepository.deleteById(post_id);
+        getPostById(postId);
+        newsPostRepository.deleteById(postId);
     }
 
     @Override
-    public NewsPostResponseDTO getPostById(Long post_id) throws NewsPostNotFoundException
+    public NewsPostResponseDTO getPostById(Long postId) throws NewsPostNotFoundException
     {
-        return (modelMapper.map(getPostEntityById(post_id),NewsPostResponseDTO.class));
+        return (modelMapper.map(getPostEntityById(postId),NewsPostResponseDTO.class));
     }
 
     @Override
@@ -81,13 +82,13 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     @Override
-    public NewsPostResponseDTO updatePost(NewsPostRequestDTO newsPostDTO, Long post_id) throws ValidationException
+    public NewsPostResponseDTO updatePost(NewsPostRequestDTO newsPostDTO, Long postId) throws ValidationException
     {
         try
         {
-            NewsPostSchema existingPost = getPostEntityById(post_id);
+            NewsPostSchema existingPost = getPostEntityById(postId);
 
-            existingPost.setCreationTime();
+            existingPost.setTime();
             existingPost.setLink(newsPostDTO.getLink());
             existingPost.setPost(newsPostDTO.getPost());
             existingPost.setPostedBy(newsPostDTO.getPostedBy());
@@ -100,11 +101,11 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     @Override
-    public NewsPostResponseDTO changePost(NewsUpdateRequestDTO newsPostDTO, Long post_id) throws ValidationException
+    public NewsPostResponseDTO changePost(NewsUpdateRequestDTO newsPostDTO, Long postId) throws ValidationException
     {
         try
         {
-            NewsPostSchema existingPost = getPostEntityById(post_id);
+            NewsPostSchema existingPost = getPostEntityById(postId);
 
             existingPost.setLink(newsPostDTO.getLink());
             existingPost.setPost(newsPostDTO.getPost());
@@ -122,11 +123,11 @@ public class NewsPostServiceImpl implements NewsPostService
     * that will increment and decrement an entity vote directly without fetching the entity.
     *************************************************************************/
     @Override
-    public int upvotePost(Long post_id) throws ValidationException
+    public int upvotePost(Long postId) throws ValidationException
     {
         try
         {
-            NewsPostSchema existingPost = getPostEntityById(post_id);
+            NewsPostSchema existingPost = getPostEntityById(postId);
             existingPost.upVote();
             return (newsPostRepository.save(existingPost).getVotes());
         }
@@ -140,11 +141,11 @@ public class NewsPostServiceImpl implements NewsPostService
     * It can be a better approach to implement a specific query to the data base 
     * that will increment and decrement an entity vote directly without fetching the entity.
     *************************************************************************/    @Override
-    public int downvotePost(Long post_id) throws ValidationException
+    public int downvotePost(Long postId) throws ValidationException
     {
         try
         {
-            NewsPostSchema existingPost = getPostEntityById(post_id);
+            NewsPostSchema existingPost = getPostEntityById(postId);
             existingPost.downVote();
             return (newsPostRepository.save(existingPost).getVotes());
         }
@@ -154,9 +155,9 @@ public class NewsPostServiceImpl implements NewsPostService
         }
     }
 
-    private NewsPostSchema getPostEntityById(Long post_id) throws NewsPostNotFoundException
+    private NewsPostSchema getPostEntityById(Long postId) throws NewsPostNotFoundException
     {
-        return (newsPostRepository.findById(post_id).orElseThrow(() -> 
-        new NewsPostNotFoundException("post_id", post_id, "post")));
+        return (newsPostRepository.findById(postId).orElseThrow(() -> 
+        new NewsPostNotFoundException("postId", postId, "post")));
     }
 }

@@ -1,4 +1,4 @@
-package com.akamai.MiniHackerNews.config;
+package com.akamai.MiniHackerNews.schema.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;

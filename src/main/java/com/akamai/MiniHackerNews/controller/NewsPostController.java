@@ -44,15 +44,15 @@ public class NewsPostController
         this.newsService = newsService;
     }
     
-    @PostMapping(value = "")
+    @PostMapping("")
     public ResponseEntity<NewsPostResponseDTO> saveNewsPost
     (@Valid @RequestBody NewsPostRequestDTO newsPost)
     {
         return new ResponseEntity<NewsPostResponseDTO>
-        (newsService.saveNewsPost(newsPost), HttpStatus.CREATED);
+        (newsService.saveNewPost(newsPost), HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "")
+    @GetMapping("")
     public ResponseEntity<Page<NewsPostResponseDTO>> getAllPosts(Pageable pageable)
     {
         Page<NewsPostResponseDTO> newsPosts = newsService.getAllPosts(pageable);
@@ -60,7 +60,7 @@ public class NewsPostController
     }
 
     @Cacheable("anato")
-    @GetMapping(value = "/top-posts")
+    @GetMapping("/top-posts")
     public ResponseEntity<Page<NewsPostResponseDTO>> getTopPostsByRank(Pageable pageable)
     {
         Page<NewsPostResponseDTO> newsPosts = newsService.getPostsByRankDesc(pageable);
@@ -68,7 +68,7 @@ public class NewsPostController
     }
 
     @Cacheable(key = "#post_id")
-    @GetMapping(value = "/{postId}")
+    @GetMapping("/{postId}")
     public ResponseEntity<NewsPostResponseDTO> getPostById
     (@Valid @PathVariable("postId") Long postId)
     {
@@ -77,7 +77,7 @@ public class NewsPostController
     }
 
     @CachePut(key = "#post_id")
-    @PutMapping(value = "/{postId}")
+    @PutMapping("/{postId}")
     public ResponseEntity<NewsPostResponseDTO> updatePost
     (@Valid @RequestBody NewsPostRequestDTO updatedPost, @Valid @PathVariable("postId") Long postId)
     {
@@ -86,7 +86,7 @@ public class NewsPostController
     }
 
     @CacheEvict(key = "#post_id")
-    @DeleteMapping(value = "/{postId}")
+    @DeleteMapping("/{postId}")
     public ResponseEntity<String> deletePost
     (@Valid @PathVariable("postId") Long postId)
     {
@@ -94,7 +94,7 @@ public class NewsPostController
         return (new ResponseEntity<String>("Post deleted", HttpStatus.OK));
     }
 
-    @PatchMapping(value = "/{post_id}")
+    @PatchMapping("/{post_id}")
     public ResponseEntity<NewsPostResponseDTO> changePost
     (@Valid @RequestBody NewsUpdateRequestDTO changedPost, @Valid @PathVariable("postId") Long postId)
     {
@@ -102,7 +102,7 @@ public class NewsPostController
         (newsService.changePost(changedPost, postId), HttpStatus.OK));
     }
 
-    @PatchMapping(value = "/{post_id}/upvote")
+    @PatchMapping("/{post_id}/upvote")
     public ResponseEntity<String> upvotePost
     (@Valid @PathVariable("postId") Long postId)
     {
@@ -110,7 +110,7 @@ public class NewsPostController
         ( "👍 " + newsService.upvotePost(postId), HttpStatus.OK));
     }
 
-    @PatchMapping(value = "/{post_id}/downvote")
+    @PatchMapping("/{post_id}/downvote")
     public ResponseEntity<String> downvotePost
     (@Valid @PathVariable("postId") Long postId)
     {
