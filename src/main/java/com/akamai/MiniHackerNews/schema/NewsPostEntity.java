@@ -13,7 +13,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.URL;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 /******************************************************************************
  * @author Tal Aharon
@@ -42,18 +41,18 @@ public class NewsPostEntity
     @Max(value = Long.MAX_VALUE, message = "Maximum posts capacity reached.")
     private Long post_id;
 
-    @Column(name = "post", nullable = false)
     @NotBlank(message = "Post is required")
+    @Column(name = "post", nullable = false, updatable = true)
     @Size(min = 1, max = 1024, message = "Post must be between 1 and 1024 characters")
     private String post;
 
-    @Column(name = "user_name", nullable = false)
     @NotBlank(message = "User name is required")
+    @Column(name = "posted_by", nullable = false, updatable = false)
     @Size(min = 3, max = 20, message = "User name must be between 3 to 20 characters")
-    private String userName;
+    private String postedBy;
 
-    @Column(name = "link")
     @NotBlank(message = "Url is required.")
+    @Column(name = "link", nullable = false, updatable = true)
     @URL(message = "Invalid URL. Please provide a valid HTTP or HTTPS URL.")
     @Size(min = 10, max = 1024, message = "Link must be between 10 to 1024 characters long")
     private String link;
@@ -62,16 +61,6 @@ public class NewsPostEntity
     @Column(name = "creation_time", updatable = false)
     @PastOrPresent(message = "Creation time must be in the past or present")
     private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_time", updatable = true)
-    @PastOrPresent(message = "Updating time must be in the past or present")
-    private LocalDateTime updatedAt;
-
-    @Min(value = 0, message = "post time must be a non-negative value")
-    @Max(value = Long.MAX_VALUE, message = "Maximum time reached")
-    @Column(name = "post_time", updatable = true)
-    private long postTime;
 
     @Column(name = "rank")
     @Min(value = 0, message = "Rank must be a non-negative value")
@@ -83,12 +72,20 @@ public class NewsPostEntity
     @Max(value = Integer.MAX_VALUE, message = "Maximum votes reached")
     private int votes;
 
-    @PreUpdate
-    public void preUpdate()
+    public int getVotes(){return (votes);}
+    public String getPost(){return (post);}
+    public double getRank(){return (rank);}
+    public Long getPostId(){return (post_id);}
+    public String getPostedBy(){return (postedBy);}
+
+    public void setVotes(){++this.votes;}
+    public void setPost(String post){this.post = post;}
+    public void setLink(String link){this.link = link;}
+
+    public void setRank(double rank)
     {
-        updatedAt = LocalDateTime.now();
-        postTime = ChronoUnit.SECONDS.between(createdAt, updatedAt) / 36000;
-        rank = votes / Math.pow((postTime + 2), 1.8);
+        long postTime = ChronoUnit.HOURS.between(createdAt, LocalDateTime.now());
+        this.rank = votes / Math.pow((postTime + 2), 1.8);
     }
 
     @PrePersist
@@ -96,11 +93,5 @@ public class NewsPostEntity
     {
         votes = 0;
         createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    public Long getPostId()
-    {
-        return (post_id);
     }
 }

@@ -1,5 +1,8 @@
 package com.akamai.MiniHackerNews.schema.dto;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 public class NewsPostResponse
 {
     private Long post_id;
@@ -24,9 +27,10 @@ public class NewsPostResponse
     public void setPost_id(Long post_id){this.post_id = post_id;}
     public void setUserName(String userName){this.userName = userName;}
 
-    public void setPostTime(long postTime)
+    public void setPostTime(LocalDateTime createdAt)
     {
-        if (postTime < 1)
+        long postedAt = ChronoUnit.HOURS.between(createdAt, LocalDateTime.now());
+        if(postedAt < 1)
         {
             this.postTime = "Just now";
         }
@@ -34,14 +38,14 @@ public class NewsPostResponse
         {
             long timeValue;
             String timeUnit;
-            if(postTime < 24)
+            if(postedAt < 24)
             {
-                timeValue = postTime;
+                timeValue = postedAt;
                 timeUnit = "hour";
             }
             else
             {
-                timeValue = postTime / 24;
+                timeValue = postedAt / 24;
                 timeUnit = "day";
             }
 
