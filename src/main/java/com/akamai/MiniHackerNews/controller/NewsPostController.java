@@ -53,15 +53,17 @@ import com.akamai.MiniHackerNews.service.*;    /* Internal Implementation */
 import com.akamai.MiniHackerNews.schema.dto.*; /* Internal Implementation */
 
 /**************************************************************************
-* @description          : Controller layer crud Implementation for the api.
-* @NewsPostRequestDTO   : DTO representation of the client post, put requests structure.
-* @NewsPostResponseDTO  : DTO to represent the structure of the response to the client side.
-* @NewsUpdateRequestDTO : DTO representation of the client patch request structure.
-*
-* @apiNote : GET controllers for all posts and for top posts uses pagination 
-           : for efficiently. GET top posts page size is configurable in the application.yml
-           : file. The size is 30 and may change based on the client requirement.
-           : Hacker news webpage is displaying only 28 in the main web page.
+ * @description          : Controller layer crud Implementation for the api.
+ * @NewsPostRequestDTO   : DTO representation of the client post, put requests structure.
+ * @NewsPostResponseDTO  : DTO to represent the structure of the response to the client side.
+ * @NewsUpdateRequestDTO : DTO representation of the client patch request structure.
+ *
+ * @caching : The controllers use caching mechanism, to improve performance.
+ * 
+ * @apiNote : GET controllers for all posts and for top posts uses pagination 
+*           : for efficiently. GET top posts page size is configurable in the application.yml
+ *          : file. The size is 30 and may change based on the client requirement.
+ *          : Hacker news webpage is displaying only 28 in the main web page.
 **************************************************************************/
 
 @Validated

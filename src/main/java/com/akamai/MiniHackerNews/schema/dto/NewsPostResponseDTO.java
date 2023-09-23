@@ -24,6 +24,9 @@ SOFTWARE.
 ******************************************************************************/
 package com.akamai.MiniHackerNews.schema.dto;
 
+/******************************************************************************
+ * @dto : A DTO entity representing the client response.
+******************************************************************************/
 public class NewsPostResponseDTO
 {
     private Long postId;
@@ -35,6 +38,9 @@ public class NewsPostResponseDTO
 
     public NewsPostResponseDTO(){/* Empty*/}
 
+    /**************************************************************************
+     * @GettersNSetters : Defined for the ModelMapper.
+    **************************************************************************/
     public int getVotes(){return (votes);}
     public String getPost(){return (post);}
     public String getLink(){return (link);}

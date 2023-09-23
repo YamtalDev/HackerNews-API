@@ -24,11 +24,15 @@ SOFTWARE.
 ******************************************************************************/
 package com.akamai.MiniHackerNews.schema.dto;
 
-import jakarta.validation.constraints.Size;
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotBlank;
+
 import org.hibernate.validator.constraints.URL;
 
+/******************************************************************************
+ * @dto : This DTO entity is used for client PUT and POST requests.
+******************************************************************************/
 public class NewsPostRequestDTO
 {
     @NotBlank(message = "User name is required")
@@ -47,6 +51,9 @@ public class NewsPostRequestDTO
     @Size(min = 10, max = 1024, message = "Link must be between 10 to 1024 characters long")
     private String link;
 
+    /**************************************************************************
+     * @Getters : Defined for the ModelMapper.
+    **************************************************************************/
     public String getPost(){return (post);}
     public String getLink(){return (link);}
     public String getPostedBy(){return (postedBy);}
