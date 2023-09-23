@@ -29,6 +29,9 @@ spring:
     url: jdbc:mysql://localhost:3306/akamai?useSSL=false&serverTimezone=UTC
     password: '!Tal@2410'
     username: anato
+    hikari:
+          data-source-properties:
+            serverTimezone: Asia/Jerusalem
   jpa:
     hibernate:
       ddl-auto: update
@@ -48,7 +51,7 @@ spring:
     cache-names: anato
     caffeine:
     # 600 entities to cache is chosen because in the web site the maximun number 
-    # of posts that are loaded at once is 583
+    # of posts that are loaded if i scroll to the end is once is 583
     # 45 min just seems resonable for me, caffein was chosen as a cache mechanism 
     # because it is easy to integrate, quick to implement and efficient.
-      spec: maximumSize=600, expireAfterAccess=45m
+      spec: maximumSize=600, expireAfterAccess=30m

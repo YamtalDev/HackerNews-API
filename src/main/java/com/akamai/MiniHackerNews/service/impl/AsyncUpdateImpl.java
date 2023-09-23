@@ -38,7 +38,6 @@ import com.akamai.MiniHackerNews.repository.NewsPostRepository;
 public class AsyncUpdateImpl implements AsyncUpdate
 {
     private final NewsPostRepository newsPostRepository;
-
     public AsyncUpdateImpl(NewsPostRepository newsPostRepository)
     {
         this.newsPostRepository = newsPostRepository;
@@ -46,7 +45,7 @@ public class AsyncUpdateImpl implements AsyncUpdate
 
     @Async
     @Override
-    @Scheduled(fixedRate = 36000)
+    @Scheduled(fixedRate = 3600000)
     public void updateRanksAsync()
     {
         List<NewsPostSchema> allPosts = newsPostRepository.findAll();
@@ -60,7 +59,7 @@ public class AsyncUpdateImpl implements AsyncUpdate
 
     @Async
     @Override
-    @Scheduled(fixedRate = 36000)
+    @Scheduled(fixedRate = 3600000)
     public void updateTimeElapsedAsync()
     {
         List<NewsPostSchema> allPosts = newsPostRepository.findAll();

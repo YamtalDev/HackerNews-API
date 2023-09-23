@@ -32,10 +32,10 @@ import com.akamai.MiniHackerNews.schema.dto.NewsUpdateRequestDTO;
 
 public interface NewsPostService
 {
-    public int upvotePost(Long postId);
     public void deletePost(Long postId);
-    public int downvotePost(Long postId);
+    public NewsPostResponseDTO upvotePost(Long postId);
     public NewsPostResponseDTO getPostById(Long postId);
+    public NewsPostResponseDTO downvotePost(Long postId);
     public Page<NewsPostResponseDTO> getAllPosts(Pageable pageable);
     public NewsPostResponseDTO saveNewPost(NewsPostRequestDTO newsPost);
     public Page<NewsPostResponseDTO> getPostsByRankDesc(Pageable pageable);

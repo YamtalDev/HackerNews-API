@@ -115,21 +115,27 @@ public class NewsPostSchema
 
     public void updateTimeElapsed()
     {
-        long timeValue = 0;
-        String timeUnit = "";
         long hoursFromCreation = ChronoUnit.HOURS.between(creationTime, LocalDateTime.now());
-
-        if(hoursFromCreation < 24)
+        if(1 > hoursFromCreation)
         {
-            timeValue = hoursFromCreation;
-            timeUnit = "hour";
+            timeElapsed = "Just now";
         }
         else
         {
-            timeValue = hoursFromCreation / 24;
-            timeUnit = "day";
-        }
+            long timeValue = 0;
+            String timeUnit = "";
+            if(hoursFromCreation < 24)
+            {
+                timeValue = hoursFromCreation;
+                timeUnit = "hour";
+            }
+            else
+            {
+                timeValue = hoursFromCreation / 24;
+                timeUnit = "day";
+            }
 
-        this.timeElapsed = timeValue + " " + timeUnit + (timeValue == 1 ? "" : "s") + " ago";
+            this.timeElapsed = timeValue + " " + timeUnit + (timeValue == 1 ? "" : "s") + " ago";
+        }
     }
 }

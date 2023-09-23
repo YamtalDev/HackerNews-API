@@ -12,7 +12,8 @@ If i had more time i would implement the comments count and posting of comments.
 Restrictions for 1 up vote and down vote at a time per user in a session.
 use a schema.sql to provide data base migration in the app.
 Indexing: Ensure that your database tables have appropriate indexes, especially on columns used in queries frequently. Indexes can significantly improve query performance.
-
+think of how to catch the lower level exception of the data base instead of an if in the up/down vote.
+think of a way to update the cache of the top most posts when the data is changing.
 
 
 Database Optimization: As your application grows, database performance becomes critical. Make sure you're using appropriate indexes, caching mechanisms, and database connection pooling. You can also consider using Spring's support for database transactions.

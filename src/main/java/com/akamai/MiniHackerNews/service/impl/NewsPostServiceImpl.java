@@ -31,8 +31,6 @@ import com.akamai.MiniHackerNews.repository.*;
 import com.akamai.MiniHackerNews.schema.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
-
-import com.akamai.MiniHackerNews.service.AsyncUpdate;
 import com.akamai.MiniHackerNews.service.NewsPostService;
 import org.springframework.dao.DataIntegrityViolationException;
 import com.akamai.MiniHackerNews.exception.ValidationException;
@@ -42,13 +40,11 @@ import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException;
 public class NewsPostServiceImpl implements NewsPostService
 {
     private ModelMapper modelMapper;
-    private final AsyncUpdate asyncUpdate;
     private NewsPostRepository newsPostRepository;
 
     public NewsPostServiceImpl
-    (AsyncUpdate asyncUpdate, ModelMapper modelMapper, NewsPostRepository newsPostRepository)
+    (ModelMapper modelMapper, NewsPostRepository newsPostRepository)
     {
-        this.asyncUpdate = asyncUpdate;
         this.modelMapper = modelMapper;
         this.newsPostRepository = newsPostRepository;
     }
@@ -83,8 +79,6 @@ public class NewsPostServiceImpl implements NewsPostService
     @Override
     public Page<NewsPostResponseDTO> getAllPosts(Pageable pageable)
     {
-        asyncUpdate.updateRanksAsync();
-        asyncUpdate.updateTimeElapsedAsync();
         return (newsPostRepository.findAll(pageable)).map
         (entity -> modelMapper.map(entity, NewsPostResponseDTO.class));
     }
@@ -133,18 +127,16 @@ public class NewsPostServiceImpl implements NewsPostService
     * that will increment and decrement an entity vote directly without fetching the entity.
     *************************************************************************/
     @Override
-    public int upvotePost(Long postId) throws ValidationException
+    public NewsPostResponseDTO upvotePost(Long postId) throws ValidationException
     {
-        try
-        {
-            NewsPostSchema existingPost = getPostEntityById(postId);
-            existingPost.upVote();
-            return (newsPostRepository.save(existingPost).getVotes());
-        }
-        catch(DataIntegrityViolationException | NewsPostNotFoundException exception)
+        NewsPostSchema existingPost = getPostEntityById(postId);
+        if(Integer.MAX_VALUE == existingPost.getVotes())
         {
             throw (new ValidationException("Maximum votes reached."));
         }
+
+        existingPost.upVote();
+        return (modelMapper.map(newsPostRepository.save(existingPost), NewsPostResponseDTO.class));
     }
 
     /*************************************************************************
@@ -152,18 +144,16 @@ public class NewsPostServiceImpl implements NewsPostService
     * that will increment and decrement an entity vote directly without fetching the entity.
     *************************************************************************/
     @Override
-    public int downvotePost(Long postId) throws ValidationException
+    public NewsPostResponseDTO downvotePost(Long postId) throws ValidationException
     {
-        try
+        NewsPostSchema existingPost = getPostEntityById(postId);
+        if(existingPost.getVotes() == 0)
         {
-            NewsPostSchema existingPost = getPostEntityById(postId);
-            existingPost.downVote();
-            return (newsPostRepository.save(existingPost).getVotes());
+            throw new ValidationException("Cannot downvote below zero.");
         }
-        catch(DataIntegrityViolationException | NewsPostNotFoundException exception)
-        {
-            throw (new ValidationException("Cannot downvote below zero."));
-        }
+
+        existingPost.downVote();
+        return (modelMapper.map(newsPostRepository.save(existingPost), NewsPostResponseDTO.class));
     }
 
     private NewsPostSchema getPostEntityById(Long postId) throws NewsPostNotFoundException
