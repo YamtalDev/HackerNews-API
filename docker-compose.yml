@@ -1,7 +1,20 @@
-version: "3"
+version: "3.8"
 services:
-  springboot-app:
-    image: springboot-app
+  server:
+    build:
+    restart: always
     ports:
-      - 8080:8080
-    
+      -8080:8080
+    depends_on:
+      - mysqldb
+  mysqldb:
+    platform: linux/x86_64
+    image: "mysql:8:0"
+    restart: always
+    ports:
+      -3307:3306
+    environment:
+      MYSQL_DATABASE: news_posts
+      MYSQL_USER: yamtaldev
+      MYSQL_PASSWORD: '!YamtalDev254'
+      MYSQL_ROOT_PASSWORD: '!Tal@2410'

@@ -31,7 +31,7 @@ spring:
   datasource:
     # Please fill in your password, username, local MySQL data base url fields
     url: ${DB_DATABASE_URL}
-    # passwrd should be: 'your password'
+    # Passwrd should be - password: 'your-password'
     password: ${DB_PASSWORD}
     username: ${DB_USER}
     hikari:

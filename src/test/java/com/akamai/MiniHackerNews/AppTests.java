@@ -32,9 +32,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 @AutoConfigureMockMvc
 public class AppTests
 {
-    @Test
-    public void testGetAllContentEndpoint() throws Exception
+	@Test
+	public void contextLoads()
     {
 
-    }
+	}
 }
