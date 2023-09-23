@@ -25,22 +25,25 @@
 ###############################################################################
 
 spring:
+  config:
+    import: env.properties
+
   datasource:
-
     # Please fill in your password, username, local MySQL data base url fields
-    url: jdbc:mysql://localhost:3306/akamai?useSSL=false&serverTimezone=UTC
-    password: '!Tal@2410'
-    username: anato
-
+    url: ${DB_DATABASE_URL}
+    password: ${DB_PASSWORD}
+    username: ${DB_USER}
     hikari:
           data-source-properties:
             serverTimezone: Asia/Jerusalem
+
   jpa:
     hibernate:
       ddl-auto: update
     open-in-view: false
     database-platform: org.hibernate.dialect.MySQLDialect
-    show-sql: true
+    # For debugging purposes you can reveal this line
+    #show-sql: true
     properties:
       hibernate:
         globally_quoted_identifiers: true
@@ -51,7 +54,7 @@ spring:
       mode: never
   cache:
     # My nickname
-    cache-names: anato
+    cache-names: ${CACHE_NAME}
     caffeine:
     # 600 entities to cache is chosen because in the Hacker News web site the 
     # maximun number of posts that are loaded if scrolling down to the end is is 583
