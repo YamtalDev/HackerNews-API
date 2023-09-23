@@ -55,3 +55,10 @@ spring:
     # 45 min just seems resonable for me, caffein was chosen as a cache mechanism 
     # because it is easy to integrate, quick to implement and efficient.
       spec: maximumSize=600, expireAfterAccess=30m
+app:
+  # 30 Enitites per result from the data base.
+  top-posts-page-size: 30
+
+  # every houre update the data base.
+  rank_update_cycle: 3600000
+  time_elapsed_cycle: 3600000

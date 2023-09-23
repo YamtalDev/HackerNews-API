@@ -25,15 +25,28 @@ SOFTWARE.
 package com.akamai.MiniHackerNews.schema;
 
 import lombok.Data;
-import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import lombok.NoArgsConstructor;
-import jakarta.validation.constraints.*;
+
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.URL;
+
 import org.springframework.data.annotation.CreatedDate;
+
+import jakarta.persistence.*;            /* Internal API */
+import jakarta.validation.constraints.*; /* Internal API */
+
+/******************************************************************************
+ * @description : NewsPostSchema representation of a news post in the Mini Hacker 
+ *              : News system. Each news post post id, contains a title, text
+ *              : link creation time, elapsed time, rank and vote counts.
+ * 
+ * @apiNote:    : The data schema contains PreUpdate and PrePersist methods.
+ *              : Also methods to upvote, downvote and update rank/elapsed time.
+******************************************************************************/
 
 @Data
 @Entity
@@ -86,33 +99,61 @@ public class NewsPostSchema
     @Max(value = Integer.MAX_VALUE, message = "Maximum votes reached")
     private int votes;
 
+    /**************************************************************************
+     * @GettersNSetters : Implementation for the ModelMapper to map between DTO entities.
+    **************************************************************************/
     public int getVotes(){return (votes);}
     public String getPost(){return (post);}
     public Long getPostId(){return (postId);}
     public String getPostedBy(){return (postedBy);}
     public String getTimeElapsed(){return (timeElapsed);}
 
-    public void upVote(){++this.votes;}
-    public void downVote(){--this.votes;}
-
     public void setPost(String post){this.post = post;}
     public void setLink(String link){this.link = link;}
     public void setPostedBy(String posted_by){this.postedBy = posted_by;}
 
+    /**************************************************************************
+     * @Voting: Methods to upvote and downvote the post.
+    **************************************************************************/
+    public void upVote()
+    {
+        ++this.votes;
+    }
+
+    public void downVote()
+    {
+        --this.votes;
+    }
+
+    /**************************************************************************
+     * @Initiation: Every time a post will be constructed this method will be triggered.
+    **************************************************************************/
     @PrePersist
     public void setTime()
     {
+        rank = 0;
+        votes = 0;
         timeElapsed = "Just now";
         this.creationTime = LocalDateTime.now();
     }
 
+    /**************************************************************************
+     * @Updating : Every time a post will be updated this method will be triggered.
+     *           : The updated values are the rank and the elapsed time.  
+     *           : This method is using the `Hot Post` ranking algorithm. See link below:
+     * @link     : https://medium.com/hacking-and-gonzo/how-hacker-news-ranking-algorithm-works-1d9b0cf2c08d
+     **************************************************************************/
     @PreUpdate
-    public void updateRank()
+    public void update()
     {
+        updateTimeElapsed();
         long hoursFromCreation = ChronoUnit.HOURS.between(creationTime, LocalDateTime.now());
         this.rank = votes / Math.pow((hoursFromCreation + 2), 1.8);
     }
 
+    /**************************************************************************
+     * @time: Represent the time elapsed as a string for the client(Just like Hacker news displays it).
+    **************************************************************************/
     public void updateTimeElapsed()
     {
         long hoursFromCreation = ChronoUnit.HOURS.between(creationTime, LocalDateTime.now());

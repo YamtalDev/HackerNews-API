@@ -30,8 +30,5 @@ import org.springframework.scheduling.annotation.Async;
 public interface AsyncUpdate
 {
     @Async
-    public void updateRanksAsync();
-
-    @Async
-    public void updateTimeElapsedAsync();
+    public void updateAsync();
 }

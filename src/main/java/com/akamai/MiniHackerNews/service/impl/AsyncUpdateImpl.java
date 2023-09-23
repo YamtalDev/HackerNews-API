@@ -29,6 +29,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import com.akamai.MiniHackerNews.service.AsyncUpdate;
 import com.akamai.MiniHackerNews.schema.NewsPostSchema;
+
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -38,6 +39,7 @@ import com.akamai.MiniHackerNews.repository.NewsPostRepository;
 public class AsyncUpdateImpl implements AsyncUpdate
 {
     private final NewsPostRepository newsPostRepository;
+     
     public AsyncUpdateImpl(NewsPostRepository newsPostRepository)
     {
         this.newsPostRepository = newsPostRepository;
@@ -45,29 +47,17 @@ public class AsyncUpdateImpl implements AsyncUpdate
 
     @Async
     @Override
-    @Scheduled(fixedRate = 3600000)
-    public void updateRanksAsync()
+    @Scheduled(initialDelay = 1800000, fixedRate = 3600000)
+    public void updateAsync()
     {
         List<NewsPostSchema> allPosts = newsPostRepository.findAll();
-        for (NewsPostSchema post : allPosts)
+        for(NewsPostSchema post : allPosts)
         {
-            post.updateRank();
+            post.update();
         }
 
         newsPostRepository.saveAll(allPosts);
     }
 
-    @Async
-    @Override
-    @Scheduled(fixedRate = 3600000)
-    public void updateTimeElapsedAsync()
-    {
-        List<NewsPostSchema> allPosts = newsPostRepository.findAll();
-        for (NewsPostSchema post : allPosts)
-        {
-            post.updateTimeElapsed();
-        }
 
-        newsPostRepository.saveAll(allPosts);
-    }
 }

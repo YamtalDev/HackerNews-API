@@ -24,10 +24,6 @@ SOFTWARE.
 ******************************************************************************/
 package com.akamai.MiniHackerNews.controller;
 
-/* Internal API */
-import com.akamai.MiniHackerNews.service.*;
-import com.akamai.MiniHackerNews.schema.dto.*;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +36,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CacheConfig;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 
 import org.springframework.web.bind.annotation.PutMapping;
@@ -52,6 +49,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.akamai.MiniHackerNews.service.*;    /* Internal Implementation */
+import com.akamai.MiniHackerNews.schema.dto.*; /* Internal Implementation */
+
 /**************************************************************************
 * @description          : Controller layer crud Implementation for the api.
 * @NewsPostRequestDTO   : DTO representation of the client post, put requests structure.
@@ -59,9 +59,9 @@ import org.springframework.web.bind.annotation.RestController;
 * @NewsUpdateRequestDTO : DTO representation of the client patch request structure.
 *
 * @apiNote : GET controllers for all posts and for top posts uses pagination 
-           : for efficiently retrieving the list. GET top posts are set to give 
-           : the 30 top most posts. This is configurable and may change based on 
-           : the client requirement. The Hacker news webpage is displaying only 28.
+           : for efficiently. GET top posts page size is configurable in the application.yml
+           : file. The size is 30 and may change based on the client requirement.
+           : Hacker news webpage is displaying only 28 in the main web page.
 **************************************************************************/
 
 @Validated
@@ -70,6 +70,9 @@ import org.springframework.web.bind.annotation.RestController;
 @CacheConfig(cacheNames = "anato")
 public class NewsPostController
 {
+    @Value("${app.top-posts-page-size}")
+    private int topPostsPageSize;
+
     private NewsPostService newsService;
 
     public NewsPostController(NewsPostService newsService)
@@ -84,8 +87,8 @@ public class NewsPostController
     public ResponseEntity<NewsPostResponseDTO> saveNewsPost
     (@Validated @RequestBody NewsPostRequestDTO newsPost)
     {
-        return new ResponseEntity<NewsPostResponseDTO>
-        (newsService.saveNewPost(newsPost), HttpStatus.CREATED);
+        return (new ResponseEntity<NewsPostResponseDTO>
+        (newsService.saveNewPost(newsPost), HttpStatus.CREATED));
     }
     
     /**************************************************************************
@@ -157,9 +160,9 @@ public class NewsPostController
     @GetMapping("/top-posts")
     public ResponseEntity<Page<NewsPostResponseDTO>> getTopPostsByRank(Pageable pageable)
     {
-        pageable = PageRequest.of(pageable.getPageNumber(), 30);
+        pageable = PageRequest.of(pageable.getPageNumber(), topPostsPageSize);
         Page<NewsPostResponseDTO> newsPosts = newsService.getPostsByRankDesc(pageable);
-        return new ResponseEntity<>(newsPosts, HttpStatus.OK);
+        return (new ResponseEntity<>(newsPosts, HttpStatus.OK));
     }
 
     /**************************************************************************

@@ -51,10 +51,10 @@ public class NewsPostNotFoundException extends RuntimeException
         this.fieldValue = fieldValue;
         this.resourceName = resourceName;
     }
-    /**************************************************************************
-    * Getters for the exception
-    **************************************************************************/
 
+    /**************************************************************************
+    * Getters for the exception handler.
+    **************************************************************************/
     public String getFieldName(){return (fieldName);}
     public Object getFieldValue(){return (fieldValue);}
     public String getResourceName(){return (resourceName);}
