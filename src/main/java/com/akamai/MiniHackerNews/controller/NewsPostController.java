@@ -24,21 +24,26 @@ SOFTWARE.
 ******************************************************************************/
 package com.akamai.MiniHackerNews.controller;
 
+/* Internal API */
 import com.akamai.MiniHackerNews.service.*;
 import com.akamai.MiniHackerNews.schema.dto.*;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.validation.annotation.Validated;
+
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -46,6 +51,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+/**************************************************************************
+* @description          : Controller layer crud Implementation for the api.
+* @NewsPostRequestDTO   : DTO representation of the client post, put requests structure.
+* @NewsPostResponseDTO  : DTO to represent the structure of the response to the client side.
+* @NewsUpdateRequestDTO : DTO representation of the client patch request structure.
+**************************************************************************/
 
 @Validated
 @RestController
@@ -60,6 +72,9 @@ public class NewsPostController
         this.newsService = newsService;
     }
 
+    /**************************************************************************
+     * @description : Save a new new post endpoint.
+    **************************************************************************/
     @PostMapping("")
     public ResponseEntity<NewsPostResponseDTO> saveNewsPost
     (@Validated @RequestBody NewsPostRequestDTO newsPost)
@@ -67,23 +82,10 @@ public class NewsPostController
         return new ResponseEntity<NewsPostResponseDTO>
         (newsService.saveNewPost(newsPost), HttpStatus.CREATED);
     }
-
-    @GetMapping("")
-    public ResponseEntity<Page<NewsPostResponseDTO>> getAllPosts(Pageable pageable)
-    {
-        Page<NewsPostResponseDTO> newsPosts = newsService.getAllPosts(pageable);
-        return (new ResponseEntity<Page<NewsPostResponseDTO>>(newsPosts, HttpStatus.OK));
-    }
-
-    @Cacheable("anato")
-    @GetMapping("/top-posts")
-    public ResponseEntity<Page<NewsPostResponseDTO>> getTopPostsByRank(Pageable pageable)
-    {
-        pageable = PageRequest.of(pageable.getPageNumber(), 30);
-        Page<NewsPostResponseDTO> newsPosts = newsService.getPostsByRankDesc(pageable);
-        return new ResponseEntity<>(newsPosts, HttpStatus.OK);
-    }
-
+    
+    /**************************************************************************
+     * @description : Retrieve a news post by its ID endpoint.
+    **************************************************************************/
     @GetMapping("/{postId}")
     @Cacheable(cacheNames = "anato", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> getPostById
@@ -93,6 +95,9 @@ public class NewsPostController
         (newsService.getPostById(postId), HttpStatus.FOUND));
     }
 
+    /**************************************************************************
+     * @description : Update a post by its ID endpoint.
+    **************************************************************************/
     @PutMapping("/{postId}")
     @CachePut(cacheNames = "anato", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> updatePost
@@ -102,6 +107,9 @@ public class NewsPostController
         (newsService.updatePost(updatedPost, postId), HttpStatus.OK));
     }
 
+    /**************************************************************************
+     * @description : Delete a post by its ID endpoint.
+    **************************************************************************/
     @DeleteMapping("/{postId}")
     @CacheEvict(cacheNames = "anato", key = "#postId")
     public ResponseEntity<String> deletePost
@@ -111,6 +119,9 @@ public class NewsPostController
         return (new ResponseEntity<String>("Post deleted", HttpStatus.OK));
     }
 
+    /**************************************************************************
+     * @description : Change a post by its ID endpoint.
+    **************************************************************************/
     @PatchMapping("/{postId}")
     @CachePut(cacheNames = "anato", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> changePost
@@ -120,6 +131,35 @@ public class NewsPostController
         (newsService.changePost(changedPost, postId), HttpStatus.OK));
     }
 
+    /**************************************************************************
+     * @description    : Retrieve all news posts endpoint.
+     * @param pageable : The pagination information.
+     * @return         : ResponseEntity with a Page of news posts.
+    **************************************************************************/
+    @GetMapping("")
+    public ResponseEntity<Page<NewsPostResponseDTO>> getAllPosts(Pageable pageable)
+    {
+        Page<NewsPostResponseDTO> newsPosts = newsService.getAllPosts(pageable);
+        return (new ResponseEntity<Page<NewsPostResponseDTO>>(newsPosts, HttpStatus.OK));
+    }
+    
+    /**************************************************************************
+     * @description    : Retrieve the top news posts by rank endpoint;
+     * @param pageable : The pagination information.
+     * @return         : ResponseEntity with a Page of the top news posts.
+     **************************************************************************/
+    @Cacheable("anato")
+    @GetMapping("/top-posts")
+    public ResponseEntity<Page<NewsPostResponseDTO>> getTopPostsByRank(Pageable pageable)
+    {
+        pageable = PageRequest.of(pageable.getPageNumber(), 30);
+        Page<NewsPostResponseDTO> newsPosts = newsService.getPostsByRankDesc(pageable);
+        return new ResponseEntity<>(newsPosts, HttpStatus.OK);
+    }
+
+    /**************************************************************************
+     * @description 
+    **************************************************************************/
     @PatchMapping("/{postId}/upvote")
     @CachePut(cacheNames = "anato", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> upvotePost
@@ -129,6 +169,9 @@ public class NewsPostController
         (newsService.upvotePost(postId), HttpStatus.OK));
     }
 
+    /**************************************************************************
+     * @description 
+    **************************************************************************/
     @PatchMapping("/{postId}/downvote")
     @CachePut(cacheNames = "anato", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> downvotePost

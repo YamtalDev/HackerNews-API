@@ -41,8 +41,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /*****************************************************************************
- * @description GlobalExceptionHandler controller advice class that handles exceptions
- * globally for the application in the controller layer.
+ * @description : GlobalExceptionHandler controller advice class that handles exceptions
+ *                globally for the application in the controller layer.
 ******************************************************************************/
 
 @ControllerAdvice
@@ -98,9 +98,9 @@ public class GlobalExceptionHandler
     }
 
     /**************************************************************************
-     * Private error message builder from a FieldError.
-     * @param fieldError The FieldError containing error information.
-     * @return The formatted error message.
+     * @description      : Private error message builder from a FieldError.
+     * @param fieldError : The FieldError containing error information.
+     * @return           : The formatted error message.
     **************************************************************************/
     private String buildErrorMessage(FieldError fieldError)
     {
