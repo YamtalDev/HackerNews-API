@@ -44,7 +44,13 @@ import jakarta.validation.constraints.*; /* Internal API */
  *              : News system. Each news post post id, contains a title, text
  *              : link creation time, elapsed time, rank and vote counts.
  * 
- * @apiNote:    : The data schema contains PreUpdate and PrePersist methods.
+ * @indexing    : The schema is using indexing on the rank value to gain more 
+ *              : efficiency while retrieving the top pots ranked by this number.
+ *
+ * @annotations : The schema uses DynamicUpdate to Specifies that SQL update statements
+ *              : include columns which are actually being updated.
+ * 
+ * @apiNote     : The data schema contains PreUpdate and PrePersist methods.
  *              : Also methods to upvote, downvote and update rank/elapsed time.
 ******************************************************************************/
 
@@ -146,17 +152,16 @@ public class NewsPostSchema
     @PreUpdate
     public void update()
     {
-        updateTimeElapsed();
         long hoursFromCreation = ChronoUnit.HOURS.between(creationTime, LocalDateTime.now());
         this.rank = votes / Math.pow((hoursFromCreation + 2), 1.8);
+        updateTimeElapsed(hoursFromCreation);
     }
 
     /**************************************************************************
      * @time: Represent the time elapsed as a string for the client(Just like Hacker news displays it).
     **************************************************************************/
-    public void updateTimeElapsed()
+    public void updateTimeElapsed(long hoursFromCreation)
     {
-        long hoursFromCreation = ChronoUnit.HOURS.between(creationTime, LocalDateTime.now());
         if(1 > hoursFromCreation)
         {
             timeElapsed = "Just now";
