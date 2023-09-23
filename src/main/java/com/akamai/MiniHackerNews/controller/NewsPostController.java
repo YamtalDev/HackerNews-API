@@ -57,6 +57,11 @@ import org.springframework.web.bind.annotation.RestController;
 * @NewsPostRequestDTO   : DTO representation of the client post, put requests structure.
 * @NewsPostResponseDTO  : DTO to represent the structure of the response to the client side.
 * @NewsUpdateRequestDTO : DTO representation of the client patch request structure.
+*
+* @apiNote : GET controllers for all posts and for top posts uses pagination 
+           : for efficiently retrieving the list. GET top posts are set to give 
+           : the 30 top most posts. This is configurable and may change based on 
+           : the client requirement. The Hacker news webpage is displaying only 28.
 **************************************************************************/
 
 @Validated
@@ -158,7 +163,7 @@ public class NewsPostController
     }
 
     /**************************************************************************
-     * @description 
+     * @description : Upvote a post by its ID endpoint.
     **************************************************************************/
     @PatchMapping("/{postId}/upvote")
     @CachePut(cacheNames = "anato", key = "#postId")
@@ -170,7 +175,7 @@ public class NewsPostController
     }
 
     /**************************************************************************
-     * @description 
+     * @description : Downvote a post by its ID endpoint.
     **************************************************************************/
     @PatchMapping("/{postId}/downvote")
     @CachePut(cacheNames = "anato", key = "#postId")

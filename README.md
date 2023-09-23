@@ -14,7 +14,7 @@ use a schema.sql to provide data base migration in the app.
 Indexing: Ensure that your database tables have appropriate indexes, especially on columns used in queries frequently. Indexes can significantly improve query performance.
 think of how to catch the lower level exception of the data base instead of an if in the up/down vote.
 think of a way to update the cache of the top most posts when the data is changing.
-
+Implement a different algorithm to get the top most posts by adding post_id to of the next ranked posts and then getting those posts.
 
 Database Optimization: As your application grows, database performance becomes critical. Make sure you're using appropriate indexes, caching mechanisms, and database connection pooling. You can also consider using Spring's support for database transactions.
 
