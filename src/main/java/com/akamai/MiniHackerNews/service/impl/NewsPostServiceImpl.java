@@ -22,26 +22,42 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ******************************************************************************/
+
 package com.akamai.MiniHackerNews.service.impl;
 
 import org.modelmapper.ModelMapper;
-import com.akamai.MiniHackerNews.schema.*;
+
 import org.springframework.data.domain.Page;
-import com.akamai.MiniHackerNews.repository.*;
-import com.akamai.MiniHackerNews.schema.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
-import com.akamai.MiniHackerNews.service.NewsPostService;
 import org.springframework.dao.DataIntegrityViolationException;
-import com.akamai.MiniHackerNews.exception.ValidationException;
-import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException;
 
+import com.akamai.MiniHackerNews.schema.*;                            /* Internal Implementation */
+import com.akamai.MiniHackerNews.repository.*;                        /* Internal Implementation */
+import com.akamai.MiniHackerNews.schema.dto.*;                        /* Internal Implementation */
+import com.akamai.MiniHackerNews.service.NewsPostService;             /* Internal Implementation */
+import com.akamai.MiniHackerNews.exception.ValidationException;       /* Internal Implementation */
+import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException; /* Internal Implementation */
+
+/******************************************************************************
+ * @description : Implementation of the NewsPostService responsible for handling 
+ *              : news posts data base entity operations. Provide the functionality 
+ *              : for the controllers layer. The methods in this service layer
+ *              : are using the repository interface methods. (JPA Repository).
+ * 
+ * @exceptions  : All exceptions thrown from the service functions are handled 
+ *              : by the global exception manager.
+******************************************************************************/
 @Service
 public class NewsPostServiceImpl implements NewsPostService
 {
     private ModelMapper modelMapper;
     private NewsPostRepository newsPostRepository;
 
+    /**************************************************************************
+     * @param modelMapper        : Injected ModelMapper instance.
+     * @param newsPostRepository : Injected NewsPostRepository instance.
+    **************************************************************************/
     public NewsPostServiceImpl
     (ModelMapper modelMapper, NewsPostRepository newsPostRepository)
     {
@@ -49,8 +65,15 @@ public class NewsPostServiceImpl implements NewsPostService
         this.newsPostRepository = newsPostRepository;
     }
 
+    /**************************************************************************
+     * @description       : Create and saves a new post based on the provided DTO object.
+     * @param newsPostDTO : The DTO containing the new post data.
+     * @return            : The saved news post as a mapped response DTO object.
+     * @throws ValidationException : If the input data is invalid.
+    **************************************************************************/
     @Override
-    public NewsPostResponseDTO saveNewPost(NewsPostRequestDTO newsPostDTO) throws ValidationException
+    public NewsPostResponseDTO saveNewPost
+    (NewsPostRequestDTO newsPostDTO) throws ValidationException
     {
         try
         {
@@ -63,6 +86,10 @@ public class NewsPostServiceImpl implements NewsPostService
         }
     }
 
+    /**************************************************************************
+     * @description  : Delete a post based on its id.
+     * @param postId :The ID of the post to be deleted.
+    **************************************************************************/
     @Override
     public void deletePost(Long postId)
     {
@@ -70,12 +97,25 @@ public class NewsPostServiceImpl implements NewsPostService
         newsPostRepository.deleteById(postId);
     }
 
+    /**************************************************************************
+     * @description : Retrieve a post by its ID.
+     * @return      : The retrieved post as a response DTO.
+     * @throws NewsPostNotFoundException : If the specified post does not exist.
+    **************************************************************************/
     @Override
-    public NewsPostResponseDTO getPostById(Long postId) throws NewsPostNotFoundException
+    public NewsPostResponseDTO getPostById
+    (Long postId) throws NewsPostNotFoundException
     {
         return (modelMapper.map(getPostEntityById(postId),NewsPostResponseDTO.class));
     }
 
+    /**************************************************************************
+     * @description    : Retrieves a paginated list of all news posts.
+     * @param pageable : The pagination information.
+     * @return         : A page containing news posts as response DTOs.
+     * @implNote       : This method could be implemented also with a simple list.
+     *                 : Due to performance requirements pagination is chosen.
+    **************************************************************************/
     @Override
     public Page<NewsPostResponseDTO> getAllPosts(Pageable pageable)
     {
@@ -83,6 +123,11 @@ public class NewsPostServiceImpl implements NewsPostService
         (entity -> modelMapper.map(entity, NewsPostResponseDTO.class));
     }
 
+    /**************************************************************************
+     * @description : Retrieves the top news posts ordered by rank in descending order.
+     * @implNote    : This method could be implemented also with a simple list.
+     *              : Due to performance requirements pagination is chosen.
+    **************************************************************************/
     @Override
     public Page<NewsPostResponseDTO> getPostsByRankDesc(Pageable pageable)
     {
@@ -90,8 +135,14 @@ public class NewsPostServiceImpl implements NewsPostService
         (entity -> modelMapper.map(entity, NewsPostResponseDTO.class)));
     }
 
+    /**************************************************************************
+     * @description       : Updates an existing news post with new data.
+     * @param newsPostDTO : The DTO containing updated post data.
+     * @throws ValidationException : If the input data is invalid.
+    **************************************************************************/
     @Override
-    public NewsPostResponseDTO updatePost(NewsPostRequestDTO newsPostDTO, Long postId) throws ValidationException
+    public NewsPostResponseDTO updatePost
+    (NewsPostRequestDTO newsPostDTO, Long postId) throws ValidationException
     {
         try
         {
@@ -107,8 +158,13 @@ public class NewsPostServiceImpl implements NewsPostService
         }
     }
 
+    /**************************************************************************
+     * @description : Changes the data of an existing news post.
+     * @throws ValidationException : If the input data is invalid.
+    **************************************************************************/
     @Override
-    public NewsPostResponseDTO changePost(NewsUpdateRequestDTO newsPostDTO, Long postId) throws ValidationException
+    public NewsPostResponseDTO changePost
+    (NewsUpdateRequestDTO newsPostDTO, Long postId) throws ValidationException
     {
         try
         {
@@ -122,10 +178,21 @@ public class NewsPostServiceImpl implements NewsPostService
         }
     }
 
-    /*************************************************************************
-    * It can be a better approach to implement a specific query to the data base 
-    * that will increment and decrement an entity vote directly without fetching the entity.
-    *************************************************************************/
+    /**************************************************************************
+     * @description : Up vote a post by incrementing its vote count.
+     * @return      : The up voted post as a response DTO.
+     * @throws ValidationException : If the maximum votes have been reached.
+     *
+     * @implNote    : It can be a better approach to implement a specific query to upvote
+     *                or down vote directly without fetching the entity from the data base.
+     * 
+     * @implNote    : When a post votes is decremented below 0 ot incremented above 
+     *                the max value, a low level sql exception arises due to the 
+     *                restrictions in the schema. Currently there is an if statement 
+     *                that checks the boundaries and throw a more higher level exception 
+     *                to the exception manager to handle. other wise a jpa transaction 
+     *                error occur. I need to think how to catch it without using if().
+    **************************************************************************/
     @Override
     public NewsPostResponseDTO upvotePost(Long postId) throws ValidationException
     {
@@ -139,26 +206,33 @@ public class NewsPostServiceImpl implements NewsPostService
         return (modelMapper.map(newsPostRepository.save(existingPost), NewsPostResponseDTO.class));
     }
 
-    /*************************************************************************
-    * It can be a better approach to implement a specific query to the data base 
-    * that will increment and decrement an entity vote directly without fetching the entity.
-    *************************************************************************/
+    /**************************************************************************
+     * @description : Down vote a post by decrementing its vote count.
+     * @return      : The up voted post as a response DTO.
+     * @throws ValidationException : If the maximum votes have been reached.
+    **************************************************************************/
     @Override
     public NewsPostResponseDTO downvotePost(Long postId) throws ValidationException
     {
         NewsPostSchema existingPost = getPostEntityById(postId);
-        if(existingPost.getVotes() == 0)
+        if(0 == existingPost.getVotes())
         {
-            throw new ValidationException("Cannot downvote below zero.");
+            throw (new ValidationException("Cannot downvote below zero."));
         }
 
         existingPost.downVote();
         return (modelMapper.map(newsPostRepository.save(existingPost), NewsPostResponseDTO.class));
     }
 
+    /**************************************************************************
+     * @description: : Private helper method to get a post by its id to promote code reusability.
+     * @throws NewsPostNotFoundException : If the maximum votes have been reached.
+    **************************************************************************/
     private NewsPostSchema getPostEntityById(Long postId) throws NewsPostNotFoundException
     {
         return (newsPostRepository.findById(postId).orElseThrow(() -> 
         new NewsPostNotFoundException("postId", postId, "post")));
     }
 }
+
+ 

@@ -23,12 +23,15 @@
 # SOFTWARE.
 
 ###############################################################################
+
 spring:
   datasource:
+
     # Please fill in your password, username, local MySQL data base url fields
     url: jdbc:mysql://localhost:3306/akamai?useSSL=false&serverTimezone=UTC
     password: '!Tal@2410'
     username: anato
+
     hikari:
           data-source-properties:
             serverTimezone: Asia/Jerusalem
@@ -50,15 +53,12 @@ spring:
     # My nickname
     cache-names: anato
     caffeine:
-    # 600 entities to cache is chosen because in the web site the maximun number 
-    # of posts that are loaded if i scroll to the end is once is 583
-    # 45 min just seems resonable for me, caffein was chosen as a cache mechanism 
-    # because it is easy to integrate, quick to implement and efficient.
+    # 600 entities to cache is chosen because in the Hacker News web site the 
+    # maximun number of posts that are loaded if scrolling down to the end is is 583
+    # 30 min caching refresh rate seems resonable for me, caffein was chosen as 
+    # a cache mechanism because it is easy to integrate, quick to implement and efficient.
       spec: maximumSize=600, expireAfterAccess=30m
 app:
-  # 30 Enitites per result from the data base.
+  # This parameter is a configuration for the top post request.
+  # 30 Enitites per result from data base.
   top-posts-page-size: 30
-
-  # every houre update the data base.
-  rank_update_cycle: 3600000
-  time_elapsed_cycle: 3600000

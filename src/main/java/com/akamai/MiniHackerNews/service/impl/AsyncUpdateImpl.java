@@ -26,14 +26,24 @@ SOFTWARE.
 package com.akamai.MiniHackerNews.service.impl;
 
 import java.util.List;
-import org.springframework.stereotype.Service;
-import com.akamai.MiniHackerNews.service.AsyncUpdate;
-import com.akamai.MiniHackerNews.schema.NewsPostSchema;
 
+import org.springframework.stereotype.Service;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import com.akamai.MiniHackerNews.repository.NewsPostRepository;
+import com.akamai.MiniHackerNews.service.AsyncUpdate;           /* Internal implementation */
+import com.akamai.MiniHackerNews.schema.NewsPostSchema;         /* Internal implementation */
+import com.akamai.MiniHackerNews.repository.NewsPostRepository; /* Internal implementation */
+
+/******************************************************************************
+ * @description : Implementation of the AsyncUpdate service responsible to performing
+ *              : asynchronous updates of the rank and elapsed time in the data base
+ *              : every fixed time.
+ *
+ * @apiNote     : Maybe it is worth thinking of a way to configure the delay and 
+ *              : timing from the yml file. For now the compiler shouts that he 
+ *              : must accept const variables.
+*******************************************************************************/
 
 @Service
 public class AsyncUpdateImpl implements AsyncUpdate
@@ -45,6 +55,10 @@ public class AsyncUpdateImpl implements AsyncUpdate
         this.newsPostRepository = newsPostRepository;
     }
 
+    /**************************************************************************
+     * Asynchronously updates posts at regular intervals. {@interval: every hour}
+     * This method is scheduled to run at a fixed rate and have a initial delay.
+    **************************************************************************/
     @Async
     @Override
     @Scheduled(initialDelay = 1800000, fixedRate = 3600000)
@@ -58,6 +72,4 @@ public class AsyncUpdateImpl implements AsyncUpdate
 
         newsPostRepository.saveAll(allPosts);
     }
-
-
 }

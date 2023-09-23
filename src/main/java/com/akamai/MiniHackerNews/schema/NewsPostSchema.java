@@ -40,8 +40,8 @@ import jakarta.persistence.*;            /* Internal API */
 import jakarta.validation.constraints.*; /* Internal API */
 
 /******************************************************************************
- * @description : NewsPostSchema representation of a news post in the Mini Hacker 
- *              : News system. Each news post post id, contains a title, text
+ * @description : NewsPostSchema representation of a news post.
+ *              : Each news post post id, contains a title, text
  *              : link creation time, elapsed time, rank and vote counts.
  * 
  * @indexing    : The schema is using indexing on the rank value to gain more 
@@ -60,7 +60,7 @@ import jakarta.validation.constraints.*; /* Internal API */
 @NoArgsConstructor
 @Table(name = "Posts", indexes = @Index(name = "rank_index", columnList = "rank DESC"))
 /******************************************************************************
- * News post model represents a post for the Mini Hacker News system.
+ * News post model represents a post.
  * Each news post contains a title, text, creation time, updated time, and vote counts.
 ******************************************************************************/
 public class NewsPostSchema

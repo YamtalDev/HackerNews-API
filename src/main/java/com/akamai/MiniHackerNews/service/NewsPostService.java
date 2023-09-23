@@ -30,7 +30,7 @@ import org.springframework.data.domain.Pageable;
 import com.akamai.MiniHackerNews.schema.dto.*; /*  Internal implementation */
 
 /******************************************************************************
- * @description : Service interface for managing posts in the Mini Hacker News system.
+ * @description : Service interface for managing posts.
 ******************************************************************************/
 
 public interface NewsPostService
