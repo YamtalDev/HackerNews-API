@@ -31,6 +31,8 @@ import com.akamai.MiniHackerNews.repository.*;
 import com.akamai.MiniHackerNews.schema.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
+
+import com.akamai.MiniHackerNews.service.AsyncUpdate;
 import com.akamai.MiniHackerNews.service.NewsPostService;
 import org.springframework.dao.DataIntegrityViolationException;
 import com.akamai.MiniHackerNews.exception.ValidationException;
@@ -40,10 +42,13 @@ import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException;
 public class NewsPostServiceImpl implements NewsPostService
 {
     private ModelMapper modelMapper;
+    private final AsyncUpdate asyncUpdate;
     private NewsPostRepository newsPostRepository;
 
-    public NewsPostServiceImpl(ModelMapper modelMapper, NewsPostRepository newsPostRepository)
+    public NewsPostServiceImpl
+    (AsyncUpdate asyncUpdate, ModelMapper modelMapper, NewsPostRepository newsPostRepository)
     {
+        this.asyncUpdate = asyncUpdate;
         this.modelMapper = modelMapper;
         this.newsPostRepository = newsPostRepository;
     }
@@ -78,6 +83,8 @@ public class NewsPostServiceImpl implements NewsPostService
     @Override
     public Page<NewsPostResponseDTO> getAllPosts(Pageable pageable)
     {
+        asyncUpdate.updateRanksAsync();
+        asyncUpdate.updateTimeElapsedAsync();
         return (newsPostRepository.findAll(pageable)).map
         (entity -> modelMapper.map(entity, NewsPostResponseDTO.class));
     }
@@ -120,7 +127,6 @@ public class NewsPostServiceImpl implements NewsPostService
             throw (new ValidationException("Invalid input data."));
         }
     }
-
 
     /*************************************************************************
     * It can be a better approach to implement a specific query to the data base 

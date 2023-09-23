@@ -26,45 +26,49 @@ SOFTWARE.
 package com.akamai.MiniHackerNews.service.impl;
 
 import java.util.List;
+import org.springframework.stereotype.Service;
 import com.akamai.MiniHackerNews.service.AsyncUpdate;
 import com.akamai.MiniHackerNews.schema.NewsPostSchema;
-import org.springframework.core.task.AsyncTaskExecutor;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
+
 import com.akamai.MiniHackerNews.repository.NewsPostRepository;
 
+@Service
 public class AsyncUpdateImpl implements AsyncUpdate
 {
     private final NewsPostRepository newsPostRepository;
-    private final AsyncTaskExecutor asyncTaskExecutor;
 
-    public AsyncUpdateImpl(NewsPostRepository newsPostRepository, AsyncTaskExecutor asyncTaskExecutor)
+    public AsyncUpdateImpl(NewsPostRepository newsPostRepository)
     {
         this.newsPostRepository = newsPostRepository;
-        this.asyncTaskExecutor = asyncTaskExecutor;
     }
 
+    @Async
     @Override
+    @Scheduled(fixedRate = 36000)
     public void updateRanksAsync()
     {
-        asyncTaskExecutor.submit(() ->
+        List<NewsPostSchema> allPosts = newsPostRepository.findAll();
+        for (NewsPostSchema post : allPosts)
         {
-            List<NewsPostSchema> allPosts = newsPostRepository.findAll();
-            for(NewsPostSchema post : allPosts)
-            {
-                post.updateRank();
-            }
-        });
+            post.updateRank();
+        }
+
+        newsPostRepository.saveAll(allPosts);
     }
 
+    @Async
     @Override
+    @Scheduled(fixedRate = 36000)
     public void updateTimeElapsedAsync()
     {
-        asyncTaskExecutor.submit(() ->
+        List<NewsPostSchema> allPosts = newsPostRepository.findAll();
+        for (NewsPostSchema post : allPosts)
         {
-            List<NewsPostSchema> allPosts = newsPostRepository.findAll();
-            for(NewsPostSchema post : allPosts)
-            {
-                post.updateTimeElapsed();
-            }
-        });
+            post.updateTimeElapsed();
+        }
+
+        newsPostRepository.saveAll(allPosts);
     }
 }
