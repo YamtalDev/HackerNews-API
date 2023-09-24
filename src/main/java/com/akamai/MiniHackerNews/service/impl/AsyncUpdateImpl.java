@@ -28,12 +28,13 @@ package com.akamai.MiniHackerNews.service.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.akamai.MiniHackerNews.repository.NewsPostRepository;
+import com.akamai.MiniHackerNews.schema.NewsPostSchema;
+import com.akamai.MiniHackerNews.service.AsyncUpdate;
+
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
-
-import com.akamai.MiniHackerNews.service.AsyncUpdate;           /* Internal implementation */
-import com.akamai.MiniHackerNews.schema.NewsPostSchema;         /* Internal implementation */
-import com.akamai.MiniHackerNews.repository.NewsPostRepository; /* Internal implementation */
 
 /******************************************************************************
  * @description : Implementation of the AsyncUpdate service responsible to performing

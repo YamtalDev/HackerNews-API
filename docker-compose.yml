@@ -1,20 +1,64 @@
-version: "3.8"
+###############################################################################
+#
+# MIT License
+#
+# Copyright (c) 2023 Tal Aharon
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+###############################################################################
+
 services:
-  server:
-    build:
-    restart: always
-    ports:
-      -8080:8080
-    depends_on:
-      - mysqldb
-  mysqldb:
-    platform: linux/x86_64
-    image: "mysql:8:0"
-    restart: always
-    ports:
-      -3307:3306
+  db:
+    image: mysql:8.0
     environment:
-      MYSQL_DATABASE: news_posts
-      MYSQL_USER: yamtaldev
-      MYSQL_PASSWORD: '!YamtalDev254'
-      MYSQL_ROOT_PASSWORD: '!Tal@2410'
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=news_posts
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=!Tal@2410
+    ports:
+      - 3306:3306
+    networks:
+      - hackernet
+    # Add healthcheck to wait until MySQL is ready
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p!Tal@2410"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+spring-app:
+  build:
+    context: .
+    dockerfile: Dockerfile 
+  image: hacker_news
+  restart: on-failure
+  depends_on:
+    db:
+      condition: service_healthy # Wait for the healthcheck to pass
+  ports:
+    - 8080:8080
+  networks:
+    - hackernet
+  environment:
+    - DATABASE_HOST=db
+    - DATABASE_USER=root
+    - DATABASE_PASSWORD=!Tal@2410
+    - DATABASE_NAME=news_posts
+    - DATABASE_PORT=3306

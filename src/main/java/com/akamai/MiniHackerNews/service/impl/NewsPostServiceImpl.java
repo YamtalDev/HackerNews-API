@@ -29,15 +29,16 @@ import org.modelmapper.ModelMapper;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException;
+import com.akamai.MiniHackerNews.exception.ValidationException;
+import com.akamai.MiniHackerNews.repository.*;
+import com.akamai.MiniHackerNews.schema.*;
+import com.akamai.MiniHackerNews.schema.dto.*;
+import com.akamai.MiniHackerNews.service.NewsPostService;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.dao.DataIntegrityViolationException;
-
-import com.akamai.MiniHackerNews.schema.*;                            /* Internal Implementation */
-import com.akamai.MiniHackerNews.repository.*;                        /* Internal Implementation */
-import com.akamai.MiniHackerNews.schema.dto.*;                        /* Internal Implementation */
-import com.akamai.MiniHackerNews.service.NewsPostService;             /* Internal Implementation */
-import com.akamai.MiniHackerNews.exception.ValidationException;       /* Internal Implementation */
-import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException; /* Internal Implementation */
 
 /******************************************************************************
  * @description : Implementation of the NewsPostService responsible for handling 

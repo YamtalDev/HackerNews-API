@@ -27,9 +27,10 @@ package com.akamai.MiniHackerNews.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.akamai.MiniHackerNews.schema.NewsPostSchema; /* Internal API */
+import com.akamai.MiniHackerNews.schema.NewsPostSchema;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /******************************************************************************
  * @description : Repository interface for managing NewsPostSchema entities.

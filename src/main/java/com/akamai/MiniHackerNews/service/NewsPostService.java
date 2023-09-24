@@ -27,7 +27,7 @@ package com.akamai.MiniHackerNews.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.akamai.MiniHackerNews.schema.dto.*; /*  Internal implementation */
+import com.akamai.MiniHackerNews.schema.dto.*;
 
 /******************************************************************************
  * @description : Service interface for managing posts.
