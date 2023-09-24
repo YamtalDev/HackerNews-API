@@ -143,8 +143,6 @@ GET http://localhost:8080/api/news/top-posts
 PATCH http://localhost:8080/api/news/1/downvote
 PATCH http://localhost:8080/api/news/1/upvote
 
-# Response:
-
 HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -154,7 +152,7 @@ Content-Type: application/json
     "post": "This is a new post",
     "link": "https://some_website.com",
     "timeElapsed": "just now",
-    "votes": 1                    # upvoted result
+    "votes": 1
 }
 
 ```
