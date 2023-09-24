@@ -114,7 +114,7 @@ Content-Type: application/json
             "votes": 0
         },
         {
-            More posts...
+            "More posts..."
         }
     ],
     "pageable": {
