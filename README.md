@@ -273,5 +273,12 @@ Content-Type: application/json
 - [ ] Add restrictions for 1 upvote and 1 downvote at a time per user in a session.
 - [ ] Handling lower-level database exceptions instead of using `if` statements in upvote/downvote logic.
 - [ ] Implement a mechanism to update the cache of top posts when the data changes.
-- [ ] Explore alternative algorithms for fetching top posts, e.g., incorporating `post_id` for ranking.
+- [ ] Explore alternative algorithms for fetching top posts, incorporating `post_id` for ranking.
 - [ ] Integrate Spring Security to enhance API security and protect against vulnerabilities.
+
+
+**License:**
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+**Contact:**
+For questions or issues, feel free to [create an issue](https://github.com/YamtalDev/HackerNews-API/issues) or contact the project maintainer.
