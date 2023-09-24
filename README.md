@@ -57,7 +57,7 @@ PUT http://localhost:8080/api/news/1
 Content-Type: application/json
 
 {
-    "postedBy": "Updated_ser",
+    "postedBy": "Updated_user",
     "post": "Updated post content",
     "link": "https://updated_website.com"
 }
@@ -74,7 +74,7 @@ DELETE http://localhost:8080/api/news/1
 HTTP/1.1 200 OK
 Content-Type: text/plain
 
-Post deleted
+"Post deleted"
 
 ```
 
@@ -125,12 +125,11 @@ Content-Type: application/json
 
 ## Get Top Posts
 ### Request
+* The response will be a page with the top posts based on their score.
 
 ``` http
 
 GET http://localhost:8080/api/news/top-posts
-
-# Response: a page with the top posts based on their score.
 
 ```
 
@@ -157,7 +156,6 @@ Content-Type: application/json
 }
 
 ```
-
 
 ## Features
 
