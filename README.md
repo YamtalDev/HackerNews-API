@@ -9,18 +9,16 @@ and down vote operations.
 
 ## Features
 
-- MySQL Database for data storage.
-- Get Top Posts Special method, calculated from the time of post and its votes.
-- Indexing on the database rank for optimized performance to get all top posts.
-- Caching to enhances performance for client requests.
+- MySQL Database for storage.
 - Hourly asynchronous updates of the database.
+- Caching to enhances performance for client requests.
+- Indexing on the database rank for optimized performance to get all top posts.
+- Get Top Posts Special method, calculated from the time of post and its votes.
 
 ## Usage
-
 To utilize this Spring Boot REST API project, follow these steps:
 
 ### Prerequisites
-
 Before you begin, ensure you have the following prerequisites installed on your system:
 
 - **Java (JDK):** If you don't have Java installed, you can download and install it from the official website:
@@ -38,9 +36,8 @@ Before you begin, ensure you have the following prerequisites installed on your 
 
 - [Download Docker](https://docs.docker.com/get-docker/)
 - [Download Docker Compose](https://docs.docker.com/compose/install/)
-* You can choose to run the project natively or with Docker, depending on your preference and system configuration.
 
-
+### You can choose to run the project natively or with Docker, depending on your preference and system configuration.
 
 ### Installation
 
@@ -99,21 +96,29 @@ mvn spring-boot:run
 
 ```
 
+## Running with Docker
 
+1. Build the Docker Image:
+Build the Docker image using Docker Compose:
 
+``` shell
 
+docker-compose build
 
+```
 
+2. Run the Docker Containers:
+Start the Docker containers for the application and the MySQL database:
 
+``` shell
 
+docker-compose up
 
+```
 
+## Access the API using http CRUD operations
 
-
-
- ## CRUD Operations
-
-Examples of CRUD (Create, Read, Update, Delete, Patch) operations for Hacker News API.
+You can access the API by sending HTTP requests to http://localhost:8080/api/news from your local machine.
 
 ## Create a New Post
 
@@ -260,6 +265,12 @@ Content-Type: application/json
 }
 
 ```
+
+
+
+
+
+
 
 
 
