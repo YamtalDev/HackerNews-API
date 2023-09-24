@@ -271,7 +271,7 @@ Content-Type: application/json
 - [ ] Implement comments count and posting of comments.
 - [ ] Implement database schema to make data base migration easy using `schema.sql`.
 - [ ] Add restrictions for 1 upvote and 1 downvote at a time per user in a session.
-- [ ] Refactor exception handling for lower-level database exceptions instead of using `if` statements in upvote/downvote logic.
+- [ ] Handling lower-level database exceptions instead of using `if` statements in upvote/downvote logic.
 - [ ] Implement a mechanism to update the cache of top posts when the data changes.
 - [ ] Explore alternative algorithms for fetching top posts, e.g., incorporating `post_id` for ranking.
 - [ ] Integrate Spring Security to enhance API security and protect against vulnerabilities.
