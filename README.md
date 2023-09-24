@@ -7,11 +7,7 @@ News web site that allows users to post text-based news, up vote/down vote posts
 list of top posts. RESTful API that support create, update, read, delete, up vote,
 and down vote operations.
 
-## Features
-
-## Example usage
-
-# Hacker News API - CRUD Operations
+ ## CRUD Operations
 
 Examples of CRUD (Create, Read, Update, Delete, Patch) operations for Hacker News API.
 
@@ -20,7 +16,7 @@ Examples of CRUD (Create, Read, Update, Delete, Patch) operations for Hacker New
 ### Request
 
 ``` http
-http POST http://localhost:8080/api/news
+POST http://localhost:8080/api/news
 Content-Type: application/json
 
 {
@@ -163,27 +159,9 @@ Content-Type: application/json
 ```
 
 
+## Features
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## Usage
 
 To utilize this spring boot rest api application project, follow these steps:
 
