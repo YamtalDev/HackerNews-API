@@ -36,8 +36,8 @@ Before you begin, ensure you have the following prerequisites installed on your 
 
 - **Docker and Docker Compose (Optional):** If you prefer to run the project using Docker containers, make sure you have Docker and Docker Compose installed on your system.
 
-[Download Docker](https://docs.docker.com/get-docker/)
-[Download Docker Compose](https://docs.docker.com/compose/install/)
+- [Download Docker](https://docs.docker.com/get-docker/)
+- [Download Docker Compose](https://docs.docker.com/compose/install/)
 You can choose to run the project natively or with Docker, depending on your preference and system configuration.
 
 
