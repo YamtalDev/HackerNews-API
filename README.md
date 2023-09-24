@@ -7,6 +7,110 @@ News web site that allows users to post text-based news, up vote/down vote posts
 list of top posts. RESTful API that support create, update, read, delete, up vote,
 and down vote operations.
 
+## Features
+
+- MySQL Database for data storage.
+- Get Top Posts Special method, calculated from the time of post and its votes.
+- Indexing on the database rank for optimized performance to get all top posts.
+- Caching to enhances performance for client requests.
+- Hourly asynchronous updates of the database.
+
+## Usage
+
+To utilize this Spring Boot REST API project, follow these steps:
+
+### Prerequisites
+
+Before you begin, ensure you have the following prerequisites installed on your system:
+
+- **Java (JDK):** If you don't have Java installed, you can download and install it from the official website:
+  - [Download Java for Windows](https://www.oracle.com/java/technologies/javase-downloads.html) (Windows)
+  - [Download Java for macOS](https://www.oracle.com/java/technologies/javase-downloads.html) (macOS)
+  - [Download Java for Linux](https://openjdk.java.net/install/) (Linux)
+
+- **Maven:** If you don't have Maven installed, you can download and install it from the official website:
+  - [Download Maven](https://maven.apache.org/download.cgi)
+
+- **MySQL Database:** The project uses a MySQL database for data storage. Make sure you have MySQL installed and running on your system.
+  - [Download MySQL](https://dev.mysql.com/downloads/mysql/)
+
+- **Docker and Docker Compose (Optional):** If you prefer to run the project using Docker containers, make sure you have Docker and Docker Compose installed on your system.
+
+[Download Docker](https://docs.docker.com/get-docker/)
+[Download Docker Compose](https://docs.docker.com/compose/install/)
+You can choose to run the project natively or with Docker, depending on your preference and system configuration.
+
+
+
+### Installation
+
+1. **Clone or Download the Repository:**
+   You can clone this Git repository or download it as a ZIP file to your local machine.
+
+``` shell
+git clone https://github.com/YamtalDev/HackerNews-API.git
+cd HackerNews-API
+
+```
+
+2. **Database and caching configuration:**
+Open the src/main/resources/application.properties file and configure your MySQL 
+database URL, username, password, cache name, size and duration:
+
+``` shell
+
+spring.datasource.url=jdbc:mysql://your-database-url:3306/your-database-name
+spring.datasource.username=your-username
+spring.datasource.password=your-password
+
+# Cache Configuration
+spring.cache.cache-names=cache-name
+spring.cache.caffeine.spec=maximumSize=600,expireAfterAccess=30m
+
+# Top Posts size Configuration
+app.top-posts-page-size=30  # Change it if you need
+
+```
+3. **Compile the Project:**
+Use Maven to compile the project:
+
+``` shell
+
+mvn compile
+
+```
+
+4. **Run Tests:**
+Run the project's tests to ensure everything is working as expected:
+
+``` shell
+
+mvn test
+
+```
+
+6. **Run the Project:**
+
+Start the project using Maven:
+
+``` shell
+
+mvn spring-boot:run
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
  ## CRUD Operations
 
 Examples of CRUD (Create, Read, Update, Delete, Patch) operations for Hacker News API.
@@ -156,39 +260,6 @@ Content-Type: application/json
 }
 
 ```
-
-## Features
-
-## Usage
-
-To utilize this spring boot rest api application project, follow these steps:
-
-### Prerequisites
-
-Before you begin, ensure you have the following prerequisites installed on your system:
-
-- **Java (JDK):** If you don't have Java installed, you can download and install it from the official website:
-  - [Download Java for Windows](https://www.oracle.com/java/technologies/javase-downloads.html) (Windows)
-  - [Download Java for macOS](https://www.oracle.com/java/technologies/javase-downloads.html) (macOS)
-  - [Download Java for Linux](https://openjdk.java.net/install/) (Linux)
-
-- **Maven:** If you don't have Maven installed, you can download and install it from the official website:
-  - [Download Maven](https://maven.apache.org/download.cgi)
-
-- **MySQL Database:** The project uses a MySQL database for data storage. Make sure you have MySQL installed and running on your system. You can download MySQL from the official website:
-  - [Download MySQL](https://dev.mysql.com/downloads/mysql/)
-
-### Installation
-
-1. **Clone or Download the Repository:**
-   You can clone this Git repository or download it as a ZIP file to your local machine.
-
-``` shell
-git clone https://github.com/YamtalDev/HackerNews-API.git
-
-```
-
-
 
 
 
