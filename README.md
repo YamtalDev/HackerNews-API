@@ -113,7 +113,9 @@ Content-Type: application/json
             "timeElapsed": "just now",
             "votes": 0
         },
-        // More posts...
+        {
+            More posts...
+        }
     ],
     "pageable": {
         "pageSize": 30,
