@@ -1,0 +1,122 @@
+# Hacker News API - CRUD Operations
+# This document provides examples of CRUD (Create, Read, Update, Delete, Patch) 
+# operations for the Mini Hacker News API.
+
+# Create a New Post
+# Request
+
+http POST http://localhost:8080/api/news
+Content-Type: application/json
+
+{
+    "postedBy": "User",
+    "post": "This is a new post",
+    "link": "https://some_website.com"
+}
+
+
+# Read a Post by ID
+# Request
+
+GET http://localhost:8080/api/news/1
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "postId": 1,
+    "postedBy": "User",
+    "post": "This is a new post",
+    "link": "https://some_website.com",
+    "timeElapsed": "just now",
+    "votes": 0
+}
+
+# Update a Post by ID
+# Request
+
+PUT http://localhost:8080/api/news/1
+Content-Type: application/json
+
+{
+    "postedBy": "Updated_ser",
+    "post": "Updated post content",
+    "link": "https://updated_website.com"
+}
+
+# Delete a Post by ID
+# Request
+
+DELETE http://localhost:8080/api/news/1
+
+HTTP/1.1 200 OK
+Content-Type: text/plain
+
+Post deleted
+
+# Change a Post by ID (Partial Update)
+# Request
+
+PATCH http://localhost:8080/api/news/1
+Content-Type: application/json
+
+{
+    "post": "Changed post content",
+    "link": "https://changed-example.com"
+}
+
+# Get All Posts
+# Request
+
+GET http://localhost:8080/api/news
+
+# Response:
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "content": [
+        {
+            "postId": 1,
+            "postedBy": "User",
+            "post": "This is a new post",
+            "link": "https://some_website.com",
+            "timeElapsed": "just now",
+            "votes": 0
+        },
+        // More posts...
+    ],
+    "pageable": {
+        "pageSize": 30,
+        "pageNumber": 0
+    }
+}
+
+# Get Top Posts
+# Request
+
+GET http://localhost:8080/api/news/top-posts
+
+# Response: a page with the top posts based on their score.
+
+
+# downvote/upvote a Post by ID
+# Request
+
+PATCH http://localhost:8080/api/news/1/downvote
+PATCH http://localhost:8080/api/news/1/upvote
+
+# Response:
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "postId": 1,
+    "postedBy": "User",
+    "post": "This is a new post",
+    "link": "https://some_website.com",
+    "timeElapsed": "just now",
+    "votes": 1                    # upvoted result
+}

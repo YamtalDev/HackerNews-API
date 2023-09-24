@@ -1,5 +1,220 @@
-# MiniHackerNews-RESTFul-API
-RESTful API for managing simple text news posts, supporting create, update, read, delete, upvote, and downvote operations. 
+# Hacker News RESTFul API
+
+## Project Overview
+
+The Hacker News project aim to create a lightweight system similar to Hacker 
+News web site that allows users to post text-based news, up vote/down vote posts, and view a 
+list of top posts. RESTful API that support create, update, read, delete, up vote,
+and down vote operations.
+
+## Features
+
+## Example usage
+
+# Hacker News API - CRUD Operations
+
+Examples of CRUD (Create, Read, Update, Delete, Patch) operations for Hacker News API.
+
+## Create a New Post
+
+### Request
+
+``` http
+http POST http://localhost:8080/api/news
+Content-Type: application/json
+
+{
+    "postedBy": "User",
+    "post": "This is a new post",
+    "link": "https://some_website.com"
+}
+
+```
+
+
+## Read a Post by ID
+### Request
+
+``` http
+GET http://localhost:8080/api/news/1
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "postId": 1,
+    "postedBy": "User",
+    "post": "This is a new post",
+    "link": "https://some_website.com",
+    "timeElapsed": "just now",
+    "votes": 0
+}
+
+```
+
+## Update a Post by ID
+### Request
+
+``` http
+
+PUT http://localhost:8080/api/news/1
+Content-Type: application/json
+
+{
+    "postedBy": "Updated_ser",
+    "post": "Updated post content",
+    "link": "https://updated_website.com"
+}
+
+```
+
+## Delete a Post by ID
+### Request
+
+``` http
+
+DELETE http://localhost:8080/api/news/1
+
+HTTP/1.1 200 OK
+Content-Type: text/plain
+
+Post deleted
+
+```
+
+## Change a Post by ID (Partial Update)
+### Request
+
+``` http
+
+PATCH http://localhost:8080/api/news/1
+Content-Type: application/json
+
+{
+    "post": "Changed post content",
+    "link": "https://changed-example.com"
+}
+
+```
+
+## Get All Posts
+### Request
+
+``` http
+
+GET http://localhost:8080/api/news
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "content": [
+        {
+            "postId": 1,
+            "postedBy": "User",
+            "post": "This is a new post",
+            "link": "https://some_website.com",
+            "timeElapsed": "just now",
+            "votes": 0
+        },
+        // More posts...
+    ],
+    "pageable": {
+        "pageSize": 30,
+        "pageNumber": 0
+    }
+}
+
+```
+
+## Get Top Posts
+### Request
+
+``` http
+
+GET http://localhost:8080/api/news/top-posts
+
+# Response: a page with the top posts based on their score.
+
+```
+
+## downvote/upvote a Post by ID
+### Request
+
+``` http
+
+PATCH http://localhost:8080/api/news/1/downvote
+PATCH http://localhost:8080/api/news/1/upvote
+
+# Response:
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "postId": 1,
+    "postedBy": "User",
+    "post": "This is a new post",
+    "link": "https://some_website.com",
+    "timeElapsed": "just now",
+    "votes": 1                    # upvoted result
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+To utilize this spring boot rest api application project, follow these steps:
+
+### Prerequisites
+
+Before you begin, ensure you have the following prerequisites installed on your system:
+
+- **Java (JDK):** If you don't have Java installed, you can download and install it from the official website:
+  - [Download Java for Windows](https://www.oracle.com/java/technologies/javase-downloads.html) (Windows)
+  - [Download Java for macOS](https://www.oracle.com/java/technologies/javase-downloads.html) (macOS)
+  - [Download Java for Linux](https://openjdk.java.net/install/) (Linux)
+
+- **Maven:** If you don't have Maven installed, you can download and install it from the official website:
+  - [Download Maven](https://maven.apache.org/download.cgi)
+
+- **MySQL Database:** The project uses a MySQL database for data storage. Make sure you have MySQL installed and running on your system. You can download MySQL from the official website:
+  - [Download MySQL](https://dev.mysql.com/downloads/mysql/)
+
+### Installation
+
+1. **Clone or Download the Repository:**
+   You can clone this Git repository or download it as a ZIP file to your local machine.
+
+``` shell
+git clone https://github.com/YamtalDev/HackerNews-API.git
+
+```
+
+
+
+
 
 https://www.youtube.com/watch?v=PAQvxqocb6A&pp=ygUoc3ByaW5nIHJlc3QgYXBpIHVzaW5nIERUTyBmb3IgZWZmaWNpZW5jeQ%3D%3D
 
