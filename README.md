@@ -15,7 +15,11 @@ and down vote operations.
 - Caching to enhances performance for client requests.
 - Indexing on the database rank for optimized performance to get all top posts.
 - Get Top Posts Special method, calculated from the time of post and its votes.
-
+<br>
+<br>
+<br>
+<br>
+<br>
 ![](./art/diagram.png)
 
 ## Usage
