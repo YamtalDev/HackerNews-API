@@ -212,9 +212,7 @@ GET http://localhost:8080/api/news
 
 HTTP/1.1 200 OK
 Content-Type: application/json
-
-{
-    "content": [
+[
         {
             "postId": 1,
             "postedBy": "User",
@@ -226,22 +224,59 @@ Content-Type: application/json
         {
             "More posts..."
         }
+]
+
+```
+
+## Get Top Posts
+### Request
+* The response will be a page of size of the number of entities the user of this 
+code can configure in the application.property. Posts "Hotness" is calculated 
+posts based on their votes and number of hours past from the post creation.
+
+``` http
+
+GET http://localhost:8080/api/news
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "content": [
+        {
+            "postId": 1,
+            "postedBy": "User1",
+            "post": "This is a new post!",
+            "link": "https://some_website.com",
+            "timeElapsed": "just now",
+            "votes": 7
+        },
+{
+            "postId": 34,
+            "postedBy": "User",
+            "post": "This is a new post",
+            "link": "https://some_website.com",
+            "timeElapsed": "2 hours ago",
+            "votes": 24
+        },
+{
+            "postId": 6,
+            "postedBy": "User",
+            "post": "This is a new post",
+            "link": "https://some_website.com",
+            "timeElapsed": "1 hour ago",
+            "votes": 16
+        },
+        
+        {
+            "More posts..."
+        }
     ],
     "pageable": {
         "pageSize": 30,
         "pageNumber": 0
     }
 }
-
-```
-
-## Get Top Posts
-### Request
-* The response will be a page with the top posts based on their score.
-
-``` http
-
-GET http://localhost:8080/api/news/top-posts
 
 ```
 
@@ -269,6 +304,7 @@ Content-Type: application/json
 ## TODO
 
 - [ ] Implement comments count and posting of comments.
+- [ ] Think how to integrate thread pool as an executor. 
 - [ ] Implement database schema to make data base migration easy using `schema.sql`.
 - [ ] Add restrictions for 1 upvote and 1 downvote at a time per user in a session.
 - [ ] Handling lower-level database exceptions instead of using `if` statements in upvote/downvote logic.
@@ -277,8 +313,8 @@ Content-Type: application/json
 - [ ] Integrate Spring Security to enhance API security and protect against vulnerabilities.
 
 
-**License:**
+## License:
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-**Contact:**
+## Contact:
 For questions or issues, feel free to [create an issue](https://github.com/YamtalDev/HackerNews-API/issues) or contact the project maintainer.
