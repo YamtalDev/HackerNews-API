@@ -16,6 +16,8 @@ and down vote operations.
 - Indexing on the database rank for optimized performance to get all top posts.
 - Get Top Posts Special method, calculated from the time of post and its votes.
 
+![](./art/diagram.png)
+
 ## Usage
 To utilize this Spring Boot REST API project, follow these steps:
 
