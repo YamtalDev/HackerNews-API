@@ -15,9 +15,14 @@ and down vote operations.
 - Caching to enhances performance for client requests.
 - Indexing on the database rank for optimized performance to get all top posts.
 - Get Top Posts Special method, calculated from the time of post and its votes.
+
 <br>
 
-![](./art/diagram.png)
+<p align="center">
+  <img src="./art/diagram.png" alt="Diagram">
+</p>
+
+<br>
 
 ## Usage
 To utilize this Spring Boot REST API project, follow these steps:
