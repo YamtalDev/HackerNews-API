@@ -152,10 +152,14 @@ public class NewsPostSchema
     public void update()
     {
         long hoursFromCreation = ChronoUnit.HOURS.between(creationTime, LocalDateTime.now());
-        this.rank = votes / Math.pow((hoursFromCreation + 2), 1.8);
+        this.rank = calculateRank(hoursFromCreation);
         updateTimeElapsed(hoursFromCreation);
     }
 
+    private double calculateRank(long hoursFromCreation)
+    {
+        return (votes / Math.pow((hoursFromCreation + 2), 1.8));
+    }
     /**************************************************************************
      * @time: Represent the time elapsed as a string for the client(Just like Hacker news displays it).
     **************************************************************************/

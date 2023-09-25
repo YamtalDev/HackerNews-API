@@ -25,6 +25,9 @@ SOFTWARE.
 
 package com.akamai.MiniHackerNews.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 
 import org.springframework.data.domain.Page;
@@ -112,22 +115,25 @@ public class NewsPostServiceImpl implements NewsPostService
 
     /**************************************************************************
      * @description    : Retrieves a paginated list of all news posts.
-     * @param pageable : The pagination information.
-     * @return         : A page containing news posts as response DTOs.
-     * @implNote       : This method could be implemented also with a simple list.
-     *                 : Due to performance requirements pagination is chosen.
+     * @return         : A list containing news posts as response DTOs.
     **************************************************************************/
     @Override
-    public Page<NewsPostResponseDTO> getAllPosts(Pageable pageable)
+    public List<NewsPostResponseDTO> getAllPosts()
     {
-        return (newsPostRepository.findAll(pageable)).map
-        (entity -> modelMapper.map(entity, NewsPostResponseDTO.class));
+        // Assuming that newsPostRepository.findAll() returns a List<NewsPost>
+        List<NewsPostSchema> allPosts = newsPostRepository.findAll();
+
+        return( allPosts.stream()
+        .map(newsPost -> modelMapper.map(newsPost, NewsPostResponseDTO.class))
+        .collect(Collectors.toList()));
     }
 
     /**************************************************************************
      * @description : Retrieves the top news posts ordered by rank in descending order.
      * @implNote    : This method could be implemented also with a simple list.
      *              : Due to performance requirements pagination is chosen.
+     * @implNote       : This method could be implemented also with a simple list.
+     *                 : Due to performance requirements pagination is chosen.
     **************************************************************************/
     @Override
     public Page<NewsPostResponseDTO> getPostsByRankDesc(Pageable pageable)

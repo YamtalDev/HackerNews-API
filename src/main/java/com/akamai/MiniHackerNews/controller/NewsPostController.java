@@ -36,6 +36,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CacheConfig;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 
@@ -147,10 +149,10 @@ public class NewsPostController
      * @return         : ResponseEntity with a Page of news posts.
     **************************************************************************/
     @GetMapping("")
-    public ResponseEntity<Page<NewsPostResponseDTO>> getAllPosts(Pageable pageable)
+    public ResponseEntity<List<NewsPostResponseDTO>> getAllPosts()
     {
-        Page<NewsPostResponseDTO> newsPosts = newsService.getAllPosts(pageable);
-        return (new ResponseEntity<Page<NewsPostResponseDTO>>(newsPosts, HttpStatus.OK));
+        List<NewsPostResponseDTO> newsPosts = newsService.getAllPosts();
+        return (new ResponseEntity<List<NewsPostResponseDTO>>(newsPosts, HttpStatus.OK));
     }
     
     /**************************************************************************
