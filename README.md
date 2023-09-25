@@ -40,7 +40,7 @@ Before you begin, ensure you have the following prerequisites installed on your 
 
 ### You can choose to run the project natively or with Docker, depending on your preference and system configuration.
 
-### Installation
+# Installation
 
 1. **Clone or Download the Repository:**
    You can clone this Git repository or download it as a ZIP file to your local machine.
@@ -117,7 +117,7 @@ docker-compose up
 
 ```
 
-## Access the API using http CRUD operations
+# Access the API using http CRUD operations
 
 You can access the API by sending HTTP requests to http://localhost:8080/api/news from your local machine.
 
@@ -301,7 +301,7 @@ Content-Type: application/json
 }
 
 ```
-## TODO
+# TODO
 
 - [ ] Implement comments count and posting of comments.
 - [ ] Think how to integrate thread pool as an executor. 
