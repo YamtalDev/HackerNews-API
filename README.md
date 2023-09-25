@@ -77,7 +77,26 @@ spring.cache.caffeine.spec=maximumSize=600,expireAfterAccess=30m
 app.top-posts-page-size=30  # Change it if you need
 
 ```
-3. **Compile the Project:**
+
+
+3. Create an .env File in the root directory and in the `src/main/resources`:
+
+In the .env file, you should write your secrets here.
+
+``` shell
+
+SPRING_DATASOURCE_USERNAME=user
+SPRING_DATASOURCE_PASSWORD=password
+MYSQL_HOST=host
+MYSQL_ROOT_PASSWORD=password
+MYSQL_DATABASE=database
+MYSQL_PORT=3306
+
+```
+
+
+
+4. **Compile the Project:**
 Use Maven to compile the project:
 
 ``` shell
@@ -86,7 +105,7 @@ mvn compile
 
 ```
 
-4. **Run Tests:**
+5. **Run Tests:**
 Run the project's tests to ensure everything is working as expected:
 
 ``` shell
