@@ -263,7 +263,7 @@ posts based on their votes and number of hours past from the post creation.
 
 ``` http
 
-GET http://localhost:8080/api/news
+GET http://localhost:8080/api/news/top-posts
 
 HTTP/1.1 200 OK
 Content-Type: application/json
