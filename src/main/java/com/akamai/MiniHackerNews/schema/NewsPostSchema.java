@@ -67,7 +67,6 @@ public class NewsPostSchema
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Max(value = Long.MAX_VALUE, message = "Maximum posts capacity reached.")
     private Long postId;
 
     @NotBlank(message = "User name is required")

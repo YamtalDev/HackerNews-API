@@ -24,41 +24,51 @@
 
 ###############################################################################
 
+volumes:
+  dbvol:
+
+version: '3.8'
 services:
   db:
+    container_name: db
     image: mysql:8.0
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=news_posts
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=!Tal@2410
-    ports:
-      - 3306:3306
     networks:
-      - hackernet
-    # Add healthcheck to wait until MySQL is ready
-    healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p!Tal@2410"]
-      interval: 5s
-      timeout: 10s
-      retries: 5
+      - bored-network
 
-spring-app:
-  build:
-    context: .
-    dockerfile: Dockerfile 
-  image: hacker_news
-  restart: on-failure
-  depends_on:
-    db:
-      condition: service_healthy # Wait for the healthcheck to pass
-  ports:
-    - 8080:8080
-  networks:
-    - hackernet
-  environment:
-    - DATABASE_HOST=db
-    - DATABASE_USER=root
-    - DATABASE_PASSWORD=!Tal@2410
-    - DATABASE_NAME=news_posts
-    - DATABASE_PORT=3306
+    # If you are using mvn and did not create a .env file
+    # you can hard code the valuse.
+    env_file: .env
+    # environment:
+    #   - MYSQL_PASSWORD=password
+    #   - MYSQL_DATABASE=data_base
+    #   - MYSQL_ROOT_PASSWORD=password
+    volumes:
+      - dbvol:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  news_posts_app:
+    build:
+      context: .
+    container_name: hacker-news-container
+    image: hacker_news:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - bored-network
+    depends_on:
+      - db
+
+    # If you are using mvn and did not create a .env file
+    # you can hard code the valuse. 
+    env_file: .env
+    # environment:
+    #   - MYSQL_HOST=data_base_name
+    #   - MYSQL_PASSWORD=password
+    #   - MYSQL_ROOT_PASSWORD=password
+    #   - MYSQL_DATABASE=data_base
+    #   - MYSQL_PORT=3306
+
+networks:
+  bored-network:
+    name: bored-network
