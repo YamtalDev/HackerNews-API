@@ -51,7 +51,7 @@ services:
     build:
       context: .
     container_name: hacker-news-container
-    image: hacker_news:latest
+    image: yamtaldev/hacker_news:latest
     ports:
       - "8080:8080"
     networks:
