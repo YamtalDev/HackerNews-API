@@ -4,15 +4,65 @@
 
 The Hacker News project is a lightweight system similar to Hacker 
 News web site that allows users to post text-based news, up vote/down vote posts, and view a 
-list of top posts. RESTful API that support CRUD operation such as: POST, PUT, GET, DELETE, PATCH(up vote
-and down).
+list of top posts. RESTful API that support CRUD operation such as: POST, PUT, GET(all and top top posts), DELETE, PATCH(up vote down and change post).
+
+
+## Requirements
+
+1. The system should support simple text-based news posts.
+
+2. RESTful API to handle CRUD actions, including creating, updating, reading, upvoting, and downvoting posts.
+
+3. Storage Engine: MySQL.
+
+4. Implementation Language: Spring boot and Java.
+
+5. Efficient retrieval of `top posts` from the storage engine.
+
+5. Dockerization of the project: both the REST API service and the storage engine.
+
+6. Unit tests and integration for the system.
+
+## Main entities
+
+**News Post:**
+
+Attributes:
+
+* `postId`: Unique identifier for each news post.
+* `postedBy`: Username of the user who created the post.
+* `post`: The text content of the news post.
+* `link`: URL link related to the post (optional).
+* `creationTime`: Timestamp indicating when the post was created.
+* `timeElapsed`: A user-friendly representation of the time elapsed since post creation.
+* `rank`: A numeric value calculated based on the post's votes and creation time.
+* `votes`: The count of votes (upvotes and downvotes) received by the post.
+
+**Client request:**
+
+Attributes:
+
+* `postedBy`: User name (username) of the user creating the post.
+* `post`: The text content of the news post.
+* `link`: A URL link associated with the post.
+
+
+**Client response:**
+
+Attributes:
+
+* `postId`: The unique identifier for the news post.
+* `postedBy`: The username of the user who created or updated the post.
+* `post`: The text content of the news post.
+* `link`: The URL link associated with the post.
+* `timeElapsed`: The time elapsed since the post was created, similar to * the "News Post" entity.
+* `votes`: The count of votes (upvotes and downvotes) received by the post.
 
 ## Features
-    
-- MySQL Database for storage.
+
 - Hourly asynchronous updates of the database.
-- Pagination GET All method to improve efficiency.
 - Caching to enhances performance for client requests.
+- Pagination for GET top posts method to improve efficiency and limit size.
 - Indexing on the database rank for optimized performance to get all top posts.
 - Get Top Posts Special method, calculated from the time of post and its votes.
 
@@ -324,6 +374,9 @@ Content-Type: application/json
 }
 
 ```
+
+# [Jira project](https://cloudapps.xecurify.com/jirasecureshare/project?linkid=2c9f952f8a213b69018aae668bc20020&projectid=10000)
+
 # Learning resources
 
 - [Learn Java](https://www.youtube.com/watch?v=BGTx91t8q50&t=10332s)
@@ -334,8 +387,6 @@ Content-Type: application/json
 - [Spring documentation](https://docs.spring.io/spring-framework/reference/index.html)
 - [Hacker News `top posts` algorithm](https://medium.com/hacking-and-gonzo/how-hacker-news-ranking-algorithm-works-1d9b0cf2c08d)
 - [Dockerize Spring boot and MySQL application](https://ilkerguldali.medium.com/1-4-lets-create-a-spring-boot-app-with-mysql-docker-docker-compose-8acaee3a2c4d)
-
-
 
 
 
