@@ -66,11 +66,14 @@ Attributes:
 - Indexing on the database `rank` for optimized performance to get all top posts.
 - Get Top Posts Special method, calculated from the time of post and its votes.
 
+<br>
 
-<div style="text-align: center;">
-  <img src="./art/diagram.png" alt="Diagram" style="width: 70%; display: block; margin: 0 auto;">
+<div align="center">
+  <img src="./art/diagram.png" alt="Diagram" width="70%">
 </div>
 
+
+<br>
 
 ## Usage
 To utilize this Spring Boot REST API project, follow these steps:
