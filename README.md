@@ -62,8 +62,8 @@ Attributes:
 
 - Hourly asynchronous updates of the database.
 - Caching to enhances performance for client requests.
-- Pagination for GET top posts method to improve efficiency and limit size.
-- Indexing on the database rank for optimized performance to get all top posts.
+- Pagination for GET `top posts` method to improve efficiency and limit size.
+- Indexing on the database `rank` for optimized performance to get all top posts.
 - Get Top Posts Special method, calculated from the time of post and its votes.
 
 <br>
