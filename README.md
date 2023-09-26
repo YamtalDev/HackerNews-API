@@ -400,11 +400,11 @@ Content-Type: application/json
 - [ ] Add restrictions for 1 upvote and 1 downvote per post.
 - [ ] Write benchmark tests to ensure efficiency and scalability of the API.
 - [ ] Find a way to hide the secrets and still be able to docker compose the app.
-- [v] Implement a mechanism to update the cache of top posts when the data changes.
+- [x] Implement a mechanism to update the cache of top posts when the data changes.
 - [ ] Implement database schema to make data base migration easy using `schema.sql`.
 - [ ] Integrate Spring Security to enhance API security and protect against vulnerabilities.
 - [ ] Write all the test cases needed to ensure edge cases are being taking care in the code.
-- [v] Explore alternative algorithms for fetching top posts, incorporating `post_id` for ranking.
+- [x] Explore alternative algorithms for fetching top posts, incorporating `post_id` for ranking.
 - [ ] Move String timeElapsed to the response DTO responsibility and have a simple long as elapsed time.
 - [ ] Handling lower-level database exceptions instead of using `if` statements in upvote/downvote logic.
 
