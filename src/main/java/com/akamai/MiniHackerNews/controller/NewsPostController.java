@@ -111,7 +111,7 @@ public class NewsPostController
      * @description : Update a post by its ID endpoint.
     **************************************************************************/
     @PutMapping("/{postId}")
-    @CachePut(cacheNames = "anato", key = "#postId")
+    @CacheEvict(cacheNames = "anato", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> updatePost
     (@Validated @RequestBody NewsPostRequestDTO updatedPost, @Validated @PathVariable("postId") Long postId)
     {
@@ -173,7 +173,7 @@ public class NewsPostController
      * @description : Upvote a post by its ID endpoint.
     **************************************************************************/
     @PatchMapping("/{postId}/upvote")
-    @CachePut(cacheNames = "anato", key = "#postId")
+    @CacheEvict(cacheNames = "anato", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> upvotePost
     (@Validated @PathVariable("postId") Long postId)
     {
@@ -185,7 +185,7 @@ public class NewsPostController
      * @description : Downvote a post by its ID endpoint.
     **************************************************************************/
     @PatchMapping("/{postId}/downvote")
-    @CachePut(cacheNames = "anato", key = "#postId")
+    @CacheEvict(cacheNames = "anato", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> downvotePost
     (@Validated @PathVariable("postId") Long postId)
     {
