@@ -116,9 +116,9 @@ database URL, username, password, cache name, size and duration:
 
 ``` shell
 
-spring.datasource.url=jdbc:mysql://localhost:3306/`your-database-name`
-spring.datasource.username=`your-username`
-spring.datasource.password=`your-password`
+spring.datasource.url=jdbc:mysql://localhost:3306/<your-database-name>
+spring.datasource.username=<your-username>
+spring.datasource.password=<your-password>
 
 # Cache Configuration
 spring.cache.cache-names=`cache-name`
@@ -129,7 +129,7 @@ app.top-posts-page-size=30  # Change it if you need
 
 ```
 3. **Database:** 
-After you configured your data base settings in the application.properties file, make sure your local mysql database is up and running and you are logged in to the data base.
+After you configured your data base settings in the application.properties file, make sure your local mysql database is up and running and you have a data base named after what you passed as an argument to `jdbc:mysql://localhost:3306/<your-database-name>`.
 
 ``` shell
 
@@ -386,8 +386,9 @@ Content-Type: application/json
 - [DTO Model mapper](https://www.geeksforgeeks.org/spring-boot-map-entity-to-dto-using-modelmapper/)
 - [Data base Indexing](https://www.baeldung.com/jpa-indexes)
 - [Spring RESTFul API](https://spring.io/guides/tutorials/rest/)
-- [Caffein cache integration](https://www.baeldung.com/spring-boot-caffeine-cache)
 - [Spring documentation](https://docs.spring.io/spring-framework/reference/index.html)
+- [Caffein cache integration](https://www.baeldung.com/spring-boot-caffeine-cache)
+- [Constructor dependency injection](https://www.baeldung.com/constructor-injection-in-spring)
 - [Hacker News `top posts` algorithm](https://medium.com/hacking-and-gonzo/how-hacker-news-ranking-algorithm-works-1d9b0cf2c08d)
 - [Dockerize Spring boot and MySQL application](https://ilkerguldali.medium.com/1-4-lets-create-a-spring-boot-app-with-mysql-docker-docker-compose-8acaee3a2c4d)
 
@@ -397,14 +398,14 @@ Content-Type: application/json
 - [ ] Implement comments count and posting of comments.
 - [ ] Improve the logic of the `timeElapsed` calculation.
 - [ ] Add restrictions for 1 upvote and 1 downvote per post.
-- [ ] Move String timeElapsed to the response DTO responsibility.
 - [ ] Write benchmark tests to ensure efficiency and scalability of the API.
 - [ ] Find a way to hide the secrets and still be able to docker compose the app.
-- [ ] Implement a mechanism to update the cache of top posts when the data changes.
+- [v] Implement a mechanism to update the cache of top posts when the data changes.
 - [ ] Implement database schema to make data base migration easy using `schema.sql`.
 - [ ] Integrate Spring Security to enhance API security and protect against vulnerabilities.
 - [ ] Write all the test cases needed to ensure edge cases are being taking care in the code.
-- [ ] Explore alternative algorithms for fetching top posts, incorporating `post_id` for ranking.
+- [v] Explore alternative algorithms for fetching top posts, incorporating `post_id` for ranking.
+- [ ] Move String timeElapsed to the response DTO responsibility and have a simple long as elapsed time.
 - [ ] Handling lower-level database exceptions instead of using `if` statements in upvote/downvote logic.
 
 ## License:
