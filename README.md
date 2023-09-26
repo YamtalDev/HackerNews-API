@@ -2,13 +2,13 @@
 
 ## Project Overview
 
-The Hacker News project aim to create a lightweight system similar to Hacker 
+The Hacker News project is a lightweight system similar to Hacker 
 News web site that allows users to post text-based news, up vote/down vote posts, and view a 
-list of top posts. RESTful API that support create, update, read, delete, up vote,
-and down vote operations.
+list of top posts. RESTful API that support CRUD operation such as: POST, PUT, GET, DELETE, PATCH(up vote
+and down).
 
-## Features    separate this
-
+## Features
+    
 - MySQL Database for storage.
 - Hourly asynchronous updates of the database.
 - Pagination GET All method to improve efficiency.
