@@ -9,13 +9,13 @@ list of top posts. RESTful API that support CRUD operation such as: POST, PUT, G
 
 ## Requirements
 
-1. The system should support simple text-based news posts.
+1. Support simple text-based news posts.
 
 2. RESTful API to handle CRUD actions, including creating, updating, reading, upvoting, and downvoting posts.
 
-3. Storage Engine: MySQL.
+3. Storage Engine: MySQL local or cloud.
 
-4. Implementation Language: Spring boot and Java.
+4. Implementation Language: [Spring boot](https://spring.io/projects/spring-boot) and Java.
 
 5. Efficient retrieval of `top posts` from the storage engine.
 
@@ -32,9 +32,9 @@ Attributes:
 * `postId`: Unique identifier for each news post.
 * `postedBy`: Username of the user who created the post.
 * `post`: The text content of the news post.
-* `link`: URL link related to the post (optional).
+* `link`: URL link related to the post.
 * `creationTime`: Timestamp indicating when the post was created.
-* `timeElapsed`: A user-friendly representation of the time elapsed since post creation.
+* `timeElapsed`: Time elapsed since post creation.
 * `rank`: A numeric value calculated based on the post's votes and creation time.
 * `votes`: The count of votes (upvotes and downvotes) received by the post.
 
@@ -46,6 +46,7 @@ Attributes:
 * `post`: The text content of the news post.
 * `link`: A URL link associated with the post.
 
+- NOTE:  fOR PATCH request the client entity will be only `post` and `link` to change.
 
 **Client response:**
 
@@ -55,16 +56,16 @@ Attributes:
 * `postedBy`: The username of the user who created or updated the post.
 * `post`: The text content of the news post.
 * `link`: The URL link associated with the post.
-* `timeElapsed`: The time elapsed since the post was created, similar to * the "News Post" entity.
+* `timeElapsed`: Time elapsed since the post was created, similar to * the "News Post" entity.
 * `votes`: The count of votes (upvotes and downvotes) received by the post.
 
 ## Features
 
 - Hourly asynchronous updates of the database.
-- Caching to enhances performance for client requests.
 - Pagination for GET `top posts` method to improve efficiency and limit size.
-- Indexing on the database `rank` for optimized performance to get all top posts.
 - Get Top Posts Special method, calculated from the time of post and its votes.
+- Caching to enhances performance for client requests for `top-posts` end point.
+- Indexing on the database `rank` for optimized performance for `top-posts` end point.
 
 <br>
 
@@ -74,7 +75,7 @@ Attributes:
 
 <br>
 
-## Usage
+# Usage
 To utilize this Spring Boot REST API project, follow these steps:
 
 ### Prerequisites
@@ -375,7 +376,7 @@ Content-Type: application/json
 
 ```
 
-# [Jira project](https://cloudapps.xecurify.com/jirasecureshare/project?linkid=2c9f952f8a213b69018aae668bc20020&projectid=10000)
+## [Jira project](https://cloudapps.xecurify.com/jirasecureshare/project?linkid=2c9f952f8a213b69018aae668bc20020&projectid=10000)
 
 # Learning resources
 
