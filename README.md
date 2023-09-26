@@ -7,7 +7,7 @@ News web site that allows users to post text-based news, up vote/down vote posts
 list of top posts. RESTful API that support create, update, read, delete, up vote,
 and down vote operations.
 
-## Features
+## Features    separate this
 
 - MySQL Database for storage.
 - Hourly asynchronous updates of the database.
@@ -65,7 +65,7 @@ database URL, username, password, cache name, size and duration:
 
 ``` shell
 
-spring.datasource.url=jdbc:mysql://your-database-url:3306/your-database-name
+spring.datasource.url=jdbc:mysql://localhost:3306/your-database-name
 spring.datasource.username=your-username
 spring.datasource.password=your-password
 
@@ -77,24 +77,16 @@ spring.cache.caffeine.spec=maximumSize=600,expireAfterAccess=30m
 app.top-posts-page-size=30  # Change it if you need
 
 ```
-
-
-3. Create an .env File in the root directory and in the `src/main/resources`:
-
-In the .env file, you should write your secrets here.
+3. **Database:** 
+After you configured your data base settings in the application.properties file, make sure your local mysql database is up and running and you are logged in to the data base.
 
 ``` shell
 
-SPRING_DATASOURCE_USERNAME=user
-SPRING_DATASOURCE_PASSWORD=password
-MYSQL_HOST=host
-MYSQL_ROOT_PASSWORD=password
-MYSQL_DATABASE=database
-MYSQL_PORT=3306
+sudo service mysql start
+sudo service mysql status
+mysql -u root -p
 
 ```
-
-
 
 4. **Compile the Project:**
 Use Maven to compile the project:
@@ -105,7 +97,7 @@ mvn compile
 
 ```
 
-5. **Run Tests:**
+5. **Run Tests:** The test are stabs right now and have to be implemented(see TODO list at the end of the README file).
 Run the project's tests to ensure everything is working as expected:
 
 ``` shell
@@ -126,14 +118,15 @@ mvn spring-boot:run
 
 ## Running with Docker
 
-1. Build the Docker Image:
-Build the Docker image using Docker Compose:
+1. Make sure that you do not have any process that is running on ports: 8080 and 3306.
 
 ``` shell
 
-docker-compose build
+sudo lsof -i :3306 && sudo lsof -i :8080
 
 ```
+
+If you do have processes active on these ports please kill them using `kill proc_pid`
 
 2. Run the Docker Containers:
 Start the Docker containers for the application and the MySQL database:
