@@ -328,16 +328,32 @@ Content-Type: application/json
 }
 
 ```
+# Learning resources
+
+- [Learn Java](https://www.youtube.com/watch?v=BGTx91t8q50&t=10332s)
+- [Learn Docker](https://docs.docker.com/get-started/overview/)
+- [MySQL Local DB](https://dev.mysql.com/doc/mysql-getting-started/en/)
+- [Spring RESTFul API](https://spring.io/guides/tutorials/rest/)
+- [Spring documentation](https://docs.spring.io/spring-framework/reference/index.html)
+- [Hacker News `top posts` algorithm](https://medium.com/hacking-and-gonzo/how-hacker-news-ranking-algorithm-works-1d9b0cf2c08d)
+- [Dockerize Spring boot and MySQL application](https://ilkerguldali.medium.com/1-4-lets-create-a-spring-boot-app-with-mysql-docker-docker-compose-8acaee3a2c4d)
+
+
+
+
+
 # TODO
 
 - [ ] Implement comments count and posting of comments.
-- [ ] Think how to integrate thread pool as an executor. 
+- [ ] Think how to integrate thread pool as an executor.
+- [ ] Write bench mark tests to ensure efficiency and scalability of the API.
 - [ ] Implement database schema to make data base migration easy using `schema.sql`.
 - [ ] Add restrictions for 1 upvote and 1 downvote at a time per user in a session.
-- [ ] Handling lower-level database exceptions instead of using `if` statements in upvote/downvote logic.
 - [ ] Implement a mechanism to update the cache of top posts when the data changes.
 - [ ] Explore alternative algorithms for fetching top posts, incorporating `post_id` for ranking.
+- [ ] Handling lower-level database exceptions instead of using `if` statements in upvote/downvote logic.
 - [ ] Integrate Spring Security to enhance API security and protect against vulnerabilities.
+
 
 
 ## License:
