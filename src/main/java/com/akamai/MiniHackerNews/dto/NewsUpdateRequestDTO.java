@@ -22,28 +22,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ******************************************************************************/
-package com.akamai.MiniHackerNews.schema.mapper;
+package com.akamai.MiniHackerNews.dto;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotBlank;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.hibernate.validator.constraints.URL;
 
 /******************************************************************************
- * @description : ModelMapper instance with strict matching strategy to map 
- *              : between the DTO objects(response & request) to schema and back.
- * 
- * @apiNote     : The matching strategy of the json fields is set to STRICT.
+ * @dto : This DTO entity is used for client PATCH requests.
 ******************************************************************************/
-@Configuration
-public class ModelMapperDTO
+public class NewsUpdateRequestDTO
 {
-    @Bean
-    public ModelMapper modelMapper()
-    {
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        return (modelMapper);
-    }
+    @NotBlank(message = "Post is required")
+    @Column(name = "post", updatable = true)
+    @Size(min = 1, max = 1024, message = "Post must be between 1 and 1024 characters")
+    private String post;
+
+    @NotBlank(message = "Link url is required.")
+    @Column(name = "link", nullable = false, updatable = true)
+    @URL(message = "Invalid URL. Please provide a valid HTTP or HTTPS URL.")
+    @Size(min = 10, max = 1024, message = "Link must be between 10 to 1024 characters long")
+    private String link;
+
+    /**************************************************************************
+     * @Getters : Defined for the ModelMapper.
+    **************************************************************************/
+    public String getPost(){return (post);}
+    public String getLink(){return (link);}
 }

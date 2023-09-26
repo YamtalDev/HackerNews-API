@@ -22,33 +22,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ******************************************************************************/
-package com.akamai.MiniHackerNews.schema.dto;
-
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.NotBlank;
-
-import org.hibernate.validator.constraints.URL;
+package com.akamai.MiniHackerNews.dto;
 
 /******************************************************************************
- * @dto : This DTO entity is used for client PATCH requests.
+ * @dto : A DTO entity representing the client response.
 ******************************************************************************/
-public class NewsUpdateRequestDTO
+public class NewsPostResponseDTO
 {
-    @NotBlank(message = "Post is required")
-    @Column(name = "post", updatable = true)
-    @Size(min = 1, max = 1024, message = "Post must be between 1 and 1024 characters")
+    private Long postId;
+    private String postedBy;
     private String post;
-
-    @NotBlank(message = "Link url is required.")
-    @Column(name = "link", nullable = false, updatable = true)
-    @URL(message = "Invalid URL. Please provide a valid HTTP or HTTPS URL.")
-    @Size(min = 10, max = 1024, message = "Link must be between 10 to 1024 characters long")
     private String link;
+    private String timeElapsed;
+    private int votes;
+
+    public NewsPostResponseDTO(){/* Empty*/}
 
     /**************************************************************************
-     * @Getters : Defined for the ModelMapper.
+     * @GettersNSetters : Defined for the ModelMapper.
     **************************************************************************/
+    public int getVotes(){return (votes);}
     public String getPost(){return (post);}
     public String getLink(){return (link);}
+    public Long getPostId(){return (postId);}
+    public String getTimeElapsed(){return (timeElapsed);}
+    public String getPostedBy(){return (postedBy);}
+
+    public void setLink(String link){this.link = link;}
+    public void setPost(String post){this.post = post;}
+    public void setVotes(int votes){this.votes = votes;}
+    public void setPostId(Long postId){this.postId = postId;}
+    public void setPostedBy(String postedBy){this.postedBy = postedBy;}
+    public void setTimeElapsed(String timeElapsed){this.timeElapsed = timeElapsed;}
 }

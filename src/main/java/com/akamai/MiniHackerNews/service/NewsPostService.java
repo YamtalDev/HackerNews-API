@@ -29,7 +29,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.akamai.MiniHackerNews.schema.dto.*;
+import com.akamai.MiniHackerNews.dto.*;
 
 /******************************************************************************
  * @description : Service interface for managing posts.

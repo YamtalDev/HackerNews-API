@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ******************************************************************************/
-package com.akamai.MiniHackerNews.schema.dto;
+package com.akamai.MiniHackerNews.dto;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Size;

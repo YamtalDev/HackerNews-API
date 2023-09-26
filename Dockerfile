@@ -28,6 +28,7 @@
 FROM openjdk:17-jdk-alpine AS builder
 COPY pom.xml /app/
 COPY src /app/src
+
 # Install Maven
 RUN apk add --no-cache maven
 RUN mvn -f /app/pom.xml clean package -DskipTests
