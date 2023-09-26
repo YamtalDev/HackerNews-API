@@ -347,14 +347,14 @@ Content-Type: application/json
 
 - [ ] Implement comments count and posting of comments.
 - [ ] Think how to integrate thread pool as an executor.
+- [ ] Add restrictions for 1 upvote and 1 downvote per post.
 - [ ] Write bench mark tests to ensure efficiency and scalability of the API.
-- [ ] Implement database schema to make data base migration easy using `schema.sql`.
-- [ ] Add restrictions for 1 upvote and 1 downvote at a time per user in a session.
 - [ ] Implement a mechanism to update the cache of top posts when the data changes.
+- [ ] Implement database schema to make data base migration easy using `schema.sql`.
+- [ ] Integrate Spring Security to enhance API security and protect against vulnerabilities.
 - [ ] Write all the test cases needed to ensure edge cases are being taking care in the code.
 - [ ] Explore alternative algorithms for fetching top posts, incorporating `post_id` for ranking.
 - [ ] Handling lower-level database exceptions instead of using `if` statements in upvote/downvote logic.
-- [ ] Integrate Spring Security to enhance API security and protect against vulnerabilities.
 
 
 

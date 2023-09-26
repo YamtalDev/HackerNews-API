@@ -104,9 +104,8 @@ public class AppTests
     }
 
     @Test
-    public void testBenchMarkOfTopPosts() throws Exception
+    public void testExceptions() throws Exception
     {
 
     }
-
 }
