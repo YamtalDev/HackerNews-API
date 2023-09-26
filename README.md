@@ -383,6 +383,8 @@ Content-Type: application/json
 - [Learn Java](https://www.youtube.com/watch?v=BGTx91t8q50&t=10332s)
 - [Learn Docker](https://docs.docker.com/get-started/overview/)
 - [MySQL Local DB](https://dev.mysql.com/doc/mysql-getting-started/en/)
+- [DTO Model mapper](https://www.geeksforgeeks.org/spring-boot-map-entity-to-dto-using-modelmapper/)
+- [Data base Indexing](https://www.baeldung.com/jpa-indexes)
 - [Spring RESTFul API](https://spring.io/guides/tutorials/rest/)
 - [Caffein cache integration](https://www.baeldung.com/spring-boot-caffeine-cache)
 - [Spring documentation](https://docs.spring.io/spring-framework/reference/index.html)
