@@ -68,7 +68,7 @@ Attributes:
 
 <br>
 
-<p>
+<p align="center">
   <img src="./art/diagram.png" alt="Diagram">
 </p>
 
