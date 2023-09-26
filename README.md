@@ -97,7 +97,8 @@ mvn compile
 
 ```
 
-5. **Run Tests:** The test are stabs right now and have to be implemented(see TODO list at the end of the README file).
+5. **Run Tests:** The test are written as stabs right now and have to be implemented(see TODO list at the end of the README file).
+
 Run the project's tests to ensure everything is working as expected:
 
 ``` shell
@@ -105,6 +106,8 @@ Run the project's tests to ensure everything is working as expected:
 mvn test
 
 ```
+
+## NOTE: You can find a postman collection in the root directory of the project.
 
 6. **Run the Project:**
 
