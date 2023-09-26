@@ -62,7 +62,7 @@ public class AsyncUpdateImpl implements AsyncUpdate
     **************************************************************************/
     @Async
     @Override
-    @Scheduled(initialDelay = 1800000, fixedRate = 3600000)
+    @Scheduled(initialDelay = 0, fixedRate = 3600000)
     public void updateAsync()
     {
         List<NewsPostSchema> allPosts = newsPostRepository.findAll();

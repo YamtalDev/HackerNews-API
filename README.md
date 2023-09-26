@@ -304,9 +304,8 @@ Content-Type: application/json
 
 ## Get Top Posts
 ### Request
-* The response will be a page of size of the number of entities the user of this 
-code can configure in the application.property. Posts "Hotness" is calculated 
-posts based on their votes and number of hours past from the post creation.
+* The response will be a page of size of the entities the user has configured in the application.property, see installation phase above. Posts "Hotness" is calculated 
+based on the post votes and number of hours past from the post creation(`timeElapsed`).
 
 ``` http
 
