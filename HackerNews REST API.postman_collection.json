@@ -1,0 +1,248 @@
+{
+	"info": {
+		"_postman_id": "da6bf660-da05-46c7-a0c4-88a856d3488d",
+		"name": "HackerNews REST API",
+		"description": "A postam collection to test the Hacker News rest api and understand how to work with it.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18490415"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/api/news",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/news",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"news"
+					]
+				},
+				"description": "## [Get All Posts](https://github.com/YamtalDev/HackerNews-API/tree/main#get-all-posts)"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/news",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"postedBy\": \"Updated User\",\n    \"post\": \"This is a post that was updated\",\n    \"link\": \"http://somewebsitenew.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/news/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"news",
+						"1"
+					]
+				},
+				"description": "## [Update a Post by ID](https://github.com/YamtalDev/HackerNews-API/tree/main#update-a-post-by-id)"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/news",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"postedBy\": \"User\",\n    \"post\": \"This is a post\",\n    \"link\": \"http://somewebsite.com\"\n}\n\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/news",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"news"
+					]
+				},
+				"description": "## [Create a New Post](https://github.com/YamtalDev/HackerNews-API/tree/main#create-a-new-post)"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/news/1",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"post\": \"This is a changed post\",\n    \"link\": \"http://changed.com\"\n}\n\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/news/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"news",
+						"1"
+					]
+				},
+				"description": "## [Change a Post by ID (Partial Update)](https://github.com/YamtalDev/HackerNews-API/tree/main#change-a-post-by-id-partial-update)"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/news/1/upvote",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/news/1/upvote",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"news",
+						"1",
+						"upvote"
+					]
+				},
+				"description": "## [Upvote a Post by ID](https://github.com/YamtalDev/HackerNews-API/tree/main#downvoteupvote-a-post-by-id)"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/news/1/downvote",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/news/1/downvote",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"news",
+						"1",
+						"downvote"
+					]
+				},
+				"description": "## [Downvote ](https://github.com/YamtalDev/HackerNews-API/tree/main#downvoteupvote-a-post-by-id) [a Post by ID](https://github.com/YamtalDev/HackerNews-API/tree/main#downvoteupvote-a-post-by-id)"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/news/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/news/top-posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"news",
+						"top-posts"
+					]
+				},
+				"description": "## [Read a Post by ID](https://github.com/YamtalDev/HackerNews-API/tree/main#read-a-post-by-id)"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/news/1",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/news/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"news",
+						"1"
+					]
+				},
+				"description": "## [Delete a Post by ID](https://github.com/YamtalDev/HackerNews-API/tree/main#delete-a-post-by-id)"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/news/top-posts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/news/top-posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"news",
+						"top-posts"
+					]
+				},
+				"description": "## [Get Top Posts](https://github.com/YamtalDev/HackerNews-API/tree/main#get-top-posts)"
+			},
+			"response": []
+		}
+	]
+}

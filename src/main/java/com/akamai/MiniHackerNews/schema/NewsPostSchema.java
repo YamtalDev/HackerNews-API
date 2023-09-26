@@ -79,8 +79,8 @@ public class NewsPostSchema
     @Size(min = 1, max = 1024, message = "Post must be between 1 and 1024 characters")
     private String post;
 
-    @NotBlank(message = "Link url is required.")
     @Column(name = "link", updatable = true)
+    @NotBlank(message = "Link url is required.")
     @URL(message = "Invalid URL. Please provide a valid HTTP or HTTPS URL.")
     @Size(min = 10, max = 1024, message = "Link must be between 10 to 1024 characters long")
     private String link;
