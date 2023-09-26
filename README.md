@@ -68,10 +68,9 @@ Attributes:
 
 <br>
 
-<div align="center">
-  <img src="./art/diagram.png" alt="Diagram" width="70%">
-</div>
-
+<p>
+  <img src="./art/diagram.png" alt="Diagram">
+</p>
 
 <br>
 
