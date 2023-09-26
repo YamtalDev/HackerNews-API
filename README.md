@@ -115,12 +115,12 @@ database URL, username, password, cache name, size and duration:
 
 ``` shell
 
-spring.datasource.url=jdbc:mysql://localhost:3306/your-database-name
-spring.datasource.username=your-username
-spring.datasource.password=your-password
+spring.datasource.url=jdbc:mysql://localhost:3306/`your-database-name`
+spring.datasource.username=`your-username`
+spring.datasource.password=`your-password`
 
 # Cache Configuration
-spring.cache.cache-names=cache-name
+spring.cache.cache-names=`cache-name`
 spring.cache.caffeine.spec=maximumSize=600,expireAfterAccess=30m
 
 # Top Posts size Configuration
