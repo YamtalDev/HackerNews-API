@@ -34,23 +34,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.akamai.MiniHackerNews.dto.*;
-import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException;
-import com.akamai.MiniHackerNews.exception.ValidationException;
-import com.akamai.MiniHackerNews.repository.*;
 import com.akamai.MiniHackerNews.schema.*;
+import com.akamai.MiniHackerNews.repository.*;
 import com.akamai.MiniHackerNews.service.NewsPostService;
+import com.akamai.MiniHackerNews.exception.ValidationException;
+import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.dao.DataIntegrityViolationException;
 
 /******************************************************************************
  * @description : Implementation of the NewsPostService responsible for handling 
- *              : news posts data base entity operations. Provide the functionality 
- *              : for the controllers layer. The methods in this service layer
- *              : are using the repository interface methods. (JPA Repository).
+ *                news posts data base entity operations. Provide the functionality 
+ *                for the controllers layer. The methods in this service layer
+ *                are using the repository interface methods. (JPA Repository).
  * 
  * @exceptions  : All exceptions thrown from the service functions are handled 
- *              : by the global exception manager.
+ *                by the global exception manager.
 ******************************************************************************/
 @Service
 public class NewsPostServiceImpl implements NewsPostService
@@ -93,6 +93,7 @@ public class NewsPostServiceImpl implements NewsPostService
     /**************************************************************************
      * @description  : Delete a post based on its id.
      * @param postId :The ID of the post to be deleted.
+     * @throws NewsPostNotFoundException : If the specified post does not exist. 
     **************************************************************************/
     @Override
     public void deletePost(Long postId) throws NewsPostNotFoundException
@@ -135,9 +136,9 @@ public class NewsPostServiceImpl implements NewsPostService
     /**************************************************************************
      * @description : Retrieves the top news posts ordered by rank in descending order.
      * @implNote    : This method could be implemented also with a simple list.
-     *              : Due to performance requirements pagination is chosen.
-     * @implNote       : This method could be implemented also with a simple list.
-     *                 : Due to performance requirements pagination is chosen.
+     *                Due to performance requirements pagination is chosen.
+     * @implNote    : This method could be implemented also with a simple list.
+     *                Due to performance requirements pagination is chosen.
     **************************************************************************/
     @Override
     public Page<NewsPostResponseDTO> getPostsByRankDesc(Pageable pageable)
