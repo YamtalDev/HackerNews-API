@@ -24,17 +24,56 @@ SOFTWARE.
 ******************************************************************************/
 package com.akamai.MiniHackerNews;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.junit.Test;
+import org.junit.Before;
+import org.mockito.Mockito;
+import org.junit.runner.RunWith;
+import static org.mockito.Mockito.when;
+import org.springframework.http.MediaType;
+import static org.mockito.ArgumentMatchers.any;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-public class AppTests
-{
-	@Test
-	public void contextLoads()
-    {
 
-	}
+@RunWith(SpringRunner.class)
+@WebMvcTest(NewsPostController.class)
+public class AppTests {
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    private MockMvc mockMvc;
+
+    @MockBean
+    private NewsPostService newsPostService;
+
+    @Before
+    public void setup() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
+
+    @Test
+    public void testSaveNewsPost() throws Exception {
+        NewsPostRequestDTO requestDTO = new NewsPostRequestDTO();
+        // Set up your requestDTO object
+
+        NewsPostResponseDTO responseDTO = new NewsPostResponseDTO();
+        // Set up your expected responseDTO object
+
+        when(newsPostService.saveNewPost(any(NewsPostRequestDTO.class))).thenReturn(responseDTO);
+
+        mockMvc.perform(post("/api/news")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(requestDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.postId").value(responseDTO.getPostId()));
+    }
+
 }
