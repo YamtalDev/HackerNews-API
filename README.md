@@ -91,7 +91,7 @@ Before you begin, ensure you have the following prerequisites installed on your 
 - **MySQL Database:** The project uses a MySQL database for data storage. Make sure you have MySQL installed and running on your system.
   - [Download MySQL](https://dev.mysql.com/downloads/mysql/)
 
-- **Docker and Docker Compose (Optional):** If you prefer to run the project using Docker containers, make sure you have Docker and Docker Compose installed on your system.
+- **Docker and Docker Compose:** If you prefer to run the project using Docker containers, make sure you have Docker and Docker Compose installed on your system.
 
   - [Download Docker](https://docs.docker.com/get-docker/)
   - [Download Docker Compose](https://docs.docker.com/compose/install/)
