@@ -390,21 +390,19 @@ Content-Type: application/json
 - [Dockerize Spring boot and MySQL application](https://ilkerguldali.medium.com/1-4-lets-create-a-spring-boot-app-with-mysql-docker-docker-compose-8acaee3a2c4d)
 
 
-
 # TODO
 
 - [ ] Implement comments count and posting of comments.
 - [ ] Improve the logic of the `timeElapsed` calculation.
 - [ ] Add restrictions for 1 upvote and 1 downvote per post.
-- [ ] Write bench mark tests to ensure efficiency and scalability of the API.
+- [ ] Move String timeElapsed to the response DTO responsibility.
+- [ ] Write benchmark tests to ensure efficiency and scalability of the API.
 - [ ] Implement a mechanism to update the cache of top posts when the data changes.
 - [ ] Implement database schema to make data base migration easy using `schema.sql`.
 - [ ] Integrate Spring Security to enhance API security and protect against vulnerabilities.
 - [ ] Write all the test cases needed to ensure edge cases are being taking care in the code.
 - [ ] Explore alternative algorithms for fetching top posts, incorporating `post_id` for ranking.
 - [ ] Handling lower-level database exceptions instead of using `if` statements in upvote/downvote logic.
-
-
 
 ## License:
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
