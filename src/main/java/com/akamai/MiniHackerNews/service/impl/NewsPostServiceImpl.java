@@ -95,9 +95,13 @@ public class NewsPostServiceImpl implements NewsPostService
      * @param postId :The ID of the post to be deleted.
     **************************************************************************/
     @Override
-    public void deletePost(Long postId)
+    public void deletePost(Long postId) throws NewsPostNotFoundException
     {
-        getPostById(postId);
+        if(!newsPostRepository.existsById(postId))
+        {
+            throw (new NewsPostNotFoundException("postId", postId, "post"));
+        }
+
         newsPostRepository.deleteById(postId);
     }
 

@@ -394,7 +394,6 @@ Content-Type: application/json
 # TODO
 
 - [ ] Implement comments count and posting of comments.
-- [ ] Think how to integrate thread pool as an executor.
 - [ ] Improve the logic of the `timeElapsed` calculation.
 - [ ] Add restrictions for 1 upvote and 1 downvote per post.
 - [ ] Write bench mark tests to ensure efficiency and scalability of the API.
