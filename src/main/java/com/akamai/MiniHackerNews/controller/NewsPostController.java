@@ -47,7 +47,7 @@ import com.akamai.MiniHackerNews.service.*;
 @Validated
 @RestController
 @RequestMapping("/api/news")
-@CacheConfig(cacheNames = "anato")
+@CacheConfig(cacheNames = "MyCache")
 public class NewsPostController
 {
     @Value("${app.top-posts-page-size}")
@@ -75,7 +75,7 @@ public class NewsPostController
      * @description : Retrieve a news post by its ID endpoint.
     **************************************************************************/
     @GetMapping("/{postId}")
-    @Cacheable(cacheNames = "anato", key = "#postId")
+    @Cacheable(cacheNames = "MyCache", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> getPostById
     (@Validated @PathVariable("postId") Long postId)
     {
@@ -87,7 +87,7 @@ public class NewsPostController
      * @description : Update a post by its ID endpoint.
     **************************************************************************/
     @PutMapping("/{postId}")
-    @CacheEvict(cacheNames = "anato", key = "#postId")
+    @CacheEvict(cacheNames = "MyCache", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> updatePost
     (@Validated @RequestBody NewsPostRequestDTO updatedPost, @Validated @PathVariable("postId") Long postId)
     {
@@ -99,7 +99,7 @@ public class NewsPostController
      * @description : Delete a post by its ID endpoint.
     **************************************************************************/
     @DeleteMapping("/{postId}")
-    @CacheEvict(cacheNames = "anato", key = "#postId")
+    @CacheEvict(cacheNames = "MyCache", key = "#postId")
     public ResponseEntity<String> deletePost
     (@Validated @PathVariable("postId") Long postId)
     {
@@ -111,7 +111,7 @@ public class NewsPostController
      * @description : Change a post by its ID endpoint.
     **************************************************************************/
     @PatchMapping("/{postId}")
-    @CachePut(cacheNames = "anato", key = "#postId")
+    @CachePut(cacheNames = "MyCache", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> changePost
     (@Validated @RequestBody NewsUpdateRequestDTO changedPost, @Validated @PathVariable("postId") Long postId)
     {
@@ -137,7 +137,7 @@ public class NewsPostController
      * @return         : ResponseEntity with a Page of the top news posts.
      **************************************************************************/
     @GetMapping("/top-posts")
-    @Cacheable(cacheNames = "anato", key = "top-posts")
+    @Cacheable(cacheNames = "MyCache", key = "top-posts")
     public ResponseEntity<Page<NewsPostResponseDTO>> getTopPostsByRank(Pageable pageable)
     {
         pageable = PageRequest.of(pageable.getPageNumber(), topPostsPageSize);
@@ -149,7 +149,7 @@ public class NewsPostController
      * @description : Upvote a post by its ID endpoint.
     **************************************************************************/
     @PatchMapping("/{postId}/upvote")
-    @CacheEvict(cacheNames = "anato", key = "#postId")
+    @CacheEvict(cacheNames = "MyCache", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> upvotePost
     (@Validated @PathVariable("postId") Long postId)
     {
@@ -161,7 +161,7 @@ public class NewsPostController
      * @description : Downvote a post by its ID endpoint.
     **************************************************************************/
     @PatchMapping("/{postId}/downvote")
-    @CacheEvict(cacheNames = "anato", key = "#postId")
+    @CacheEvict(cacheNames = "MyCache", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> downvotePost
     (@Validated @PathVariable("postId") Long postId)
     {
