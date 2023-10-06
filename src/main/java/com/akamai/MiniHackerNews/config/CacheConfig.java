@@ -1,7 +1,7 @@
 package com.akamai.MiniHackerNews.config;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.cache.annotation.CachingConfigurer;
@@ -19,8 +19,8 @@ public class CacheConfig implements CachingConfigurer
     }
 
     @Bean
-    public CopyOnWriteArrayList<NewsPostResponseDTO> topPostsCache()
+    public ConcurrentLinkedQueue<NewsPostResponseDTO> topPostsCache()
     {
-        return new CopyOnWriteArrayList<>();
+        return (new ConcurrentLinkedQueue<NewsPostResponseDTO>());
     }
 }

@@ -135,8 +135,8 @@ public class NewsPostServiceImpl implements NewsPostService
         List<NewsPostResponseDTO> topPostsDTO = topPosts.stream()
         .map(newsPost -> modelMapper.map(newsPost, NewsPostResponseDTO.class))
         .collect(Collectors.toList());
-        
-        cacheService.putTopPosts(topPostsDTO);
+
+        cacheService.putAllTopPosts(topPostsDTO);
         return (topPostsDTO);
     }
 

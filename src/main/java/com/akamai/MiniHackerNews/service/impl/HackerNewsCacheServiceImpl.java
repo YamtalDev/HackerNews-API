@@ -1,9 +1,10 @@
 package com.akamai.MiniHackerNews.service.impl;
 
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.springframework.stereotype.Service;
 
@@ -13,12 +14,12 @@ import com.akamai.MiniHackerNews.service.HackerNewsCacheService;
 @Service
 public class HackerNewsCacheServiceImpl implements HackerNewsCacheService 
 {
-    private List<NewsPostResponseDTO> topPostsCache;
+    private final ConcurrentLinkedQueue<NewsPostResponseDTO> topPostsCache;
     private final Map<String, NewsPostResponseDTO> cache;
 
     public HackerNewsCacheServiceImpl
     (ConcurrentHashMap<String, NewsPostResponseDTO> cache, 
-    CopyOnWriteArrayList<NewsPostResponseDTO> topPostsCache)
+    ConcurrentLinkedQueue<NewsPostResponseDTO> topPostsCache)
     {
         this.topPostsCache = topPostsCache;
         this.cache = cache;
@@ -49,15 +50,20 @@ public class HackerNewsCacheServiceImpl implements HackerNewsCacheService
     }
 
     @Override
-    public void putTopPosts(List<NewsPostResponseDTO> topPosts)
+    public void putAllTopPosts(List<NewsPostResponseDTO> topPosts)
     {
-        topPostsCache = topPosts;
+        topPostsCache.addAll(topPosts);
     }
 
     @Override
     public List<NewsPostResponseDTO> getTopPostsFromCache()
     {
-        return (topPostsCache);
+        return (new ArrayList<NewsPostResponseDTO>(topPostsCache));
+    }
+
+    public void putTopPost(NewsPostResponseDTO topPosts)
+    {
+        
     }
 }
 

@@ -11,6 +11,7 @@ public interface HackerNewsCacheService
     public void put(String key, NewsPostResponseDTO value);
 
     public void evictTopPostsFromCache();
+    public void putTopPost(NewsPostResponseDTO topPosts);
     public List<NewsPostResponseDTO> getTopPostsFromCache();
-    public void putTopPosts(List<NewsPostResponseDTO> topPosts);
+    public void putAllTopPosts(List<NewsPostResponseDTO> topPosts);
 }
