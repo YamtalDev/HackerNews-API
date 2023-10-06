@@ -31,6 +31,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 public class NewsPostServiceImpl implements NewsPostService
 {
     private ModelMapper modelMapper;
+    HackerNewsCacheService cacheService;
     private NewsPostRepository newsPostRepository;
 
     /**************************************************************************
@@ -38,9 +39,10 @@ public class NewsPostServiceImpl implements NewsPostService
      * @param newsPostRepository : Injected NewsPostRepository instance.
     **************************************************************************/
     public NewsPostServiceImpl
-    (ModelMapper modelMapper, NewsPostRepository newsPostRepository)
+    (ModelMapper modelMapper, HackerNewsCacheService cacheService, NewsPostRepository newsPostRepository)
     {
         this.modelMapper = modelMapper;
+        this.cacheService = cacheService;
         this.newsPostRepository = newsPostRepository;
     }
 
