@@ -5,9 +5,6 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-
 import com.akamai.MiniHackerNews.dto.*;
 import com.akamai.MiniHackerNews.schema.*;
 import com.akamai.MiniHackerNews.repository.*;
@@ -15,7 +12,7 @@ import com.akamai.MiniHackerNews.service.NewsPostService;
 import com.akamai.MiniHackerNews.exception.ValidationException;
 import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException;
 
-import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.dao.DataIntegrityViolationException;
 
 /******************************************************************************
@@ -31,7 +28,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 public class NewsPostServiceImpl implements NewsPostService
 {
     private ModelMapper modelMapper;
-    HackerNewsCacheService cacheService;
+    HackerNewsCacheServiceImpl cacheService;
     private NewsPostRepository newsPostRepository;
 
     /**************************************************************************
@@ -39,7 +36,7 @@ public class NewsPostServiceImpl implements NewsPostService
      * @param newsPostRepository : Injected NewsPostRepository instance.
     **************************************************************************/
     public NewsPostServiceImpl
-    (ModelMapper modelMapper, HackerNewsCacheService cacheService, NewsPostRepository newsPostRepository)
+    (ModelMapper modelMapper, HackerNewsCacheServiceImpl cacheService, NewsPostRepository newsPostRepository)
     {
         this.modelMapper = modelMapper;
         this.cacheService = cacheService;
