@@ -1,7 +1,7 @@
 package com.akamai.MiniHackerNews.config;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.cache.annotation.CachingConfigurer;
@@ -19,8 +19,8 @@ public class CacheConfig implements CachingConfigurer
     }
 
     @Bean
-    public ConcurrentLinkedQueue<NewsPostResponseDTO> topPostsCache()
+    public ConcurrentSkipListMap<Double, NewsPostResponseDTO> topPostsCache()
     {
-        return (new ConcurrentLinkedQueue<NewsPostResponseDTO>());
+        return (new ConcurrentSkipListMap<Double, NewsPostResponseDTO>());
     }
 }

@@ -3,6 +3,7 @@ package com.akamai.MiniHackerNews.service;
 import java.util.List;
 
 import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
+import com.akamai.MiniHackerNews.schema.NewsPostSchema;
 
 public interface HackerNewsCacheService 
 {
@@ -11,7 +12,7 @@ public interface HackerNewsCacheService
     public void put(String key, NewsPostResponseDTO value);
 
     public void evictTopPostsFromCache();
-    public void putTopPost(NewsPostResponseDTO topPosts);
     public List<NewsPostResponseDTO> getTopPostsFromCache();
-    public void putAllTopPosts(List<NewsPostResponseDTO> topPosts);
+    public void putAllTopPosts(List<NewsPostSchema> topPosts);
+    public void putTopPost(NewsPostResponseDTO topPost, double rank);
 }
