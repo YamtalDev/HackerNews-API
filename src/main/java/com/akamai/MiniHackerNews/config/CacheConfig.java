@@ -12,6 +12,6 @@ public class CacheConfig implements CachingConfigurer
     @Bean
     public CacheManager cacheManager()
     {
-        return (new ConcurrentMapCacheManager("MyCache"));
+        return (new ConcurrentMapCacheManager("${app.cache-name}"));
     }
 }

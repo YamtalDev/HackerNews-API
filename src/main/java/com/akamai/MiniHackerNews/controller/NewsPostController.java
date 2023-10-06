@@ -47,7 +47,7 @@ import com.akamai.MiniHackerNews.service.*;
 @Validated
 @RestController
 @RequestMapping("/api/news")
-@CacheConfig(cacheNames = "MyCache")
+@CacheConfig(cacheNames = "${app.cache-name}")
 public class NewsPostController
 {
     @Value("${app.top-posts-page-size}")
@@ -75,7 +75,7 @@ public class NewsPostController
      * @description : Retrieve a news post by its ID endpoint.
     **************************************************************************/
     @GetMapping("/{postId}")
-    @Cacheable(cacheNames = "MyCache", key = "#postId")
+    @Cacheable(cacheNames = "${app.cache-name}", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> getPostById
     (@Validated @PathVariable("postId") Long postId)
     {
@@ -87,7 +87,7 @@ public class NewsPostController
      * @description : Update a post by its ID endpoint.
     **************************************************************************/
     @PutMapping("/{postId}")
-    @CacheEvict(cacheNames = "MyCache", key = "#postId")
+    @CachePut(cacheNames = "${app.cache-name}", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> updatePost
     (@Validated @RequestBody NewsPostRequestDTO updatedPost, @Validated @PathVariable("postId") Long postId)
     {
@@ -99,7 +99,7 @@ public class NewsPostController
      * @description : Delete a post by its ID endpoint.
     **************************************************************************/
     @DeleteMapping("/{postId}")
-    @CacheEvict(cacheNames = "MyCache", key = "#postId")
+    @CacheEvict(cacheNames = "${app.cache-name}", key = "#postId")
     public ResponseEntity<String> deletePost
     (@Validated @PathVariable("postId") Long postId)
     {
@@ -111,7 +111,7 @@ public class NewsPostController
      * @description : Change a post by its ID endpoint.
     **************************************************************************/
     @PatchMapping("/{postId}")
-    @CachePut(cacheNames = "MyCache", key = "#postId")
+    @CachePut(cacheNames = "${app.cache-name}", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> changePost
     (@Validated @RequestBody NewsUpdateRequestDTO changedPost, @Validated @PathVariable("postId") Long postId)
     {
@@ -137,7 +137,7 @@ public class NewsPostController
      * @return         : ResponseEntity with a Page of the top news posts.
      **************************************************************************/
     @GetMapping("/top-posts")
-    @Cacheable(cacheNames = "MyCache", key = "top-posts")
+    @Cacheable(cacheNames = "${app.cache-name}", key = "top-posts")
     public ResponseEntity<Page<NewsPostResponseDTO>> getTopPostsByRank(Pageable pageable)
     {
         pageable = PageRequest.of(pageable.getPageNumber(), topPostsPageSize);
@@ -149,7 +149,7 @@ public class NewsPostController
      * @description : Upvote a post by its ID endpoint.
     **************************************************************************/
     @PatchMapping("/{postId}/upvote")
-    @CacheEvict(cacheNames = "MyCache", key = "#postId")
+    @CachePut(cacheNames = "${app.cache-name}", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> upvotePost
     (@Validated @PathVariable("postId") Long postId)
     {
@@ -161,7 +161,7 @@ public class NewsPostController
      * @description : Downvote a post by its ID endpoint.
     **************************************************************************/
     @PatchMapping("/{postId}/downvote")
-    @CacheEvict(cacheNames = "MyCache", key = "#postId")
+    @CachePut(cacheNames = "${app.cache-name}", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> downvotePost
     (@Validated @PathVariable("postId") Long postId)
     {
@@ -169,29 +169,3 @@ public class NewsPostController
         (newsService.downvotePost(postId), HttpStatus.OK));
     }
 }
-
-// It looks like you are facing a caching issue with your Spring Boot REST API when updating and deleting posts. You want to ensure that when a post is updated or deleted, the corresponding cache entries are invalidated so that the hot-posts are always up to date. However, you are facing difficulties because the hot-posts are returned as a page, and it's challenging to determine which entities to remove from the cache.
-
-// Here are some suggestions to address this caching problem:
-
-// 1. **Custom Cache Management**: Consider implementing custom cache management for your hot-posts. Instead of relying solely on Spring's `@Cacheable`, `@CacheEvict`, and `@CachePut` annotations, you can use a more manual approach to manage the cache yourself.
-
-//     - When a new post is created or an existing post is updated, explicitly invalidate the hot-posts cache. You can do this by either manually maintaining a list of cache keys or using a custom cache management service.
-
-//     - When a post is deleted, invalidate the cache in the same way as when creating or updating a post.
-
-// 2. **Cache Entry Composition**: Instead of caching the entire page of hot-posts, consider caching the individual post entities along with their rank. This way, when a post is updated or deleted, you can easily locate and invalidate the cache entry for that specific post based on its ID.
-
-//     - When you update a post, invalidate the cache entry for that post's ID.
-
-//     - When you delete a post, invalidate the cache entry for that post's ID.
-
-// 3. **Use Cacheable Composition**: You can compose your cache keys intelligently to include information about the type of request (e.g., `top-posts`) and the page parameters. This way, you can have more fine-grained control over cache eviction.
-
-//     - For example, you can include the request type and page number in the cache key, such as `"top-posts-page-" + pageNumber`. When a post is updated or deleted, you can iterate over the cache keys that match the same request type and evict those entries.
-
-// 4. **Scheduled Cache Eviction**: Implement a scheduled task that periodically clears the entire hot-posts cache. This can be done at regular intervals, such as every few minutes or hours, depending on how frequently your data changes. While this approach is less granular, it ensures that the cache eventually reflects the latest data.
-
-// 5. **Consider Distributed Caching**: If your application has high data update frequency and maintaining cache consistency is critical, consider using a distributed caching solution like Redis. Redis provides more advanced caching capabilities and allows you to handle cache evictions and updates with greater control.
-
-// Remember to thoroughly test any changes you make to your caching strategy to ensure that they work correctly and meet your performance requirements. The choice between these options will depend on your specific use case and the trade-offs you are willing to make between cache granularity and cache management complexity.
