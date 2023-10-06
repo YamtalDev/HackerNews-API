@@ -1,9 +1,5 @@
 package com.akamai.MiniHackerNews.controller;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -132,17 +128,15 @@ public class NewsPostController
     }
     
     /**************************************************************************
-     * @description    : Retrieve the top news posts by rank endpoint;
-     * @param pageable : The pagination information.
-     * @return         : ResponseEntity with a Page of the top news posts.
+     * Retrieve the top news posts by rank endpoint.
+     * @return ResponseEntity with a list of the top news posts.
      **************************************************************************/
     @GetMapping("/top-posts")
     @Cacheable(cacheNames = "${app.cache-name}", key = "top-posts")
-    public ResponseEntity<Page<NewsPostResponseDTO>> getTopPostsByRank(Pageable pageable)
+    public ResponseEntity<List<NewsPostResponseDTO>> getTopPostsByRank()
     {
-        pageable = PageRequest.of(pageable.getPageNumber(), topPostsPageSize);
-        Page<NewsPostResponseDTO> newsPosts = newsService.getPostsByRankDesc(pageable);
-        return (new ResponseEntity<>(newsPosts, HttpStatus.OK));
+        List<NewsPostResponseDTO> newsPosts = newsService.getPostsByRankDesc();
+        return (new ResponseEntity<List<NewsPostResponseDTO>>(newsPosts, HttpStatus.OK));
     }
 
     /**************************************************************************

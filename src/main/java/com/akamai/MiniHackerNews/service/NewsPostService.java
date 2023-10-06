@@ -2,9 +2,6 @@ package com.akamai.MiniHackerNews.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import com.akamai.MiniHackerNews.dto.*;
 
 /******************************************************************************
@@ -22,7 +19,7 @@ public interface NewsPostService
     public NewsPostResponseDTO downvotePost(Long postId);
 
     public List<NewsPostResponseDTO> getAllPosts();
-    public Page<NewsPostResponseDTO> getPostsByRankDesc(Pageable pageable);
+    public List<NewsPostResponseDTO> getPostsByRankDesc();
 
     public NewsPostResponseDTO updatePost(NewsPostRequestDTO newPost, Long postId);
     public NewsPostResponseDTO changePost(NewsUpdateRequestDTO newsPostDTO, Long postId);

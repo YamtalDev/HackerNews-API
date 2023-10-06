@@ -1,30 +1,23 @@
 package com.akamai.MiniHackerNews.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.akamai.MiniHackerNews.schema.NewsPostSchema;
-
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /******************************************************************************
  * @description : Repository interface for managing NewsPostSchema entities.
 ******************************************************************************/
 
-public interface NewsPostRepository extends JpaRepository<NewsPostSchema, Long> 
+public interface NewsPostRepository extends JpaRepository<NewsPostSchema, Long>
 {
     /**************************************************************************
-    * @description    : Retrieve a pageable list of all news posts.
-    * @param pageable : The pagination information.
-    * @return         : A Page containing news posts.
+    * @description  : Retrieve a list of news posts ordered by rank in descending order. 
+    *               : With a limit of 30 entities.
+    * @return       : List of NewsPostSchema.
     **************************************************************************/
-    Page<NewsPostSchema> findAll(Pageable pageable);
-
-    /**************************************************************************
-    * @description : Retrieve a pageable list of news posts ordered by rank in descending order.
-    * @Query       : Custom JPQL for this repository method.
-    **************************************************************************/
-    @Query("SELECT p FROM NewsPostSchema p ORDER BY p.rank DESC")
-    Page<NewsPostSchema> findByOrderByRankDesc(Pageable pageable);
+    @Query("SELECT p FROM NewsPostSchema p ORDER BY p.rank DESC LIMIT 30")
+    List<NewsPostSchema> findByOrderByRankDesc();
 }

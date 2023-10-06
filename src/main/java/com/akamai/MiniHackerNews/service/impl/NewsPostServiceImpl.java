@@ -102,26 +102,25 @@ public class NewsPostServiceImpl implements NewsPostService
     @Override
     public List<NewsPostResponseDTO> getAllPosts()
     {
-        // Assuming that newsPostRepository.findAll() returns a List<NewsPost>
         List<NewsPostSchema> allPosts = newsPostRepository.findAll();
 
-        return( allPosts.stream()
+        return(allPosts.stream()
         .map(newsPost -> modelMapper.map(newsPost, NewsPostResponseDTO.class))
         .collect(Collectors.toList()));
     }
 
     /**************************************************************************
-     * @description : Retrieves the top news posts ordered by rank in descending order.
-     * @implNote    : This method could be implemented also with a simple list.
-     *                Due to performance requirements pagination is chosen.
-     * @implNote    : This method could be implemented also with a simple list.
-     *                Due to performance requirements pagination is chosen.
+     * Retrieves the top news posts ordered by rank in descending order.
+     * @return A list of the top news posts in descending rank order.
     **************************************************************************/
     @Override
-    public Page<NewsPostResponseDTO> getPostsByRankDesc(Pageable pageable)
+    public List<NewsPostResponseDTO> getPostsByRankDesc()
     {
-        return (newsPostRepository.findByOrderByRankDesc(pageable).map
-        (entity -> modelMapper.map(entity, NewsPostResponseDTO.class)));
+        List<NewsPostSchema> topPosts = newsPostRepository.findByOrderByRankDesc();
+
+        return(topPosts.stream()
+        .map(newsPost -> modelMapper.map(newsPost, NewsPostResponseDTO.class))
+        .collect(Collectors.toList()));
     }
 
     /**************************************************************************
