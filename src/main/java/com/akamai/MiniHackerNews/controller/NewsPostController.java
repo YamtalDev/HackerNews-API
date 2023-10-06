@@ -10,7 +10,6 @@ import org.springframework.cache.annotation.CacheConfig;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,12 +42,9 @@ import com.akamai.MiniHackerNews.service.*;
 @Validated
 @RestController
 @RequestMapping("/api/news")
-@CacheConfig(cacheNames = "${app.cache-name}")
+@CacheConfig(cacheNames = "MyCache")
 public class NewsPostController
 {
-    @Value("${app.top-posts-page-size}")
-    private int topPostsPageSize;
-
     private NewsPostService newsService;
 
     public NewsPostController(NewsPostService newsService)
@@ -71,7 +67,7 @@ public class NewsPostController
      * @description : Retrieve a news post by its ID endpoint.
     **************************************************************************/
     @GetMapping("/{postId}")
-    @Cacheable(cacheNames = "${app.cache-name}", key = "#postId")
+    @Cacheable(cacheNames = "MyCache", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> getPostById
     (@Validated @PathVariable("postId") Long postId)
     {
@@ -83,7 +79,7 @@ public class NewsPostController
      * @description : Update a post by its ID endpoint.
     **************************************************************************/
     @PutMapping("/{postId}")
-    @CachePut(cacheNames = "${app.cache-name}", key = "#postId")
+    @CachePut(cacheNames = "MyCache", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> updatePost
     (@Validated @RequestBody NewsPostRequestDTO updatedPost, @Validated @PathVariable("postId") Long postId)
     {
@@ -95,7 +91,7 @@ public class NewsPostController
      * @description : Delete a post by its ID endpoint.
     **************************************************************************/
     @DeleteMapping("/{postId}")
-    @CacheEvict(cacheNames = "${app.cache-name}", key = "#postId")
+    @CacheEvict(cacheNames = "MyCache", key = "#postId")
     public ResponseEntity<String> deletePost
     (@Validated @PathVariable("postId") Long postId)
     {
@@ -107,7 +103,7 @@ public class NewsPostController
      * @description : Change a post by its ID endpoint.
     **************************************************************************/
     @PatchMapping("/{postId}")
-    @CachePut(cacheNames = "${app.cache-name}", key = "#postId")
+    @CachePut(cacheNames = "MyCache", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> changePost
     (@Validated @RequestBody NewsUpdateRequestDTO changedPost, @Validated @PathVariable("postId") Long postId)
     {
@@ -132,7 +128,7 @@ public class NewsPostController
      * @return ResponseEntity with a list of the top news posts.
      **************************************************************************/
     @GetMapping("/top-posts")
-    @Cacheable(cacheNames = "${app.cache-name}", key = "top-posts")
+    @Cacheable(cacheNames = "MyCache", key = "'top-posts'")
     public ResponseEntity<List<NewsPostResponseDTO>> getTopPostsByRank()
     {
         List<NewsPostResponseDTO> newsPosts = newsService.getPostsByRankDesc();
@@ -143,7 +139,7 @@ public class NewsPostController
      * @description : Upvote a post by its ID endpoint.
     **************************************************************************/
     @PatchMapping("/{postId}/upvote")
-    @CachePut(cacheNames = "${app.cache-name}", key = "#postId")
+    @CachePut(cacheNames = "MyCache", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> upvotePost
     (@Validated @PathVariable("postId") Long postId)
     {
@@ -155,7 +151,7 @@ public class NewsPostController
      * @description : Downvote a post by its ID endpoint.
     **************************************************************************/
     @PatchMapping("/{postId}/downvote")
-    @CachePut(cacheNames = "${app.cache-name}", key = "#postId")
+    @CachePut(cacheNames = "MyCache", key = "#postId")
     public ResponseEntity<NewsPostResponseDTO> downvotePost
     (@Validated @PathVariable("postId") Long postId)
     {

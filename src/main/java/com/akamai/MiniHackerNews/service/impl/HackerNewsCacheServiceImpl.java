@@ -25,28 +25,29 @@ public class HackerNewsCacheServiceImpl implements HackerNewsCacheService
         return (cache.get(key));
     }
 
-
     @Override
     public void put(String key, Object value)
     {
-        List<?> topPosts = (List<?>)value;
-
-        for(int i = 0; i < topPosts.size(); i++)
+        Object cachedValue = cache.get("top-posts");
+        if(cachedValue != null && cachedValue instanceof List<?>)
         {
-            Object listItem = topPosts.get(i);
-            if(listItem instanceof NewsPostResponseDTO)
+            List<NewsPostResponseDTO> topPosts = (List<NewsPostResponseDTO>) cachedValue;
+            for(int i = 0; i < topPosts.size(); i++)
             {
-                NewsPostResponseDTO post = (NewsPostResponseDTO) listItem;
-                if (key.equals(String.valueOf(post.getPostId())))
+                System.out.println("HAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA");
+                if(topPosts.get(i).getPostId().equals(((NewsPostResponseDTO) value).getPostId()))
                 {
-                    topPosts.set(i, value);
-                    break;
+                    topPosts.set(i, (NewsPostResponseDTO) value);
+                    cache.put("top-posts", topPosts);
+                    return;
                 }
             }
         }
 
         cache.put(key, value);
     }
+
+
 
     @Override
     public void evict(String key)
