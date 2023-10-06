@@ -78,6 +78,7 @@ public class NewsPostServiceImpl implements NewsPostService
         }
 
         newsPostRepository.deleteById(postId);
+        cacheService.evict("post-" + postId);
     }
 
     /**************************************************************************
@@ -89,7 +90,17 @@ public class NewsPostServiceImpl implements NewsPostService
     public NewsPostResponseDTO getPostById
     (Long postId) throws NewsPostNotFoundException
     {
-        return (modelMapper.map(getPostEntityById(postId),NewsPostResponseDTO.class));
+        NewsPostResponseDTO cachedPost = (NewsPostResponseDTO)cacheService.get("post-" + postId);
+        if(null != cachedPost)
+        {
+            return (cachedPost);
+        }
+
+        NewsPostResponseDTO responseDTO = modelMapper.map
+        (getPostEntityById(postId),NewsPostResponseDTO.class);
+
+        cacheService.put("post-" + postId, responseDTO);
+        return (responseDTO);
     }
 
     /**************************************************************************
@@ -113,11 +124,20 @@ public class NewsPostServiceImpl implements NewsPostService
     @Override
     public List<NewsPostResponseDTO> getPostsByRankDesc()
     {
+        List<NewsPostResponseDTO> cachedTopPosts = cacheService.getTopPostsFromCache();
+        if(!cachedTopPosts.isEmpty())
+        {
+            return (cachedTopPosts);
+        }
+    
         List<NewsPostSchema> topPosts = newsPostRepository.findByOrderByRankDesc();
-
-        return(topPosts.stream()
+    
+        List<NewsPostResponseDTO> topPostsDTO = topPosts.stream()
         .map(newsPost -> modelMapper.map(newsPost, NewsPostResponseDTO.class))
-        .collect(Collectors.toList()));
+        .collect(Collectors.toList());
+        
+        cacheService.putTopPosts(topPostsDTO);
+        return (topPostsDTO);
     }
 
     /**************************************************************************
