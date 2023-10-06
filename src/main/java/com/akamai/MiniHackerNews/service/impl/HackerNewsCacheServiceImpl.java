@@ -1,3 +1,27 @@
+/******************************************************************************
+
+Copyright (c) 2023 Tal Aharon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+******************************************************************************/
+
 package com.akamai.MiniHackerNews.service.impl;
 
 import java.util.Map;
@@ -33,7 +57,7 @@ public class HackerNewsCacheServiceImpl implements HackerNewsCacheService
     @Override
     public NewsPostResponseDTO get(String key)
     {
-        return cache.get(key);
+        return (cache.get(key));
     }
 
     @Override
@@ -43,19 +67,29 @@ public class HackerNewsCacheServiceImpl implements HackerNewsCacheService
     }
 
     @Override
-    public void evict(String key)
+    public void evict(String key, NewsPostResponseDTO value)
     {
-        cache.remove(key);
+        if(null == cache.remove(key))
+        {
+            evictTopPostFromCache(value);
+        }
+    }
+
+    private void evictTopPostFromCache(NewsPostResponseDTO topPost)
+    {
+        topPostsCache.entrySet()
+        .removeIf(entry -> entry.getValue()
+        .getPostId().equals(topPost.getPostId()));
     }
 
     @Override
-    public void evictTopPostsFromCache()
+    public void evictAllTopPostsFromCache()
     {
         topPostsCache.clear();
     }
 
     @Override
-    public void putAllTopPosts(List<NewsPostSchema> topPosts)
+    public void putTopPosts(List<NewsPostSchema> topPosts)
     {
         for(NewsPostSchema post : topPosts)
         {
@@ -71,9 +105,7 @@ public class HackerNewsCacheServiceImpl implements HackerNewsCacheService
 
     public void putTopPost(NewsPostResponseDTO topPost, double rank)
     {
-        topPostsCache.entrySet()
-        .removeIf(entry -> entry.getValue().getPostId().equals(topPost.getPostId()));
-    
+        evictTopPostFromCache(topPost);
         topPostsCache.put(rank, topPost);
     }
     

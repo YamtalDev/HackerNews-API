@@ -1,3 +1,27 @@
+/******************************************************************************
+
+Copyright (c) 2023 Tal Aharon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+******************************************************************************/
+
 package com.akamai.MiniHackerNews.service.impl;
 
 import java.util.List;
@@ -56,7 +80,9 @@ public class NewsPostServiceImpl implements NewsPostService
         try
         {
             NewsPostSchema newPost = modelMapper.map(newsPostDTO, NewsPostSchema.class);
-            return (modelMapper.map(newsPostRepository.save(newPost), NewsPostResponseDTO.class));
+            NewsPostResponseDTO responseDTO = modelMapper.map(newsPostRepository.save(newPost), NewsPostResponseDTO.class);
+            cacheService.put("post-" + responseDTO.getPostId(), responseDTO);
+            return (responseDTO);
         }
         catch(DataIntegrityViolationException exception)
         {
@@ -72,13 +98,10 @@ public class NewsPostServiceImpl implements NewsPostService
     @Override
     public void deletePost(Long postId) throws NewsPostNotFoundException
     {
-        if(!newsPostRepository.existsById(postId))
-        {
-            throw (new NewsPostNotFoundException("postId", postId, "post"));
-        }
+        NewsPostSchema newPost = getPostEntityById(postId);
 
         newsPostRepository.deleteById(postId);
-        cacheService.evict("post-" + postId);
+        cacheService.evict("post-" + postId, modelMapper.map(newPost ,NewsPostResponseDTO.class));
     }
 
     /**************************************************************************
@@ -90,7 +113,7 @@ public class NewsPostServiceImpl implements NewsPostService
     public NewsPostResponseDTO getPostById
     (Long postId) throws NewsPostNotFoundException
     {
-        NewsPostResponseDTO cachedPost = (NewsPostResponseDTO)cacheService.get("post-" + postId);
+        NewsPostResponseDTO cachedPost = cacheService.get("post-" + postId);
         if(null != cachedPost)
         {
             return (cachedPost);
@@ -136,7 +159,7 @@ public class NewsPostServiceImpl implements NewsPostService
         .map(newsPost -> modelMapper.map(newsPost, NewsPostResponseDTO.class))
         .collect(Collectors.toList());
 
-        cacheService.putAllTopPosts(topPosts);
+        cacheService.putTopPosts(topPosts);
         return (topPostsDTO);
     }
 
@@ -155,7 +178,12 @@ public class NewsPostServiceImpl implements NewsPostService
 
             existingPost.setTime();
             modelMapper.map(newsPostDTO, existingPost);
-            return (modelMapper.map(newsPostRepository.save(existingPost), NewsPostResponseDTO.class));
+
+            NewsPostResponseDTO responseDTO = modelMapper.map
+            (newsPostRepository.save(existingPost), NewsPostResponseDTO.class);
+
+            cacheService.put("post-" + postId, responseDTO);
+            return (responseDTO);
         }
         catch(DataIntegrityViolationException |  NewsPostNotFoundException exception)
         {
@@ -175,7 +203,12 @@ public class NewsPostServiceImpl implements NewsPostService
         {
             NewsPostSchema existingPost = getPostEntityById(postId);
             modelMapper.map(newsPostDTO, existingPost);
-            return (modelMapper.map(newsPostRepository.save(existingPost), NewsPostResponseDTO.class));
+
+            NewsPostResponseDTO responseDTO = modelMapper.map
+            (newsPostRepository.save(existingPost), NewsPostResponseDTO.class);
+
+            cacheService.put("post-" + postId, responseDTO);
+            return (responseDTO);
         }
         catch(DataIntegrityViolationException |  NewsPostNotFoundException exception)
         {
@@ -208,7 +241,12 @@ public class NewsPostServiceImpl implements NewsPostService
         }
 
         existingPost.upVote();
-        return (modelMapper.map(newsPostRepository.save(existingPost), NewsPostResponseDTO.class));
+
+        NewsPostResponseDTO responseDTO = modelMapper.map
+        (newsPostRepository.save(existingPost), NewsPostResponseDTO.class);
+
+        cacheService.put("post-" + postId, responseDTO);
+        return (responseDTO);
     }
 
     /**************************************************************************
@@ -226,7 +264,12 @@ public class NewsPostServiceImpl implements NewsPostService
         }
 
         existingPost.downVote();
-        return (modelMapper.map(newsPostRepository.save(existingPost), NewsPostResponseDTO.class));
+
+        NewsPostResponseDTO responseDTO = modelMapper.map
+        (newsPostRepository.save(existingPost), NewsPostResponseDTO.class);
+
+        cacheService.put("post-" + postId, responseDTO);
+        return (responseDTO);
     }
 
     /**************************************************************************
