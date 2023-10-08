@@ -59,6 +59,8 @@ public class NewsPostServiceImpl implements NewsPostService
     @Value("${app.cache.top-posts-size}")
     private int maxTopPostsSize;
 
+    private boolean topPostsCachePopulated;
+
     /**************************************************************************
      * @param modelMapper        : Injected ModelMapper instance.
      * @param newsPostRepository : Injected NewsPostRepository instance.
@@ -66,6 +68,7 @@ public class NewsPostServiceImpl implements NewsPostService
     public NewsPostServiceImpl
     (ModelMapper modelMapper, NewsPostsCacheServiceImpl cacheService, NewsPostRepository newsPostRepository)
     {
+        this.topPostsCachePopulated = false;
         this.modelMapper = modelMapper;
         this.cacheService = cacheService;
         this.newsPostRepository = newsPostRepository;
@@ -158,20 +161,25 @@ public class NewsPostServiceImpl implements NewsPostService
     public List<NewsPostResponseDTO> getPostsByRankDesc()
     {
         List<NewsPostResponseDTO> cachedTopPosts = cacheService.getTopPostsFromCache();
-        if(!cachedTopPosts.isEmpty())
+        if(!topPostsCachePopulated || cachedTopPosts.isEmpty())
+        {
+            List<NewsPostSchema> topPosts = newsPostRepository
+            .findByOrderByRankDescWithLimit(maxTopPostsSize);
+
+            List<NewsPostResponseDTO> topPostsDTO = topPosts.stream()
+            .map(newsPost -> modelMapper.map(newsPost, NewsPostResponseDTO.class))
+            .collect(Collectors.toList());
+
+           cacheService.putTopPosts(topPosts);
+
+            topPostsCachePopulated = true;
+
+            return (topPostsDTO);
+        }
+        else
         {
             return (cachedTopPosts);
         }
-
-        List<NewsPostSchema> topPosts = newsPostRepository
-        .findByOrderByRankDescWithLimit(maxTopPostsSize);
-
-        List<NewsPostResponseDTO> topPostsDTO = topPosts.stream()
-        .map(newsPost -> modelMapper.map(newsPost, NewsPostResponseDTO.class))
-        .collect(Collectors.toList());
-
-        cacheService.putTopPosts(topPosts);
-        return (topPostsDTO);
     }
 
     /**************************************************************************

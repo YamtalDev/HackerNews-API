@@ -24,11 +24,11 @@ SOFTWARE.
 
 package com.akamai.MiniHackerNews.cache;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Value;
 
 import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
@@ -38,30 +38,35 @@ public class RankedCache
     @Value("${app.cache.size}")
     private int maxCacheSize;
 
+    @Value("${app.cache.top-posts-size}")
+    private int maxTopPostsQueueSize;
+
+    private double lowestRank;
     private final ConcurrentHashMap<Long, CacheEntity> cacheMap;
     private final PriorityBlockingQueue<CacheEntity> cacheQueue;
 
     public RankedCache(ConcurrentHashMap<Long, CacheEntity> cacheMap, PriorityBlockingQueue<CacheEntity> cacheQueue)
     {
+        this.lowestRank = 0;
         this.cacheMap = cacheMap;
         this.cacheQueue = cacheQueue;
     }
 
     public void put(Long key, CacheEntity value)
     {
-        if(maxCacheSize <= cacheMap.size())
-        {
-            evictLowestRank();
-        }
-
         CacheEntity existingEntity = cacheMap.remove(key);
-        if (null != existingEntity)
+        if(null != existingEntity)
         {
             cacheQueue.remove(existingEntity);
         }
 
+        if(maxTopPostsQueueSize <= cacheQueue.size() && lowestRank < value.getRank())
+        {
+            removeLowestRank();
+            cacheQueue.put(value);
+        }
+
         cacheMap.put(key, value);
-        cacheQueue.offer(value);
     }
 
     public CacheEntity get(Long key)
@@ -90,13 +95,26 @@ public class RankedCache
         return (cacheQueue.stream().map(CacheEntity::getEntity).collect(Collectors.toList()));
     }
 
-    private void evictLowestRank()
+    private void removeLowestRank()
     {
-        CacheEntity lowestRank = cacheQueue.poll();
-
-        if(null != lowestRank)
+        CacheEntity lowestRankedEntity = getLowestRankedEntity();
+        if(lowestRankedEntity != null)
         {
-            cacheMap.remove(lowestRank.getEntity().getPostId());
+            lowestRank = lowestRankedEntity.getRank();
+            cacheQueue.remove(lowestRankedEntity);
+            cacheMap.remove(lowestRankedEntity.getEntity().getPostId());
         }
+    }
+
+    private CacheEntity getLowestRankedEntity()
+    {
+        Iterator<CacheEntity> iterator = cacheQueue.iterator();
+        CacheEntity lowestRankedEntity = null;
+        while(iterator.hasNext())
+        {
+            lowestRankedEntity = iterator.next();
+        }
+
+        return (lowestRankedEntity);
     }
 }

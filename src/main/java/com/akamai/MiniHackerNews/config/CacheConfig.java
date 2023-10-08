@@ -39,8 +39,8 @@ import org.springframework.cache.annotation.CachingConfigurer;
 @Configuration
 public class CacheConfig implements CachingConfigurer
 {
-    @Value("${app.cache.size}")
-    private int maxCacheSize;
+    @Value("${app.cache.top-posts-size}")
+    private int maxTopPostsQueueSize;
 
     @Bean
     public ConcurrentHashMap<Long, CacheEntity> cacheMap()
@@ -52,7 +52,7 @@ public class CacheConfig implements CachingConfigurer
     public PriorityBlockingQueue<CacheEntity> cacheQueue()
     {
         return (new PriorityBlockingQueue<CacheEntity>
-        (maxCacheSize, Comparator.comparingDouble(CacheEntity::getRank).reversed()));
+        (maxTopPostsQueueSize, Comparator.comparingDouble(CacheEntity::getRank).reversed()));
     }
 
     @Bean
