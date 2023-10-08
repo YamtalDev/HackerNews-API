@@ -49,8 +49,6 @@ import com.akamai.MiniHackerNews.service.*;
  * @NewsPostRequestDTO   : DTO representation of the client post, put requests structure.
  * @NewsPostResponseDTO  : DTO to represent the structure of the response to the client side.
  * @NewsUpdateRequestDTO : DTO representation of the client patch request structure.
- *
- * @caching : The controllers use caching mechanism, to improve performance.
  * 
  * @apiNote : GET controllers for all posts and for top posts uses pagination 
 *           : for efficiently. GET top posts page size is configurable in the application.yml

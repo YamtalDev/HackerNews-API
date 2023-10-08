@@ -29,15 +29,12 @@ import java.util.List;
 import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
 import com.akamai.MiniHackerNews.schema.NewsPostSchema;
 
-public interface HackerNewsCacheService 
+public interface NewsPostsCacheService 
 {
-    public NewsPostResponseDTO get(String key);
-    public void put(String key, NewsPostResponseDTO value);
-    public void evict(String key, NewsPostResponseDTO value);
-
-    public void evictAllTopPostsFromCache();
-    public List<NewsPostResponseDTO> getTopPostsFromCache();
+    public void evictAll();
+    public void put(NewsPostSchema value);
+    public void evict(NewsPostSchema value);
+    public NewsPostResponseDTO get(Long key);
     public void putTopPosts(List<NewsPostSchema> topPosts);
-    public void putTopPost(NewsPostResponseDTO topPost, double rank);
-
+    public List<NewsPostResponseDTO> getTopPostsFromCache();
 }

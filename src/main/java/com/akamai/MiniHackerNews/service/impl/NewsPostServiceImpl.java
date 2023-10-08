@@ -52,7 +52,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 public class NewsPostServiceImpl implements NewsPostService
 {
     private ModelMapper modelMapper;
-    HackerNewsCacheServiceImpl cacheService;
+    NewsPostsCacheServiceImpl cacheService;
     private NewsPostRepository newsPostRepository;
 
     /**************************************************************************
@@ -60,7 +60,7 @@ public class NewsPostServiceImpl implements NewsPostService
      * @param newsPostRepository : Injected NewsPostRepository instance.
     **************************************************************************/
     public NewsPostServiceImpl
-    (ModelMapper modelMapper, HackerNewsCacheServiceImpl cacheService, NewsPostRepository newsPostRepository)
+    (ModelMapper modelMapper, NewsPostsCacheServiceImpl cacheService, NewsPostRepository newsPostRepository)
     {
         this.modelMapper = modelMapper;
         this.cacheService = cacheService;
@@ -81,7 +81,7 @@ public class NewsPostServiceImpl implements NewsPostService
         {
             NewsPostSchema newPost = modelMapper.map(newsPostDTO, NewsPostSchema.class);
             NewsPostResponseDTO responseDTO = modelMapper.map(newsPostRepository.save(newPost), NewsPostResponseDTO.class);
-            cacheService.put("post-" + responseDTO.getPostId(), responseDTO);
+            cacheService.put(newPost);
             return (responseDTO);
         }
         catch(DataIntegrityViolationException exception)
@@ -101,7 +101,7 @@ public class NewsPostServiceImpl implements NewsPostService
         NewsPostSchema newPost = getPostEntityById(postId);
 
         newsPostRepository.deleteById(postId);
-        cacheService.evict("post-" + postId, modelMapper.map(newPost ,NewsPostResponseDTO.class));
+        cacheService.evict(newPost);
     }
 
     /**************************************************************************
@@ -113,16 +113,16 @@ public class NewsPostServiceImpl implements NewsPostService
     public NewsPostResponseDTO getPostById
     (Long postId) throws NewsPostNotFoundException
     {
-        NewsPostResponseDTO cachedPost = cacheService.get("post-" + postId);
+        NewsPostResponseDTO cachedPost = cacheService.get(postId);
         if(null != cachedPost)
         {
             return (cachedPost);
         }
 
-        NewsPostResponseDTO responseDTO = modelMapper.map
-        (getPostEntityById(postId),NewsPostResponseDTO.class);
+        NewsPostSchema newsPost = getPostEntityById(postId);
+        NewsPostResponseDTO responseDTO = modelMapper.map(newsPost,NewsPostResponseDTO.class);
 
-        cacheService.put("post-" + postId, responseDTO);
+        cacheService.put(newsPost);
         return (responseDTO);
     }
 
@@ -176,13 +176,12 @@ public class NewsPostServiceImpl implements NewsPostService
         {
             NewsPostSchema existingPost = getPostEntityById(postId);
 
-            existingPost.setTime();
             modelMapper.map(newsPostDTO, existingPost);
 
             NewsPostResponseDTO responseDTO = modelMapper.map
             (newsPostRepository.save(existingPost), NewsPostResponseDTO.class);
 
-            cacheService.put("post-" + postId, responseDTO);
+            cacheService.put(existingPost);
             return (responseDTO);
         }
         catch(DataIntegrityViolationException |  NewsPostNotFoundException exception)
@@ -207,7 +206,7 @@ public class NewsPostServiceImpl implements NewsPostService
             NewsPostResponseDTO responseDTO = modelMapper.map
             (newsPostRepository.save(existingPost), NewsPostResponseDTO.class);
 
-            cacheService.put("post-" + postId, responseDTO);
+            cacheService.put(existingPost);
             return (responseDTO);
         }
         catch(DataIntegrityViolationException |  NewsPostNotFoundException exception)
@@ -245,7 +244,7 @@ public class NewsPostServiceImpl implements NewsPostService
         NewsPostResponseDTO responseDTO = modelMapper.map
         (newsPostRepository.save(existingPost), NewsPostResponseDTO.class);
 
-        cacheService.put("post-" + postId, responseDTO);
+        cacheService.put(existingPost);
         return (responseDTO);
     }
 
@@ -268,7 +267,7 @@ public class NewsPostServiceImpl implements NewsPostService
         NewsPostResponseDTO responseDTO = modelMapper.map
         (newsPostRepository.save(existingPost), NewsPostResponseDTO.class);
 
-        cacheService.put("post-" + postId, responseDTO);
+        cacheService.put(existingPost);
         return (responseDTO);
     }
 
