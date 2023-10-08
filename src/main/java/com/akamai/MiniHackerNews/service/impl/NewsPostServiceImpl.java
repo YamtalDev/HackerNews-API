@@ -33,9 +33,6 @@ import com.akamai.MiniHackerNews.dto.*;
 import com.akamai.MiniHackerNews.schema.*;
 import com.akamai.MiniHackerNews.repository.*;
 import com.akamai.MiniHackerNews.service.NewsPostService;
-
-import jakarta.annotation.PostConstruct;
-
 import com.akamai.MiniHackerNews.exception.ValidationException;
 import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException;
 
@@ -60,7 +57,7 @@ public class NewsPostServiceImpl implements NewsPostService
     private NewsPostRepository newsPostRepository;
 
     @Value("${app.cache.top-posts-size}")
-    private int maxResults;
+    private int maxTopPostsSize;
 
     /**************************************************************************
      * @param modelMapper        : Injected ModelMapper instance.
@@ -72,13 +69,6 @@ public class NewsPostServiceImpl implements NewsPostService
         this.modelMapper = modelMapper;
         this.cacheService = cacheService;
         this.newsPostRepository = newsPostRepository;
-    }
-
-    @PostConstruct
-    private void prePopulateCacheWithTopPosts()
-    {
-        cacheService.putTopPosts
-        (newsPostRepository.findByOrderByRankDescWithLimit(maxResults));
     }
 
     /**************************************************************************
@@ -112,10 +102,12 @@ public class NewsPostServiceImpl implements NewsPostService
     @Override
     public void deletePost(Long postId) throws NewsPostNotFoundException
     {
-        NewsPostSchema newPost = getPostEntityById(postId);
-
+        if(!newsPostRepository.existsById(postId))
+        {
+            throw (new NewsPostNotFoundException("postId", postId, "post"));
+        }
         newsPostRepository.deleteById(postId);
-        cacheService.evict(newPost.getPostId());
+        cacheService.evict(postId);
     }
 
     /**************************************************************************
@@ -166,8 +158,9 @@ public class NewsPostServiceImpl implements NewsPostService
         {
             return (cachedTopPosts);
         }
-    
-        List<NewsPostSchema> topPosts = newsPostRepository.findByOrderByRankDescWithLimit(maxResults);
+
+        List<NewsPostSchema> topPosts = newsPostRepository
+        .findByOrderByRankDescWithLimit(maxTopPostsSize);
 
         List<NewsPostResponseDTO> topPostsDTO = topPosts.stream()
         .map(newsPost -> modelMapper.map(newsPost, NewsPostResponseDTO.class))

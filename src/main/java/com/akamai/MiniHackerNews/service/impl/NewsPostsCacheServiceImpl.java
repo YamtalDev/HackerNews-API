@@ -84,8 +84,8 @@ public class NewsPostsCacheServiceImpl implements NewsPostsCacheService
     @Override
     public void evict(Long postId)
     {
-        cache.remove(postId);
-        evictTopPost(cache.get(postId).getEntity());
+        CacheEntity removedEntity = cache.remove(postId);
+        evictTopPost(removedEntity.getEntity());
     }
 
     @Override
@@ -114,23 +114,28 @@ public class NewsPostsCacheServiceImpl implements NewsPostsCacheService
     }
 
     @Async
-    private void updateTopPosts()
-    {
+    private void updateTopPosts() {
+        // Sort the cache entries by rank
         List<CacheEntity> entries = cache.values().stream()
-        .sorted((entry1, entry2) -> Double.compare(entry2.getRank(), entry1.getRank()))
-        .collect(Collectors.toList());
-
-        List<NewsPostResponseDTO> topNewsPosts= entries.stream().map
-        (entry -> entry.getEntity()).collect(Collectors.toList());
-
-        if(topNewsPosts.size() > maxTopPostsSize)
-        {
+                .sorted((entry1, entry2) -> Double.compare(entry2.getRank(), entry1.getRank()))
+                .collect(Collectors.toList());
+    
+        // Create a list of top posts from the sorted entries
+        List<NewsPostResponseDTO> topNewsPosts = entries.stream()
+                .map(entry -> entry.getEntity())
+                .collect(Collectors.toList());
+    
+        if (topNewsPosts.size() > maxTopPostsSize) {
             topNewsPosts = topNewsPosts.subList(0, maxTopPostsSize);
         }
-
+    
+        // Clear the existing topPosts cache
         topPosts.clear();
+    
+        // Add the topNewsPosts to the topPosts cache
         topPosts.addAll(topNewsPosts);
     }
+    
 
     @Async
     private void evictTopPost(NewsPostResponseDTO entity)
