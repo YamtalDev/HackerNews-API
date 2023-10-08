@@ -33,6 +33,9 @@ import com.akamai.MiniHackerNews.dto.*;
 import com.akamai.MiniHackerNews.schema.*;
 import com.akamai.MiniHackerNews.repository.*;
 import com.akamai.MiniHackerNews.service.NewsPostService;
+
+import jakarta.annotation.PostConstruct;
+
 import com.akamai.MiniHackerNews.exception.ValidationException;
 import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException;
 
@@ -67,6 +70,13 @@ public class NewsPostServiceImpl implements NewsPostService
         this.newsPostRepository = newsPostRepository;
     }
 
+    @PostConstruct
+    private void prePopulateCacheWithTopPosts()
+    {
+        List<NewsPostSchema> topPosts = newsPostRepository.findByOrderByRankDesc();
+        cacheService.putTopPosts(topPosts);
+    }
+
     /**************************************************************************
      * @description       : Create and saves a new post based on the provided DTO object.
      * @param newsPostDTO : The DTO containing the new post data.
@@ -81,7 +91,7 @@ public class NewsPostServiceImpl implements NewsPostService
         {
             NewsPostSchema newPost = modelMapper.map(newsPostDTO, NewsPostSchema.class);
             NewsPostResponseDTO responseDTO = modelMapper.map(newsPostRepository.save(newPost), NewsPostResponseDTO.class);
-            cacheService.put(newPost);
+            cacheService.put(responseDTO, newPost.getRank());
             return (responseDTO);
         }
         catch(DataIntegrityViolationException exception)
@@ -101,7 +111,7 @@ public class NewsPostServiceImpl implements NewsPostService
         NewsPostSchema newPost = getPostEntityById(postId);
 
         newsPostRepository.deleteById(postId);
-        cacheService.evict(newPost);
+        cacheService.evict(newPost.getPostId());
     }
 
     /**************************************************************************
@@ -122,7 +132,7 @@ public class NewsPostServiceImpl implements NewsPostService
         NewsPostSchema newsPost = getPostEntityById(postId);
         NewsPostResponseDTO responseDTO = modelMapper.map(newsPost,NewsPostResponseDTO.class);
 
-        cacheService.put(newsPost);
+        cacheService.put(responseDTO, newsPost.getRank());
         return (responseDTO);
     }
 
@@ -181,7 +191,7 @@ public class NewsPostServiceImpl implements NewsPostService
             NewsPostResponseDTO responseDTO = modelMapper.map
             (newsPostRepository.save(existingPost), NewsPostResponseDTO.class);
 
-            cacheService.put(existingPost);
+            cacheService.put(responseDTO, existingPost.getRank());
             return (responseDTO);
         }
         catch(DataIntegrityViolationException |  NewsPostNotFoundException exception)
@@ -206,7 +216,7 @@ public class NewsPostServiceImpl implements NewsPostService
             NewsPostResponseDTO responseDTO = modelMapper.map
             (newsPostRepository.save(existingPost), NewsPostResponseDTO.class);
 
-            cacheService.put(existingPost);
+            cacheService.put(responseDTO, existingPost.getRank());
             return (responseDTO);
         }
         catch(DataIntegrityViolationException |  NewsPostNotFoundException exception)
@@ -244,7 +254,7 @@ public class NewsPostServiceImpl implements NewsPostService
         NewsPostResponseDTO responseDTO = modelMapper.map
         (newsPostRepository.save(existingPost), NewsPostResponseDTO.class);
 
-        cacheService.put(existingPost);
+        cacheService.put(responseDTO, existingPost.getRank());
         return (responseDTO);
     }
 
@@ -267,7 +277,7 @@ public class NewsPostServiceImpl implements NewsPostService
         NewsPostResponseDTO responseDTO = modelMapper.map
         (newsPostRepository.save(existingPost), NewsPostResponseDTO.class);
 
-        cacheService.put(existingPost);
+        cacheService.put(responseDTO, existingPost.getRank());
         return (responseDTO);
     }
 

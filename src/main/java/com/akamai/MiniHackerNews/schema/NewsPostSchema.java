@@ -108,6 +108,7 @@ public class NewsPostSchema
      * @GettersNSetters : Implementation for the ModelMapper to map between DTO entities.
     **************************************************************************/
     public int getVotes(){ return (votes);}
+    public double getRank(){ return (rank);}
     public String getPost(){ return (post);}
     public Long getPostId(){ return (postId);}
     public String getPostedBy(){ return (postedBy);}

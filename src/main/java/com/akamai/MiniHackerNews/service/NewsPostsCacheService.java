@@ -32,9 +32,9 @@ import com.akamai.MiniHackerNews.schema.NewsPostSchema;
 public interface NewsPostsCacheService 
 {
     public void evictAll();
-    public void put(NewsPostSchema value);
-    public void evict(NewsPostSchema value);
-    public NewsPostResponseDTO get(Long key);
+    public void evict(Long postId);
+    public NewsPostResponseDTO get(Long postId);
+    public void put(NewsPostResponseDTO value, Double rank);
     public void putTopPosts(List<NewsPostSchema> topPosts);
     public List<NewsPostResponseDTO> getTopPostsFromCache();
 }

@@ -24,13 +24,15 @@ SOFTWARE.
 
 package com.akamai.MiniHackerNews.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
 import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
 import com.akamai.MiniHackerNews.schema.NewsPostSchema;
 import com.akamai.MiniHackerNews.service.NewsPostsCacheService;
@@ -39,59 +41,60 @@ import com.akamai.MiniHackerNews.service.NewsPostsCacheService;
 public class NewsPostsCacheServiceImpl implements NewsPostsCacheService 
 {
     private ModelMapper modelMapper;
-    private ConcurrentSkipListMap<Long, NewsPostSchema> cache;
+    private ConcurrentSkipListMap<Double, Long> rankToPostIdMap;
+    private Map<Long, NewsPostResponseDTO> cache;
 
-    public NewsPostsCacheServiceImpl(ModelMapper modelMapper)
+    public NewsPostsCacheServiceImpl(ModelMapper modelMapper, ConcurrentSkipListMap<Double, Long> rankToPostIdMap, ConcurrentHashMap<Long, NewsPostResponseDTO> cache)
     {
-        cache = new ConcurrentSkipListMap<Long, NewsPostSchema>((postId1, postId2) ->
-        {
-            double rank1 = cache.get(postId1).getRank();
-            double rank2 = cache.get(postId2).getRank();
-            return (Double.compare(rank2, rank1));
-        });
-
+        this.cache = cache;
         this.modelMapper = modelMapper;
+        this.rankToPostIdMap = rankToPostIdMap;
+    }
+
+
+    @Override
+    public NewsPostResponseDTO get(Long postId)
+    {
+        return cache.get(postId);
     }
 
     @Override
-    public NewsPostResponseDTO get(Long key)
+    public void put(NewsPostResponseDTO value, Double rank)
     {
-        return (modelMapper.map(cache.get(key), NewsPostResponseDTO.class));
+        Long postId = value.getPostId()
+        rankToPostIdMap.put(rank, postId);
+        cache.put(postId, value);
     }
 
     @Override
-    public void put(NewsPostSchema value)
+    public void evict(Long postId)
     {
-        cache.put(value.getPostId(), value);
-    }
-
-    @Override
-    public void evict(NewsPostSchema value)
-    {
-        cache.remove(value.getPostId());
+        cache.remove(cache.get(postId).getRank());
+        cache.remove(postId);
     }
 
     @Override
     public void evictAll()
     {
+        rankToPostIdMap.clear();
         cache.clear();
     }
 
     @Override
     public List<NewsPostResponseDTO> getTopPostsFromCache()
     {
-        List<NewsPostResponseDTO> topPosts = cache.values().stream()
-        .map(newsPostSchema -> modelMapper.map(newsPostSchema, NewsPostResponseDTO.class))
-        .collect(Collectors.toList());
-
-        return (topPosts);
+        List<Long> sortedPostIds = new ArrayList<Long>(rankToPostIdMap.values());
+        
+        return sortedPostIds.stream()
+            .map(postId -> cache.get(postId))
+            .collect(Collectors.toList());
     }
 
     public void putTopPosts(List<NewsPostSchema> topPosts)
     {
-        for(NewsPostSchema topPost : topPosts)
+        for(NewsPostSchema topPost: topPosts)
         {
-            put(topPost);
+            put(modelMapper.map(topPost, NewsPostResponseDTO.class), topPost.getRank());
         }
     }
 }
