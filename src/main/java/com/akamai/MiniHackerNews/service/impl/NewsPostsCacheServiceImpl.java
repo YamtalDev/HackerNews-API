@@ -24,17 +24,15 @@ SOFTWARE.
 
 package com.akamai.MiniHackerNews.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.NavigableMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import com.akamai.MiniHackerNews.config.CacheEntity;
 import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
 import com.akamai.MiniHackerNews.schema.NewsPostSchema;
 import com.akamai.MiniHackerNews.service.NewsPostsCacheService;
@@ -43,63 +41,54 @@ import com.akamai.MiniHackerNews.service.NewsPostsCacheService;
 public class NewsPostsCacheServiceImpl implements NewsPostsCacheService 
 {
     private ModelMapper modelMapper;
-    private Map<Long, NewsPostResponseDTO> cache;
-    private NavigableMap<Double, List<NewsPostResponseDTO>> rankToPostsMap;
+    private ConcurrentMap<Long, CacheEntity> cache;
 
-    public NewsPostsCacheServiceImpl(ModelMapper modelMapper, ConcurrentHashMap<Long, NewsPostResponseDTO> cache)
+    public NewsPostsCacheServiceImpl
+    (ModelMapper modelMapper, ConcurrentHashMap<Long, CacheEntity> cache)
     {
         this.cache = cache;
-        this.rankToPostsMap = new ConcurrentSkipListMap<>(Collections.reverseOrder());
         this.modelMapper = modelMapper;
     }
 
     @Override
     public NewsPostResponseDTO get(Long postId)
     {
-        return cache.get(postId);
+        CacheEntity entry = cache.get(postId);
+        return (entry.getEntity());
     }
 
     @Override
-    public void put(NewsPostResponseDTO value, Double rank)
+    public void put(NewsPostResponseDTO entity, Double rank)
     {
-        Long postId = value.getPostId();
+        Long postId = entity.getPostId();
 
-        List<NewsPostResponseDTO> postsForRank = rankToPostsMap.computeIfAbsent(rank, k -> new ArrayList<>());
-        postsForRank.add(value);
-        cache.put(postId, value);
+        CacheEntity entry = cache.computeIfAbsent(postId, k -> new CacheEntity());
+        entry.setEntity(entity);
+        entry.setRank(rank);
     }
 
     @Override
     public void evict(Long postId)
     {
-        NewsPostResponseDTO post = cache.get(postId);
-        if(null == post)
-        {
-            return;
-        }
-
-        Double rank = post.getRank();
-        
-        List<NewsPostResponseDTO> postsForRank = rankToPostsMap.get(rank);
-        if(null != postsForRank)
-        {
-            postsForRank.removeIf(p -> p.getPostId().equals(postId));
-        }
-
         cache.remove(postId);
     }
 
     @Override
     public void evictAll()
     {
-        rankToPostsMap.clear();
         cache.clear();
     }
 
     @Override
     public List<NewsPostResponseDTO> getTopPostsFromCache()
     {
-        return rankToPostsMap.values().stream().flatMap(List::stream).collect(Collectors.toList());
+        List<CacheEntity> entries = cache.values().stream()
+        .sorted((entry1, entry2) -> Double.compare(entry2.getRank(), entry1.getRank()))
+        .collect(Collectors.toList());
+        
+        return entries.stream()
+        .map(entry -> modelMapper.map(entry.getEntity(), NewsPostResponseDTO.class))
+        .collect(Collectors.toList());
     }
 
     public void putTopPosts(List<NewsPostSchema> topPosts)

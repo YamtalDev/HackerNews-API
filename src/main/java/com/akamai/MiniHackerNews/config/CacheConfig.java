@@ -24,9 +24,7 @@ SOFTWARE.
 
 package com.akamai.MiniHackerNews.config;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
 import org.springframework.context.annotation.Bean;
-import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.cache.annotation.CachingConfigurer;
 
@@ -34,14 +32,8 @@ import org.springframework.cache.annotation.CachingConfigurer;
 public class CacheConfig implements CachingConfigurer
 {
     @Bean
-    public ConcurrentHashMap<Long, NewsPostResponseDTO> cache()
+    public ConcurrentHashMap<Long, CacheEntity> cache()
     {
-        return (new ConcurrentHashMap<Long, NewsPostResponseDTO>());
-    }
-
-    @Bean
-    public ConcurrentSkipListMap<Double, Long> rankToPostIdMap()
-    {
-        return (new ConcurrentSkipListMap<Double, Long>((rank1, rank2) -> Double.compare(rank2, rank1)));
+        return (new ConcurrentHashMap<Long, CacheEntity>());
     }
 }
