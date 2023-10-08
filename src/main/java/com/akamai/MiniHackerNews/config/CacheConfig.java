@@ -30,15 +30,19 @@ import org.springframework.context.annotation.Configuration;
 
 import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachingConfigurer;
 
 @Configuration
 public class CacheConfig implements CachingConfigurer
 {
+    @Value("${app.cache.size}")
+    private int maxCacheSize;
+
     @Bean
     public ConcurrentHashMap<Long, CacheEntity> cache()
     {
-        return (new ConcurrentHashMap<Long, CacheEntity>());
+        return (new ConcurrentHashMap<Long, CacheEntity>(maxCacheSize));
     }
 
     @Bean

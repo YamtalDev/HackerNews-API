@@ -40,6 +40,7 @@ import com.akamai.MiniHackerNews.exception.ValidationException;
 import com.akamai.MiniHackerNews.exception.NewsPostNotFoundException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 
 /******************************************************************************
@@ -58,6 +59,9 @@ public class NewsPostServiceImpl implements NewsPostService
     NewsPostsCacheServiceImpl cacheService;
     private NewsPostRepository newsPostRepository;
 
+    @Value("${app.cache.top-posts-size}")
+    private int maxResults;
+
     /**************************************************************************
      * @param modelMapper        : Injected ModelMapper instance.
      * @param newsPostRepository : Injected NewsPostRepository instance.
@@ -73,8 +77,8 @@ public class NewsPostServiceImpl implements NewsPostService
     @PostConstruct
     private void prePopulateCacheWithTopPosts()
     {
-        List<NewsPostSchema> topPosts = newsPostRepository.findByOrderByRankDesc();
-        cacheService.putTopPosts(topPosts);
+        cacheService.putTopPosts
+        (newsPostRepository.findByOrderByRankDescWithLimit(maxResults));
     }
 
     /**************************************************************************
@@ -163,8 +167,8 @@ public class NewsPostServiceImpl implements NewsPostService
             return (cachedTopPosts);
         }
     
-        List<NewsPostSchema> topPosts = newsPostRepository.findByOrderByRankDesc();
-    
+        List<NewsPostSchema> topPosts = newsPostRepository.findByOrderByRankDescWithLimit(maxResults);
+
         List<NewsPostResponseDTO> topPostsDTO = topPosts.stream()
         .map(newsPost -> modelMapper.map(newsPost, NewsPostResponseDTO.class))
         .collect(Collectors.toList());

@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,12 @@ public class NewsPostsCacheServiceImpl implements NewsPostsCacheService
     private ModelMapper modelMapper;
     List<NewsPostResponseDTO> topPosts;
     private ConcurrentMap<Long, CacheEntity> cache;
+
+    @Value("${app.cache.top-posts-size}")
+    private int maxTopPostsSize;
+
+    @Value("${app.cache.size}")
+    private int maxCacheSize;
 
     public NewsPostsCacheServiceImpl
     (ModelMapper modelMapper, ConcurrentHashMap<Long, CacheEntity> cache, ArrayList<NewsPostResponseDTO> topPosts)
@@ -65,6 +72,11 @@ public class NewsPostsCacheServiceImpl implements NewsPostsCacheService
     @Override
     public void put(NewsPostResponseDTO entity, Double rank)
     {
+        if(cache.size() >= maxCacheSize && null == cache.get(entity.getPostId()))
+        {
+            return;
+        }
+
         cache.put(entity.getPostId(), new CacheEntity(entity, rank));
         updateTopPosts();
     }
@@ -110,6 +122,11 @@ public class NewsPostsCacheServiceImpl implements NewsPostsCacheService
 
         List<NewsPostResponseDTO> topNewsPosts= entries.stream().map
         (entry -> entry.getEntity()).collect(Collectors.toList());
+
+        if(topNewsPosts.size() > maxTopPostsSize)
+        {
+            topNewsPosts = topNewsPosts.subList(0, maxTopPostsSize);
+        }
 
         topPosts.clear();
         topPosts.addAll(topNewsPosts);

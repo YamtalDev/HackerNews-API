@@ -142,8 +142,8 @@ public class NewsPostController
     @GetMapping("/top-posts")
     public ResponseEntity<List<NewsPostResponseDTO>> getTopPostsByRank()
     {
-        List<NewsPostResponseDTO> newsPosts = newsService.getPostsByRankDesc();
-        return (new ResponseEntity<List<NewsPostResponseDTO>>(newsPosts, HttpStatus.OK));
+        List<NewsPostResponseDTO> topPosts = newsService.getPostsByRankDesc();
+        return (new ResponseEntity<List<NewsPostResponseDTO>>(topPosts, HttpStatus.OK));
     }
 
     /**************************************************************************
