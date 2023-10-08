@@ -23,12 +23,15 @@ SOFTWARE.
 ******************************************************************************/
 
 package com.akamai.MiniHackerNews.config;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.PriorityBlockingQueue;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
+import com.akamai.MiniHackerNews.cache.CacheEntity;
+import com.akamai.MiniHackerNews.cache.RankedCache;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachingConfigurer;
@@ -40,15 +43,23 @@ public class CacheConfig implements CachingConfigurer
     private int maxCacheSize;
 
     @Bean
-    public ConcurrentHashMap<Long, CacheEntity> cache()
+    public ConcurrentHashMap<Long, CacheEntity> cacheMap()
     {
-        return (new ConcurrentHashMap<Long, CacheEntity>(maxCacheSize));
+        return (new ConcurrentHashMap<Long, CacheEntity>());
     }
 
     @Bean
-    public ArrayList<NewsPostResponseDTO> topPosts()
+    public PriorityBlockingQueue<CacheEntity> cacheQueue()
     {
-        return (new ArrayList<NewsPostResponseDTO>());
+        return (new PriorityBlockingQueue<CacheEntity>
+        (maxCacheSize, Comparator.comparingDouble(CacheEntity::getRank).reversed()));
     }
-    
+
+    @Bean
+    public RankedCache rankedCache
+    (ConcurrentHashMap<Long, CacheEntity> cacheMap,
+    PriorityBlockingQueue<CacheEntity> cacheQueue)
+    {
+        return (new RankedCache(cacheMap, cacheQueue));
+    }
 }

@@ -22,19 +22,28 @@ SOFTWARE.
 
 ******************************************************************************/
 
-package com.akamai.MiniHackerNews.service;
-
-import java.util.List;
+package com.akamai.MiniHackerNews.cache;
 
 import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
-import com.akamai.MiniHackerNews.schema.NewsPostSchema;
 
-public interface NewsPostsCacheService 
+public class CacheEntity
 {
-    public void evictAll();
-    public void evict(Long postId);
-    public NewsPostResponseDTO get(Long postId);
-    public void put(NewsPostResponseDTO entity, Double rank);
-    public void putTopPosts(List<NewsPostSchema> topPosts);
-    public List<NewsPostResponseDTO> getTopPostsFromCache();
+    private NewsPostResponseDTO entity;
+    private Double rank;
+
+    public CacheEntity(NewsPostResponseDTO entity, Double rank)
+    {
+        this.entity = entity;
+        this.rank = rank;
+    }
+
+    public NewsPostResponseDTO getEntity()
+    {
+        return (entity);
+    }
+
+    public Double getRank()
+    {
+        return (rank);
+    }
 }

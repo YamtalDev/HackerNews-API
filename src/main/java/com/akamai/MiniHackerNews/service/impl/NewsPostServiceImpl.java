@@ -84,7 +84,10 @@ public class NewsPostServiceImpl implements NewsPostService
         try
         {
             NewsPostSchema newPost = modelMapper.map(newsPostDTO, NewsPostSchema.class);
-            NewsPostResponseDTO responseDTO = modelMapper.map(newsPostRepository.save(newPost), NewsPostResponseDTO.class);
+
+            NewsPostResponseDTO responseDTO = modelMapper.map
+            (newsPostRepository.save(newPost), NewsPostResponseDTO.class);
+
             cacheService.put(responseDTO, newPost.getRank());
             return (responseDTO);
         }
@@ -106,6 +109,7 @@ public class NewsPostServiceImpl implements NewsPostService
         {
             throw (new NewsPostNotFoundException("postId", postId, "post"));
         }
+
         newsPostRepository.deleteById(postId);
         cacheService.evict(postId);
     }
