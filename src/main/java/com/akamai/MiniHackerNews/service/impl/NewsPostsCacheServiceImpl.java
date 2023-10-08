@@ -24,6 +24,8 @@ SOFTWARE.
 
 package com.akamai.MiniHackerNews.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -41,30 +43,28 @@ import com.akamai.MiniHackerNews.service.NewsPostsCacheService;
 public class NewsPostsCacheServiceImpl implements NewsPostsCacheService 
 {
     private ModelMapper modelMapper;
+    List<NewsPostResponseDTO> topPosts;
     private ConcurrentMap<Long, CacheEntity> cache;
 
     public NewsPostsCacheServiceImpl
-    (ModelMapper modelMapper, ConcurrentHashMap<Long, CacheEntity> cache)
+    (ModelMapper modelMapper, ConcurrentHashMap<Long, CacheEntity> cache, ArrayList<NewsPostResponseDTO> topPosts)
     {
         this.cache = cache;
         this.modelMapper = modelMapper;
+        this.topPosts = Collections.synchronizedList(new ArrayList<NewsPostResponseDTO>());
     }
 
     @Override
     public NewsPostResponseDTO get(Long postId)
     {
         CacheEntity entry = cache.get(postId);
-        return (entry.getEntity());
+        return (entry != null ? entry.getEntity() : null);
     }
 
     @Override
     public void put(NewsPostResponseDTO entity, Double rank)
     {
-        Long postId = entity.getPostId();
-
-        CacheEntity entry = cache.computeIfAbsent(postId, k -> new CacheEntity());
-        entry.setEntity(entity);
-        entry.setRank(rank);
+        cache.put(entity.getPostId(), new CacheEntity(entity, rank));
     }
 
     @Override
@@ -86,14 +86,13 @@ public class NewsPostsCacheServiceImpl implements NewsPostsCacheService
         .sorted((entry1, entry2) -> Double.compare(entry2.getRank(), entry1.getRank()))
         .collect(Collectors.toList());
         
-        return entries.stream()
-        .map(entry -> modelMapper.map(entry.getEntity(), NewsPostResponseDTO.class))
-        .collect(Collectors.toList());
+        return entries.stream().map
+        (entry -> entry.getEntity()).collect(Collectors.toList());
     }
 
     public void putTopPosts(List<NewsPostSchema> topPosts)
     {
-        for(NewsPostSchema topPost : topPosts)
+        for(NewsPostSchema topPost: topPosts)
         {
             put(modelMapper.map(topPost, NewsPostResponseDTO.class), topPost.getRank());
         }

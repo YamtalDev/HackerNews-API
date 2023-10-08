@@ -23,9 +23,13 @@ SOFTWARE.
 ******************************************************************************/
 
 package com.akamai.MiniHackerNews.config;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
+
 import org.springframework.cache.annotation.CachingConfigurer;
 
 @Configuration
@@ -36,4 +40,11 @@ public class CacheConfig implements CachingConfigurer
     {
         return (new ConcurrentHashMap<Long, CacheEntity>());
     }
+
+    @Bean
+    public ArrayList<NewsPostResponseDTO> topPosts()
+    {
+        return (new ArrayList<NewsPostResponseDTO>());
+    }
+    
 }

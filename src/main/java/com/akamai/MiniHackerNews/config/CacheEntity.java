@@ -7,23 +7,19 @@ public class CacheEntity
     private NewsPostResponseDTO entity;
     private Double rank;
 
+    public CacheEntity(NewsPostResponseDTO entity, Double rank)
+    {
+        this.entity = entity;
+        this.rank = rank;
+    }
+
     public NewsPostResponseDTO getEntity()
     {
         return (entity);
     }
 
-    public void setEntity(NewsPostResponseDTO entity)
-    {
-        this.entity = entity;
-    }
-
     public Double getRank()
     {
         return (rank);
-    }
-
-    public void setRank(Double rank)
-    {
-        this.rank = rank;
     }
 }
