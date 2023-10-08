@@ -170,7 +170,7 @@ public class NewsPostServiceImpl implements NewsPostService
             .map(newsPost -> modelMapper.map(newsPost, NewsPostResponseDTO.class))
             .collect(Collectors.toList());
 
-           cacheService.putTopPosts(topPosts);
+            cacheService.putTopPosts(topPosts);
 
             topPostsCachePopulated = true;
 

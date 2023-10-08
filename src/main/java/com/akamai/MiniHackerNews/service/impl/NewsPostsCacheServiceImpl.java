@@ -35,7 +35,6 @@ import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
 import com.akamai.MiniHackerNews.schema.NewsPostSchema;
 import com.akamai.MiniHackerNews.service.NewsPostsCacheService;
 
-
 @Service
 public class NewsPostsCacheServiceImpl implements NewsPostsCacheService
 {
