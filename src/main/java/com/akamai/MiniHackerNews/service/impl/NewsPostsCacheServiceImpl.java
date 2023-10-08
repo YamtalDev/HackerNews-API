@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.akamai.MiniHackerNews.config.CacheEntity;
@@ -65,12 +66,14 @@ public class NewsPostsCacheServiceImpl implements NewsPostsCacheService
     public void put(NewsPostResponseDTO entity, Double rank)
     {
         cache.put(entity.getPostId(), new CacheEntity(entity, rank));
+        updateTopPosts();
     }
 
     @Override
     public void evict(Long postId)
     {
         cache.remove(postId);
+        evictTopPost(cache.get(postId).getEntity());
     }
 
     @Override
@@ -82,19 +85,38 @@ public class NewsPostsCacheServiceImpl implements NewsPostsCacheService
     @Override
     public List<NewsPostResponseDTO> getTopPostsFromCache()
     {
-        List<CacheEntity> entries = cache.values().stream()
-        .sorted((entry1, entry2) -> Double.compare(entry2.getRank(), entry1.getRank()))
-        .collect(Collectors.toList());
-        
-        return entries.stream().map
-        (entry -> entry.getEntity()).collect(Collectors.toList());
+        return (topPosts);
     }
 
     public void putTopPosts(List<NewsPostSchema> topPosts)
     {
         for(NewsPostSchema topPost: topPosts)
         {
-            put(modelMapper.map(topPost, NewsPostResponseDTO.class), topPost.getRank());
+            NewsPostResponseDTO responseDTO = modelMapper.map
+            (topPost, NewsPostResponseDTO.class);
+
+            this.topPosts.add(responseDTO);
+            put(responseDTO, topPost.getRank());
         }
+    }
+
+    @Async
+    private void updateTopPosts()
+    {
+        List<CacheEntity> entries = cache.values().stream()
+        .sorted((entry1, entry2) -> Double.compare(entry2.getRank(), entry1.getRank()))
+        .collect(Collectors.toList());
+
+        List<NewsPostResponseDTO> topNewsPosts= entries.stream().map
+        (entry -> entry.getEntity()).collect(Collectors.toList());
+
+        topPosts.clear();
+        topPosts.addAll(topNewsPosts);
+    }
+
+    @Async
+    private void evictTopPost(NewsPostResponseDTO entity)
+    {
+        topPosts.removeIf(topPost -> topPost.getPostId().equals(entity.getPostId()));
     }
 }

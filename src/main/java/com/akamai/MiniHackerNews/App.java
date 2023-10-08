@@ -29,9 +29,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@EnableAsync
+
 @EnableScheduling
 @SpringBootApplication
+@EnableAsync(proxyTargetClass = true)
 public class App 
 {
 	public static void main(String[] args)
