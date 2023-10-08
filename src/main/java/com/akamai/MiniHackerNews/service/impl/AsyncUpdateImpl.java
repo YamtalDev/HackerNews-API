@@ -48,10 +48,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 @Service
 public class AsyncUpdateImpl implements AsyncUpdate
 {
+    private final NewsPostsCacheServiceImpl cache;
     private final NewsPostRepository newsPostRepository;
-     
-    public AsyncUpdateImpl(NewsPostRepository newsPostRepository)
+    
+    public AsyncUpdateImpl(NewsPostsCacheServiceImpl cache, NewsPostRepository newsPostRepository)
     {
+        this.cache = cache;
         this.newsPostRepository = newsPostRepository;
     }
 
@@ -61,7 +63,7 @@ public class AsyncUpdateImpl implements AsyncUpdate
     **************************************************************************/
     @Async
     @Override
-    @Scheduled(initialDelay = 0, fixedRate = 3600000)
+    @Scheduled(initialDelay = 0, fixedRateString = "${app.async.update.interval}")
     public void updateAsync()
     {
         List<NewsPostSchema> allPosts = newsPostRepository.findAll();
@@ -71,5 +73,13 @@ public class AsyncUpdateImpl implements AsyncUpdate
         }
 
         newsPostRepository.saveAll(allPosts);
+    }
+
+    @Async
+    @Override
+    @Scheduled(fixedRateString = "${app.async.update.interval}")
+    public void clearCache()
+    {
+        cache.evictAll();
     }
 }

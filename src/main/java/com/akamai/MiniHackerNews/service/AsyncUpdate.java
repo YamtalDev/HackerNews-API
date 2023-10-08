@@ -34,4 +34,7 @@ import org.springframework.scheduling.annotation.Async;
 {
     @Async
     public void updateAsync();
+
+    @Async
+    public void clearCache();
 }

@@ -80,6 +80,7 @@ public class NewsPostsCacheServiceImpl implements NewsPostsCacheService
     public void evictAll()
     {
         cache.clear();
+        topPosts.clear();
     }
 
     @Override
