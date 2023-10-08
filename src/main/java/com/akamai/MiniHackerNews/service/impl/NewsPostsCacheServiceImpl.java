@@ -25,8 +25,10 @@ SOFTWARE.
 package com.akamai.MiniHackerNews.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Collectors;
@@ -41,16 +43,15 @@ import com.akamai.MiniHackerNews.service.NewsPostsCacheService;
 public class NewsPostsCacheServiceImpl implements NewsPostsCacheService 
 {
     private ModelMapper modelMapper;
-    private ConcurrentSkipListMap<Double, Long> rankToPostIdMap;
     private Map<Long, NewsPostResponseDTO> cache;
+    private NavigableMap<Double, List<NewsPostResponseDTO>> rankToPostsMap;
 
-    public NewsPostsCacheServiceImpl(ModelMapper modelMapper, ConcurrentSkipListMap<Double, Long> rankToPostIdMap, ConcurrentHashMap<Long, NewsPostResponseDTO> cache)
+    public NewsPostsCacheServiceImpl(ModelMapper modelMapper, ConcurrentHashMap<Long, NewsPostResponseDTO> cache)
     {
         this.cache = cache;
+        this.rankToPostsMap = new ConcurrentSkipListMap<>(Collections.reverseOrder());
         this.modelMapper = modelMapper;
-        this.rankToPostIdMap = rankToPostIdMap;
     }
-
 
     @Override
     public NewsPostResponseDTO get(Long postId)
@@ -61,38 +62,49 @@ public class NewsPostsCacheServiceImpl implements NewsPostsCacheService
     @Override
     public void put(NewsPostResponseDTO value, Double rank)
     {
-        Long postId = value.getPostId()
-        rankToPostIdMap.put(rank, postId);
+        Long postId = value.getPostId();
+
+        List<NewsPostResponseDTO> postsForRank = rankToPostsMap.computeIfAbsent(rank, k -> new ArrayList<>());
+        postsForRank.add(value);
         cache.put(postId, value);
     }
 
     @Override
     public void evict(Long postId)
     {
-        cache.remove(cache.get(postId).getRank());
+        NewsPostResponseDTO post = cache.get(postId);
+        if(null == post)
+        {
+            return;
+        }
+
+        Double rank = post.getRank();
+        
+        List<NewsPostResponseDTO> postsForRank = rankToPostsMap.get(rank);
+        if(null != postsForRank)
+        {
+            postsForRank.removeIf(p -> p.getPostId().equals(postId));
+        }
+
         cache.remove(postId);
     }
 
     @Override
     public void evictAll()
     {
-        rankToPostIdMap.clear();
+        rankToPostsMap.clear();
         cache.clear();
     }
 
     @Override
     public List<NewsPostResponseDTO> getTopPostsFromCache()
     {
-        List<Long> sortedPostIds = new ArrayList<Long>(rankToPostIdMap.values());
-        
-        return sortedPostIds.stream()
-            .map(postId -> cache.get(postId))
-            .collect(Collectors.toList());
+        return rankToPostsMap.values().stream().flatMap(List::stream).collect(Collectors.toList());
     }
 
     public void putTopPosts(List<NewsPostSchema> topPosts)
     {
-        for(NewsPostSchema topPost: topPosts)
+        for(NewsPostSchema topPost : topPosts)
         {
             put(modelMapper.map(topPost, NewsPostResponseDTO.class), topPost.getRank());
         }
