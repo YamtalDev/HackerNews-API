@@ -22,6 +22,25 @@
 
 ###############################################################################
 
+################################################################################
+# Docker Compose Configuration for Hacker News REST API Application
+#
+# This Docker Compose file defines the services and configuration for running
+# the application. It sets up two containers: one for the MySQL database and 
+# another for the Hacker News application itself.
+#
+# Usage:
+# - Use 'docker-compose up' to start the containers.
+# - Access the Hacker News application at http://localhost:8080 in your browser.
+#
+# Note:
+# - You can customize environment variables and container configurations as needed.
+# - Ensure you have the necessary Docker images available (e.g., mysql:8.0).
+# - The 'bored-network' network is created to enable communication between containers.
+# - Data for the MySQL database is persisted in a volume named 'dbvol'.
+#
+################################################################################
+
 version: '3.8'
 services:
   db:

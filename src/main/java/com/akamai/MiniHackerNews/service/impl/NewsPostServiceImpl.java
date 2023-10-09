@@ -41,13 +41,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 
 /******************************************************************************
- * @description : Implementation of the NewsPostService responsible for handling 
- *                news posts data base entity operations. Provide the functionality 
- *                for the controllers layer. The methods in this service layer
- *                are using the repository interface methods. (JPA Repository).
+ * @description: Implementation of the NewsPostService responsible for handling 
+ * news posts database entity operations and caching. Provides functionality for the
+ * controller layer. The methods in this service layer use the repository interface 
+ * methods (JPA Repository) for database operations.
  * 
- * @exceptions  : All exceptions thrown from the service functions are handled 
- *                by the global exception manager.
+ * @exceptions: All exceptions thrown from the service functions are handled 
+ * by the global exception manager.
 ******************************************************************************/
 @Service
 public class NewsPostServiceImpl implements NewsPostService
@@ -62,7 +62,9 @@ public class NewsPostServiceImpl implements NewsPostService
     private boolean topPostsCachePopulated;
 
     /**************************************************************************
+     * @description              : Constructs a NewsPostServiceImpl instance.
      * @param modelMapper        : Injected ModelMapper instance.
+     * @param cacheService       : Injected NewsPostsCacheServiceImpl instance.
      * @param newsPostRepository : Injected NewsPostRepository instance.
     **************************************************************************/
     public NewsPostServiceImpl
@@ -75,9 +77,10 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     /**************************************************************************
-     * @description       : Create and saves a new post based on the provided DTO object.
+     * @description       : Create and save a new post based on the DTO object.
      * @param newsPostDTO : The DTO containing the new post data.
      * @return            : The saved news post as a mapped response DTO object.
+     * @cache             : The result that is returned are being cached.
      * @throws ValidationException : If the input data is invalid.
     **************************************************************************/
     @Override
@@ -102,8 +105,9 @@ public class NewsPostServiceImpl implements NewsPostService
 
     /**************************************************************************
      * @description  : Delete a post based on its id.
-     * @param postId :The ID of the post to be deleted.
-     * @throws NewsPostNotFoundException : If the specified post does not exist. 
+     * @param postId : The ID of the post to be deleted.
+     * @cache        : The result will be evicted from the cache.
+     * @throws NewsPostNotFoundException : If the specified post does not exist.
     **************************************************************************/
     @Override
     public void deletePost(Long postId) throws NewsPostNotFoundException
@@ -120,6 +124,7 @@ public class NewsPostServiceImpl implements NewsPostService
     /**************************************************************************
      * @description : Retrieve a post by its ID.
      * @return      : The retrieved post as a response DTO.
+     * @cache       : The result that is returned are being cached.
      * @throws NewsPostNotFoundException : If the specified post does not exist.
     **************************************************************************/
     @Override
@@ -140,8 +145,8 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     /**************************************************************************
-     * @description    : Retrieves a paginated list of all news posts.
-     * @return         : A list containing news posts as response DTOs.
+     * @description : Retrieves a paginated list of all news posts.
+     * @return      : A list containing news posts as response DTOs.
     **************************************************************************/
     @Override
     public List<NewsPostResponseDTO> getAllPosts()
@@ -154,8 +159,9 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     /**************************************************************************
-     * Retrieves the top news posts ordered by rank in descending order.
-     * @return A list of the top news posts in descending rank order.
+     * @description : Retrieves the top news posts ordered by rank in descending order.
+     * @cache       : The result that is returned are being cached.
+     * @return      : A list of the top news posts in descending rank order.
     **************************************************************************/
     @Override
     public List<NewsPostResponseDTO> getPostsByRankDesc()
@@ -185,6 +191,9 @@ public class NewsPostServiceImpl implements NewsPostService
     /**************************************************************************
      * @description       : Updates an existing news post with new data.
      * @param newsPostDTO : The DTO containing updated post data.
+     * @param postId      : The ID of the post to be updated.
+     * @return            : The updated news post as a response DTO.
+     * @cache             : The result returned by this method is cached.
      * @throws ValidationException : If the input data is invalid.
     **************************************************************************/
     @Override
@@ -210,7 +219,11 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     /**************************************************************************
-     * @description : Changes the data of an existing news post.
+     * @description       : Changes the data of an existing news post.
+     * @param newsPostDTO : The DTO containing updated post data.
+     * @param postId      : The ID of the post to be changed.
+     * @return            : The changed news post as a response DTO.
+     * @cache             : The result returned by this method is cached.
      * @throws ValidationException : If the input data is invalid.
     **************************************************************************/
     @Override
@@ -235,19 +248,24 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     /**************************************************************************
-     * @description : Up vote a post by incrementing its vote count.
-     * @return      : The up voted post as a response DTO.
-     * @throws ValidationException : If the maximum votes have been reached.
+     * @description  : Upvote a post by incrementing its vote count.
      *
-     * @implNote    : It can be a better approach to implement a specific query to upvote
-     *                or down vote directly without fetching the entity from the data base.
+     * @param postId : The ID of the post to upvote.
+     * @return       : The upvoted post as a response DTO.
+     * @cache        : The result returned by this method is cached.
+     * @throws ValidationException : If the maximum votes have been reached.
      * 
-     * @implNote    : When a post votes is decremented below 0 ot incremented above 
-     *                the max value, a low level sql exception arises due to the 
-     *                restrictions in the schema. Currently there is an if statement 
-     *                that checks the boundaries and throw a more higher level exception 
-     *                to the exception manager to handle. other wise a jpa transaction 
-     *                error occur. I need to think how to catch it without using if().
+     * @implNote     : It can be a better approach to implement a specific query 
+     *               : to upvote or downvote directly without fetching the 
+     *               : entity from the database.
+     *
+     * @implNote     : When a post's votes are decremented below 0 or incremented above
+     *               : the max value, a low-level SQL exception arises due to the
+     *               : restrictions in the schema. Currently, there is an if statement
+     *               : that checks the boundaries and throws a higher-level exception
+     *               : to the exception manager to handle. Otherwise, a JPA transaction
+     *               : error occurs. Consider a better approach for handling this scenario.
+
     **************************************************************************/
     @Override
     public NewsPostResponseDTO upvotePost(Long postId) throws ValidationException
@@ -268,8 +286,10 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     /**************************************************************************
-     * @description : Down vote a post by decrementing its vote count.
-     * @return      : The up voted post as a response DTO.
+     * @description  : Downvote a post by decrementing its vote count.
+     * @param postId : The ID of the post to downvote.
+     * @return       : The downvoted post as a response DTO.
+     * @cache        : The result returned by this method is cached.
      * @throws ValidationException : If the maximum votes have been reached.
     **************************************************************************/
     @Override
@@ -291,8 +311,11 @@ public class NewsPostServiceImpl implements NewsPostService
     }
 
     /**************************************************************************
-     * @description: : Private helper method to get a post by its id to promote code reusability.
-     * @throws NewsPostNotFoundException : If the maximum votes have been reached.
+     * @description  : Private helper method to get a post by its ID to promote 
+     *               : code reusability.
+     * @param postId : The ID of the post to retrieve.
+     * @return       : The retrieved post entity.
+     * @throws NewsPostNotFoundException : If the specified post does not exist.
     **************************************************************************/
     private NewsPostSchema getPostEntityById(Long postId) throws NewsPostNotFoundException
     {

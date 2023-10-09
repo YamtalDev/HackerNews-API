@@ -36,22 +36,21 @@ import org.hibernate.validator.constraints.URL;
 
 import org.springframework.data.annotation.CreatedDate;
 
-import jakarta.persistence.*;            /* Internal API */
-import jakarta.validation.constraints.*; /* Internal API */
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 /******************************************************************************
- * @description : NewsPostSchema representation of a news post.
- *              : Each news post post id, contains a title, text
- *              : link creation time, elapsed time, rank and vote counts.
+ * @description: NewsPostSchema representation of a news post. Each news post post 
+ * id, contains a title, text link creation time, elapsed time, rank and vote counts.
  * 
- * @indexing    : The schema is using indexing on the rank value to gain more 
- *              : efficiency while retrieving the top pots ranked by this number.
+ * @indexing: The schema is using indexing on the rank value to gain more efficiency 
+ * while retrieving the top pots ranked by this number.
  *
- * @annotations : The schema uses DynamicUpdate to Specifies that SQL update statements
- *              : include columns which are actually being updated.
+ * @annotations: The schema uses DynamicUpdate to Specifies that SQL update statements
+ * include columns which are actually being updated.
  * 
- * @apiNote     : The data schema contains PreUpdate and PrePersist methods.
- *              : Also methods to upvote, downvote and update rank/elapsed time.
+ * @apiNote: The data schema contains PreUpdate and PrePersist methods. Also methods 
+ * to upvote, downvote and update rank/elapsed time.
 ******************************************************************************/
 
 @Data
@@ -159,6 +158,7 @@ public class NewsPostSchema
     {
         return (votes / Math.pow((hoursFromCreation + 2), 1.8));
     }
+
     /**************************************************************************
      * @time: Represent the time elapsed as a string for the client(Just like Hacker news displays it).
     **************************************************************************/

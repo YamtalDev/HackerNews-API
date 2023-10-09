@@ -36,9 +36,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 
 /******************************************************************************
- * @description : Implementation of the AsyncUpdate service responsible to performing
- *              : asynchronous updates for the app every configurable fixed time.
- *
+ * @description : Implementation of the AsyncUpdate service responsible to 
+ * performing asynchronous updates for the app every configurable fixed time.
 *******************************************************************************/
 
 @Service
@@ -54,8 +53,9 @@ public class AsyncUpdateImpl implements AsyncUpdate
     }
 
     /**************************************************************************
-     * Asynchronously updates posts at regular intervals. {@interval: every hour}
-     * This method is scheduled to run at a fixed rate and have a initial delay.
+     * @description: Asynchronously updates posts at regular intervals. 
+     * {@interval: every hour} This method is scheduled to run at a fixed rate 
+     * and have a initial delay.
     **************************************************************************/
     @Async
     @Override
@@ -73,9 +73,9 @@ public class AsyncUpdateImpl implements AsyncUpdate
 
 
     /**************************************************************************
-     * Asynchronously clears the cache at regular intervals. This method is 
-     * scheduled to run at a configurable fixed rate based on the value set in
-     * the property file.
+     * @description: Asynchronously clears the cache at regular intervals. 
+     * This method is scheduled to run at a configurable fixed rate based on the 
+     * value set in the property file.
     **************************************************************************/
     @Async
     @Override

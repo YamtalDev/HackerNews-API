@@ -29,6 +29,12 @@ import java.util.List;
 import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
 import com.akamai.MiniHackerNews.schema.NewsPostSchema;
 
+/******************************************************************************
+ * @description: Service interface responsible for caching and managing news posts.
+ * The interface defines methods to store, retrieve, and clear cached news posts,
+ * allowing access to frequently used data.
+******************************************************************************/
+
 public interface NewsPostsCacheService 
 {
     public void evictAll();

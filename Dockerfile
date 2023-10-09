@@ -22,12 +22,39 @@
 
 ###############################################################################
 
+################################################################################
+# Dockerfile for MiniHackerNews REST API Application
+#
+# This Dockerfile defines the build and final stages for the MiniHackerNews
+# application. It uses multi-stage building to efficiently build and package
+# the Java application using Maven, then creates a lightweight runtime
+# container to run the application.
+#
+# Steps:
+# 1. Build Stage (Builder):
+#    - Use the 'openjdk:17-jdk-alpine' base image for the build stage.
+#    - Copy the project's 'pom.xml' and source code from the host to the '/app/'
+#      directory in the container.
+#    - Install Maven in the container using Alpine Linux package manager 'apk'.
+#    - Build the application using Maven with 'clean package' command, skipping
+#      tests.
+#
+# 2. Final Stage:
+#    - Use another 'openjdk:17-jdk-alpine' base image for the final stage,
+#      creating a lightweight runtime container.
+#    - Copy the compiled JAR file from the build stage to the root directory of
+#      the final container and name it 'app.jar'.
+#    - Expose port 8080 to allow external access to the application.
+#    - Set the entry point to run the Java application by executing 'java -jar app.jar'.
+#
+################################################################################
+
 # Build Stage
 FROM openjdk:17-jdk-alpine AS builder
 COPY pom.xml /app/
 COPY src /app/src
 
-# Install Maven
+# Install with Maven
 RUN apk add --no-cache maven
 RUN mvn -f /app/pom.xml clean package -DskipTests
 

@@ -29,7 +29,7 @@ import java.util.List;
 import com.akamai.MiniHackerNews.dto.*;
 
 /******************************************************************************
- * @description : Service interface for managing posts.
+ * @description : Service interface to manage data base and posts.
 ******************************************************************************/
 
 public interface NewsPostService
