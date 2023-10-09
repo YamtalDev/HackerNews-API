@@ -120,7 +120,7 @@ cd HackerNews-API
 
 2. **Database and caching configuration:**
 Open the src/main/resources/application.properties file and configure your MySQL 
-database URL, username, password, cache name, size and duration:
+database URL, username, password, `cache.size`, `cache.top-posts-size`, `async.update.interval`, `async.initial-delay`:
 
 ``` shell
 
@@ -128,12 +128,15 @@ spring.datasource.url=jdbc:mysql://localhost:3306/<your-database-name>
 spring.datasource.username=<your-username>
 spring.datasource.password=<your-password>
 
-# Cache Configuration
-spring.cache.cache-names=`cache-name`
-spring.cache.caffeine.spec=maximumSize=600,expireAfterAccess=30m
+# Application Configuration
+# Define the initial delay and update interval for asynchronous tasks.
+app.async.initial-delay = 0          # Immediately invoked at start up 
+app.async.update.interval = 3600000  # Every hour
 
-# Top Posts size Configuration
-app.top-posts-page-size=30  # Change it if you need
+# Cache Configuration
+# Define the maximum cache size and size of the topPosts list.
+app.cache.size=600
+app.cache.top-posts-size=5
 
 ```
 3. **Database:** 
@@ -178,7 +181,7 @@ mvn spring-boot:run
 
 ```
 
-## Running with Docker
+## Spin up with Docker
 
 1. Make sure that you do not have any process that is running on ports: 8080 and 3306.
 
@@ -383,8 +386,6 @@ Content-Type: application/json
 
 ```
 
-## [Jira project](https://cloudapps.xecurify.com/jirasecureshare/project?linkid=2c9f952f8a213b69018aae668bc20020&projectid=10000)
-
 # Learning resources
 
 - [Learn Java](https://www.youtube.com/watch?v=BGTx91t8q50&t=10332s)
@@ -394,7 +395,6 @@ Content-Type: application/json
 - [Data base Indexing](https://www.baeldung.com/jpa-indexes)
 - [Spring RESTFul API](https://spring.io/guides/tutorials/rest/)
 - [Spring documentation](https://docs.spring.io/spring-framework/reference/index.html)
-- [Caffein cache integration](https://www.baeldung.com/spring-boot-caffeine-cache)
 - [Constructor dependency injection](https://www.baeldung.com/constructor-injection-in-spring)
 - [Hacker News `top posts` algorithm](https://medium.com/hacking-and-gonzo/how-hacker-news-ranking-algorithm-works-1d9b0cf2c08d)
 - [Dockerize Spring boot and MySQL application](https://ilkerguldali.medium.com/1-4-lets-create-a-spring-boot-app-with-mysql-docker-docker-compose-8acaee3a2c4d)
@@ -406,7 +406,7 @@ Content-Type: application/json
 - [ ] Improve the logic of the `timeElapsed` calculation.
 - [ ] Add restrictions for 1 upvote and 1 downvote per post.
 - [ ] Write benchmark tests to ensure efficiency and scalability of the API.
-- [ ] Find a way to hide the secrets and still be able to docker compose the app.
+- [x] Find a way to hide the secrets and still be able to docker compose the app.
 - [x] Implement a mechanism to update the cache of top posts when the data changes.
 - [ ] Implement database schema to make data base migration easy using `schema.sql`.
 - [ ] Integrate Spring Security to enhance API security and protect against vulnerabilities.
