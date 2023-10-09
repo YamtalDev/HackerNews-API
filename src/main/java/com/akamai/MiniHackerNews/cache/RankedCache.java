@@ -62,7 +62,7 @@ public class RankedCache
 
         if(maxTopPostsQueueSize <= cacheQueue.size() && lowestRank < value.getRank())
         {
-            removeLowestRank();
+            removeLowestRankedEntity();
             cacheQueue.put(value);
         }
 
@@ -95,7 +95,7 @@ public class RankedCache
         return (cacheQueue.stream().map(CacheEntity::getEntity).collect(Collectors.toList()));
     }
 
-    private void removeLowestRank()
+    private void removeLowestRankedEntity()
     {
         CacheEntity lowestRankedEntity = getLowestRankedEntity();
         if(lowestRankedEntity != null)
