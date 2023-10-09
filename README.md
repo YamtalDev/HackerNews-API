@@ -11,17 +11,21 @@ list of top posts. RESTful API that support CRUD operation such as: POST, PUT, G
 
 1. Support simple text-based news posts.
 
-2. RESTful API to handle CRUD actions, including creating, updating, reading, upvoting, and downvoting posts.
+2. RESTful API to handle CRUD operations, including creating, updating, reading, upvoting, and downvoting posts.
 
 3. Storage Engine: MySQL local or cloud.
 
-4. Implementation Language: [Spring boot](https://spring.io/projects/spring-boot) and Java.
+4. Implementation Language: [Java](https://www.java.com/en/).
 
-5. Efficient retrieval of `top posts` from the storage engine.
+5. FrameWork: [Spring boot](https://spring.io/projects/spring-boot) and Java.
 
-5. Dockerization of the project: both the REST API service and the storage engine.
+6. Efficient retrieval of `top posts` from the storage engine.
 
-6. Unit tests and integration for the system.
+7. Costume cache implementation to manage entities.
+
+8. Dockerization of the project to containers: both the REST API service and the storage engine.
+
+9. Unit tests and integration for the system.
 
 ## Main entities
 
