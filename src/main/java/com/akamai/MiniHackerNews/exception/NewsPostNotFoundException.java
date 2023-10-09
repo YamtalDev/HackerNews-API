@@ -28,8 +28,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /******************************************************************************
- * @description : Custom exception class for handling resource not found errors 
- *                in the service layer.
+ * @description: Custom exception class for handling resource not found errors 
+ * in the service layer.
 ******************************************************************************/
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class NewsPostNotFoundException extends RuntimeException
@@ -53,7 +53,7 @@ public class NewsPostNotFoundException extends RuntimeException
     }
 
     /**************************************************************************
-    * Getters for the exception handler.
+    * Getters for exception handler.
     **************************************************************************/
     public String getFieldName(){return (fieldName);}
     public Object getFieldValue(){return (fieldValue);}

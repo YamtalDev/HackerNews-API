@@ -41,8 +41,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /*****************************************************************************
- * @description : GlobalExceptionHandler controller advice class that handles exceptions
- *                globally for the application in the controller layer.
+ * @description: GlobalExceptionHandler controller advice class that handles 
+ * exceptions globally for the application in the controller layer.
 ******************************************************************************/
 
 @ControllerAdvice
@@ -50,8 +50,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class GlobalExceptionHandler
 {
     /**************************************************************************
-     * Handles ValidationException and returns a bad request response with
-     * the exception message.
+     * @description: Handles ValidationException and returns a bad request 
+     * response with the exception message.
     **************************************************************************/
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<String> handleValidationException
@@ -61,8 +61,8 @@ public class GlobalExceptionHandler
     }
 
     /**************************************************************************
-     * Handles NewsPostNotFoundException and returns a not found response with
-     * the exception message.
+     * @description: Handles NewsPostNotFoundException and returns a not found 
+     * response with the exception message.
     **************************************************************************/
     @ExceptionHandler(NewsPostNotFoundException.class)
     public ResponseEntity<String> handleResourceNotFoundException
@@ -72,8 +72,8 @@ public class GlobalExceptionHandler
     }
 
     /**************************************************************************
-    * Handles MethodArgumentNotValidException and returns a bad request response
-    * with validation error messages.
+    * @description: Handles MethodArgumentNotValidException and returns a bad 
+    * request response with validation error messages.
     **************************************************************************/
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationErrors
@@ -86,8 +86,8 @@ public class GlobalExceptionHandler
     }
 
     /**************************************************************************
-     * Handles generic exceptions and returns an internal server error response
-     * with an error message.
+     * @description: Handles generic exceptions and returns an internal server 
+     * error response with an error message.
     **************************************************************************/
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
