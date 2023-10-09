@@ -36,10 +36,13 @@ public class NewsPostResponseDTO
     private String timeElapsed;
     private int votes;
 
-    public NewsPostResponseDTO(){/* Empty*/}
+    public NewsPostResponseDTO()
+    {
+        // Empty
+    }
 
     /**************************************************************************
-     * @GettersNSetters : Defined for the ModelMapper.
+     * @GettersNSetters : Defined for ModelMapper.
     **************************************************************************/
     public int getVotes(){return (votes);}
     public String getPost(){return (post);}

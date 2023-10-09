@@ -47,7 +47,7 @@ public class NewsUpdateRequestDTO
     private String link;
 
     /**************************************************************************
-     * @Getters : Defined for the ModelMapper.
+     * @Getters : Defined for ModelMapper.
     **************************************************************************/
     public String getPost(){return (post);}
     public String getLink(){return (link);}
