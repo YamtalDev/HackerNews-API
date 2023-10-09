@@ -37,12 +37,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 /******************************************************************************
  * @description : Implementation of the AsyncUpdate service responsible to performing
- *              : asynchronous updates of the rank and elapsed time in the data base
- *              : every fixed time.
+ *              : asynchronous updates for the app every configurable fixed time.
  *
- * @apiNote     : Maybe it is worth thinking of a way to configure the delay and 
- *              : timing from the yml file. For now the compiler shouts that he 
- *              : must accept const variables.
 *******************************************************************************/
 
 @Service
@@ -50,7 +46,7 @@ public class AsyncUpdateImpl implements AsyncUpdate
 {
     private final NewsPostsCacheServiceImpl cache;
     private final NewsPostRepository newsPostRepository;
-    
+
     public AsyncUpdateImpl(NewsPostsCacheServiceImpl cache, NewsPostRepository newsPostRepository)
     {
         this.cache = cache;
@@ -75,6 +71,12 @@ public class AsyncUpdateImpl implements AsyncUpdate
         newsPostRepository.saveAll(allPosts);
     }
 
+
+    /**************************************************************************
+     * Asynchronously clears the cache at regular intervals. This method is 
+     * scheduled to run at a configurable fixed rate based on the value set in
+     * the property file.
+    **************************************************************************/
     @Async
     @Override
     @Scheduled(fixedRateString = "${app.async.update.interval}")

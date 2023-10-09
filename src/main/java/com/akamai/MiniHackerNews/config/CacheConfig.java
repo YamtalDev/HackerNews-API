@@ -23,6 +23,7 @@ SOFTWARE.
 ******************************************************************************/
 
 package com.akamai.MiniHackerNews.config;
+
 import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
