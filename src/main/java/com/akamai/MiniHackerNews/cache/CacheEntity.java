@@ -26,6 +26,11 @@ package com.akamai.MiniHackerNews.cache;
 
 import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
 
+/******************************************************************************
+ * @description: Representation of a cache entity that holds a NewsPostResponseDTO 
+ * and its associated rank. This class is used within the RankedCache to store and 
+ * manage cache entries with their ranks.
+******************************************************************************/
 public class CacheEntity
 {
     private NewsPostResponseDTO entity;

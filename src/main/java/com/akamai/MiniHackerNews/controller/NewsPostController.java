@@ -24,10 +24,10 @@ SOFTWARE.
 
 package com.akamai.MiniHackerNews.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 import org.springframework.validation.annotation.Validated;
 
@@ -42,18 +42,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akamai.MiniHackerNews.dto.*;
-import com.akamai.MiniHackerNews.service.*;
+import com.akamai.MiniHackerNews.service.NewsPostService;
 
 /**************************************************************************
- * @description          : Controller layer crud Implementation for the api.
+ * @description : Controller layer responsible for handling CRUD operations and 
+ * managing news posts. This controller provides endpoints to create, retrieve, 
+ * update, and delete news posts, as well as perform upvotes and downvotes on posts.
+ *
  * @NewsPostRequestDTO   : DTO representation of the client post, put requests structure.
  * @NewsPostResponseDTO  : DTO to represent the structure of the response to the client side.
  * @NewsUpdateRequestDTO : DTO representation of the client patch request structure.
- * 
- * @apiNote : GET controllers for all posts and for top posts uses pagination 
-*           : for efficiently. GET top posts page size is configurable in the application.yml
- *          : file. The size is 30 and may change based on the client requirement.
- *          : Hacker news webpage is displaying only 28 in the main web page.
+ * @caching              : Caching logic is implemented in the service layer.
 **************************************************************************/
 
 @Validated
@@ -69,7 +68,7 @@ public class NewsPostController
     }
 
     /**************************************************************************
-     * @description : Save a new new post endpoint.
+     * @description : Save a new new post.
     **************************************************************************/
     @PostMapping("")
     public ResponseEntity<NewsPostResponseDTO> saveNewsPost
@@ -80,7 +79,7 @@ public class NewsPostController
     }
     
     /**************************************************************************
-     * @description : Retrieve a news post by its ID endpoint.
+     * @description : Retrieve a news post by its ID.
     **************************************************************************/
     @GetMapping("/{postId}")
     public ResponseEntity<NewsPostResponseDTO> getPostById
@@ -91,7 +90,7 @@ public class NewsPostController
     }
 
     /**************************************************************************
-     * @description : Update a post by its ID endpoint.
+     * @description : Update a post by its ID.
     **************************************************************************/
     @PutMapping("/{postId}")
     public ResponseEntity<NewsPostResponseDTO> updatePost
@@ -102,7 +101,7 @@ public class NewsPostController
     }
 
     /**************************************************************************
-     * @description : Delete a post by its ID endpoint.
+     * @description : Delete a post by its ID.
     **************************************************************************/
     @DeleteMapping("/{postId}")
     public ResponseEntity<String> deletePost
@@ -113,7 +112,7 @@ public class NewsPostController
     }
 
     /**************************************************************************
-     * @description : Change a post by its ID endpoint.
+     * @description : Change a post by its ID.
     **************************************************************************/
     @PatchMapping("/{postId}")
     public ResponseEntity<NewsPostResponseDTO> changePost
@@ -124,9 +123,8 @@ public class NewsPostController
     }
 
     /**************************************************************************
-     * @description    : Retrieve all news posts endpoint.
-     * @param pageable : The pagination information.
-     * @return         : ResponseEntity with a Page of news posts.
+     * @description : Retrieve all news posts..
+     * @return      : ResponseEntity List of news posts.
     **************************************************************************/
     @GetMapping("")
     public ResponseEntity<List<NewsPostResponseDTO>> getAllPosts()
@@ -136,8 +134,8 @@ public class NewsPostController
     }
     
     /**************************************************************************
-     * Retrieve the top news posts by rank endpoint.
-     * @return ResponseEntity with a list of the top news posts.
+     * @description : Retrieve the top news posts by rank.
+     * @return      : ResponseEntity List of the top news posts ordered by descending order.
      **************************************************************************/
     @GetMapping("/top-posts")
     public ResponseEntity<List<NewsPostResponseDTO>> getTopPostsByRank()
@@ -147,7 +145,7 @@ public class NewsPostController
     }
 
     /**************************************************************************
-     * @description : Upvote a post by its ID endpoint.
+     * @description : Upvote a post by its ID.
     **************************************************************************/
     @PatchMapping("/{postId}/upvote")
     public ResponseEntity<NewsPostResponseDTO> upvotePost
@@ -158,7 +156,7 @@ public class NewsPostController
     }
 
     /**************************************************************************
-     * @description : Downvote a post by its ID endpoint.
+     * @description : Downvote a post by its ID.
     **************************************************************************/
     @PatchMapping("/{postId}/downvote")
     public ResponseEntity<NewsPostResponseDTO> downvotePost

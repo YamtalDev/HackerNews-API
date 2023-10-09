@@ -37,18 +37,32 @@ import com.akamai.MiniHackerNews.cache.RankedCache;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachingConfigurer;
 
+
+/******************************************************************************
+ * @description: Configuration class for setting up the caching infrastructure.
+ * This class defines the configuration for caching in the application, including
+ * cache size, queue size, and the creation of the RankedCache bean.
+******************************************************************************/
 @Configuration
 public class CacheConfig implements CachingConfigurer
 {
     @Value("${app.cache.top-posts-size}")
     private int maxTopPostsQueueSize;
 
+    /**************************************************************************
+     * @description: Configure a ConcurrentHashMap to store cache entries.
+     * @return A ConcurrentHashMap for storing cache entries.
+    **************************************************************************/
     @Bean
     public ConcurrentHashMap<Long, CacheEntity> cacheMap()
     {
         return (new ConcurrentHashMap<Long, CacheEntity>());
     }
 
+    /**************************************************************************
+     * @description: Configure a PriorityBlockingQueue to manage cache entries based on rank.
+     * @return A PriorityBlockingQueue for managing cache entries in descending rank order.
+    **************************************************************************/
     @Bean
     public PriorityBlockingQueue<CacheEntity> cacheQueue()
     {
@@ -56,6 +70,14 @@ public class CacheConfig implements CachingConfigurer
         (maxTopPostsQueueSize, Comparator.comparingDouble(CacheEntity::getRank).reversed()));
     }
 
+    /**************************************************************************
+     * @description: Creates and configures a RankedCache bean that uses the 
+     * provided cacheMap and cacheQueue.
+     *
+     * @param cacheMap   ConcurrentHashMap for storing cache entries.
+     * @param cacheQueue PriorityBlockingQueue for managing cache entries based on rank.
+     * @return           A RankedCache bean for caching and managing data.
+    **************************************************************************/
     @Bean
     public RankedCache rankedCache
     (ConcurrentHashMap<Long, CacheEntity> cacheMap,
