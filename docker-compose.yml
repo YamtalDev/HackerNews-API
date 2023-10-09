@@ -54,7 +54,7 @@ services:
     env_file: .env
     #environment:
     #  - MYSQL_PASSWORD=password
-    #  - MYSQL_DATABASE=data_base
+    #  - MYSQL_DATABASE=news_posts
     #  - MYSQL_ROOT_PASSWORD=password
     volumes:
       - dbvol:/var/lib/mysql
@@ -77,10 +77,10 @@ services:
     # you can hard code the valuse or just do:
     env_file: .env
     #environment:
-    #  - MYSQL_HOST=data_base_name
+    #  - MYSQL_HOST=db
     #  - MYSQL_PASSWORD=password
     #  - MYSQL_ROOT_PASSWORD=password
-    #  - MYSQL_DATABASE=data_base
+    #  - MYSQL_DATABASE=news_posts
     #  - MYSQL_PORT=3306
 
 networks:

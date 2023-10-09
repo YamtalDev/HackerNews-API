@@ -1,43 +1,8 @@
 {"properties": [
   {
-    "name": "app.cache-name",
-    "type": "java.lang.String",
-    "description": "A description for 'app.cache-name'"
-  },
-  {
-    "name": "app.cache-max-size",
-    "type": "java.lang.String",
-    "description": "A description for 'app.cache-max-size'"
-  },
-  {
-    "name": "app.top-posts-page-size",
-    "type": "java.lang.String",
-    "description": "A description for 'app.top-posts-page-size'"
-  },
-  {
-    "name": "app.top-posts-list-size",
-    "type": "java.lang.String",
-    "description": "A description for 'app.top-posts-list-size'"
-  },
-  {
     "name": "app.async.update.interval",
     "type": "java.lang.String",
     "description": "A description for 'app.async.update.interval'"
-  },
-  {
-    "name": "app.topPosts.max-size",
-    "type": "java.lang.String",
-    "description": "A description for 'app.topPosts.max-size'"
-  },
-  {
-    "name": "app.topPosts.max-size",
-    "type": "java.lang.String",
-    "description": "A description for 'app.topPosts.max-size'"
-  },
-  {
-    "name": "app.topPosts.max-size",
-    "type": "java.lang.String",
-    "description": "A description for 'app.topPosts.max-size'"
   },
   {
     "name": "app.cache.size",
