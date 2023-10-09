@@ -38,8 +38,8 @@ public class CacheEntity
 
     public CacheEntity(NewsPostResponseDTO entity, Double rank)
     {
-        this.entity = entity;
         this.rank = rank;
+        this.entity = entity;
     }
 
     public NewsPostResponseDTO getEntity()
