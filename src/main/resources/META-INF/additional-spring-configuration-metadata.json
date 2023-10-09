@@ -53,5 +53,10 @@
     "name": "app.async.initial-delay",
     "type": "java.lang.String",
     "description": "A description for 'app.async.initial-delay'"
+  },
+  {
+    "name": "spring.devtools.restart.enabled",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.devtools.restart.enabled'"
   }
 ]}

@@ -65,10 +65,10 @@ Attributes:
 
 ## Features
 
-- Hourly asynchronous updates of the database.
-- Pagination for GET `top posts` method to improve efficiency and limit size.
+- Hourly asynchronous updates of the database and cache eviction.
+- Configurable `cache-size`, `top posts list size`, `async update interval`, `async initial delay`.
 - Get Top Posts Special method, calculated from the time of post and its votes.
-- Caching to enhances performance for client requests for `top-posts` end point.
+- Costume caching mechanism to enhances performance for client requests of `top-posts` end point.
 - Indexing on the database `rank` for optimized performance for `top-posts` end point.
 
 <br>
