@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Configuration;
 
 /******************************************************************************
  * @description : ModelMapper instance with strict matching strategy to map 
- *              : between the DTO objects(response & request) to schema and back.
+ * between the DTO objects(response & request) to schema and back.
  * 
  * @apiNote     : The matching strategy of the json fields is set to STRICT.
 ******************************************************************************/

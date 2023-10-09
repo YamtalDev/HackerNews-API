@@ -39,9 +39,10 @@ import com.akamai.MiniHackerNews.schema.NewsPostSchema;
 public interface NewsPostRepository extends JpaRepository<NewsPostSchema, Long>
 {
     /**************************************************************************
-    * @description  : Retrieve a list of news posts ordered by rank in descending order. 
-    *               : With a limit of 30 entities.
-    * @return       : List of NewsPostSchema.
+    * @description: Retrieve a list of news posts ordered by rank in descending 
+    * order with configurable limit of entities fetched from the data base.
+    *
+    * @return: List of NewsPostSchema.
     **************************************************************************/
     @Query("SELECT p FROM NewsPostSchema p ORDER BY p.rank DESC LIMIT :limit")
     List<NewsPostSchema> findByOrderByRankDescWithLimit(@Param("limit") int limit);

@@ -152,6 +152,7 @@ public class RankedCache
      * @description : Retrieves the cache entity with the lowest rank from the cache.
      * This method iterates through the cache queue to find and return the cache entity
      * with the lowest rank. If no such entity is found, it returns null.
+     * 
      * @return The cache entity with the lowest rank or null if the cache is empty.
     **************************************************************************/
     private CacheEntity getLowestRankedEntity()
