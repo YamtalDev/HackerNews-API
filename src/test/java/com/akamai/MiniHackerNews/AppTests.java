@@ -1,5 +1,5 @@
 /******************************************************************************
-
+ 
 Copyright (c) 2023 Tal Aharon
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,20 +21,53 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ******************************************************************************/
-
 package com.akamai.MiniHackerNews;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.akamai.MiniHackerNews.controller.NewsPostController;
+import com.akamai.MiniHackerNews.dto.NewsPostRequestDTO;
+import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
+import com.akamai.MiniHackerNews.repository.NewsPostRepository;
+import com.akamai.MiniHackerNews.schema.NewsPostSchema;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@Transactional
 @SpringBootTest
-@AutoConfigureMockMvc
 public class AppTests
 {
+    private NewsPostController server;
+
     @Test
-    public void testSaveNewsPost() throws Exception
+    @Rollback
+    @Transactional
+    public void testSaveNewsPost()
     {
+        NewsPostRequestDTO newsPost = new NewsPostRequestDTO();
+        newsPost.setPostedBy("User");
+        newsPost.setPost("Post Content");
+        newsPost.setLink("https://example.com/test");
+
+        ResponseEntity<NewsPostResponseDTO> savedPost =  server.saveNewsPost(newsPost);
+
+        assertNotNull(savedPost);
+        NewsPostResponseDTO response = savedPost.getBody();
+        assertNotNull(response);
+
+        assertEquals("User", response.getPostedBy());
+        assertEquals("Post Content", response.getPost());
+        assertEquals("https://example.com/test", response.getLink());
+        assertEquals("Just now", response.getTimeElapsed());
+        assertEquals(0, response.getVotes());
+
 
     }
 

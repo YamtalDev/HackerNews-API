@@ -57,4 +57,11 @@ public class NewsPostRequestDTO
     public String getPost(){return (post);}
     public String getLink(){return (link);}
     public String getPostedBy(){return (postedBy);}
+
+    /**************************************************************************
+     * @Setters : Defined for tests.
+    **************************************************************************/
+    public void setLink(String link){ this.link = link;}
+    public void setPost(String post){ this.post = post;}
+    public void setPostedBy(String postedBy){ this.postedBy = postedBy;}
 }
