@@ -395,6 +395,8 @@ Content-Type: application/json
 - [Data base Indexing](https://www.baeldung.com/jpa-indexes)
 - [Spring RESTFul API](https://spring.io/guides/tutorials/rest/)
 - [Spring documentation](https://docs.spring.io/spring-framework/reference/index.html)
+- [Concurrent Collections](https://docs.oracle.com/javase/tutorial/essential/concurrency/collections.html)
+- [In Memory Cache in Java](https://crunchify.com/how-to-create-a-simple-in-memory-cache-in-java-lightweight-cache/)
 - [Constructor dependency injection](https://www.baeldung.com/constructor-injection-in-spring)
 - [Hacker News `top posts` algorithm](https://medium.com/hacking-and-gonzo/how-hacker-news-ranking-algorithm-works-1d9b0cf2c08d)
 - [Dockerize Spring boot and MySQL application](https://ilkerguldali.medium.com/1-4-lets-create-a-spring-boot-app-with-mysql-docker-docker-compose-8acaee3a2c4d)
