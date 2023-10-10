@@ -56,7 +56,7 @@ Attributes:
 
 - NOTE:  fOR PATCH request the client entity will be only `post` and `link` to change.
 
-**Client response:**
+**Server response:**
 
 Attributes:
 
