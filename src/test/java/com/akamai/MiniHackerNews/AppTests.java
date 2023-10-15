@@ -23,52 +23,67 @@ SOFTWARE.
 ******************************************************************************/
 package com.akamai.MiniHackerNews;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
-import com.akamai.MiniHackerNews.controller.NewsPostController;
 import com.akamai.MiniHackerNews.dto.NewsPostRequestDTO;
 import com.akamai.MiniHackerNews.dto.NewsPostResponseDTO;
-import com.akamai.MiniHackerNews.repository.NewsPostRepository;
-import com.akamai.MiniHackerNews.schema.NewsPostSchema;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Transactional
+import java.net.URL;
+
 @SpringBootTest
+@AutoConfigureMockMvc
 public class AppTests
 {
-    private NewsPostController server;
+
+    private URL base;
+
+    @Autowired
+    private RestTemplateBuilder restTemplateBuilder;
+
+    private RestTemplate restTemplate;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        this.base = new URL("http://localhost:8080/api/news");
+        restTemplate = restTemplateBuilder.rootUri(base.toString()).build();
+    }
 
     @Test
-    @Rollback
-    @Transactional
-    public void testSaveNewsPost()
+    void testSaveNewsPostEndpoint()
     {
+        String apiUrl = "http://localhost:8080/api/news";
+
         NewsPostRequestDTO newsPost = new NewsPostRequestDTO();
         newsPost.setPostedBy("User");
         newsPost.setPost("Post Content");
         newsPost.setLink("https://example.com/test");
 
-        ResponseEntity<NewsPostResponseDTO> savedPost =  server.saveNewsPost(newsPost);
+        ResponseEntity<NewsPostResponseDTO> responseEntity = restTemplate.postForEntity(apiUrl, newsPost, NewsPostResponseDTO.class);
 
-        assertNotNull(savedPost);
-        NewsPostResponseDTO response = savedPost.getBody();
-        assertNotNull(response);
+        assertTrue(responseEntity.getStatusCode() == HttpStatus.CREATED);
 
-        assertEquals("User", response.getPostedBy());
-        assertEquals("Post Content", response.getPost());
-        assertEquals("https://example.com/test", response.getLink());
-        assertEquals("Just now", response.getTimeElapsed());
-        assertEquals(0, response.getVotes());
+        NewsPostResponseDTO response = responseEntity.getBody();
+        assertNotNull(response, "Response should not be null");
 
-
+        String errorMsg = " does not match";
+        assertEquals("User", response.getPostedBy(), "User name" + errorMsg);
+        assertEquals("Post Content", response.getPost(), "Posts content" + errorMsg);
+        assertEquals("https://example.com/test", response.getLink(), "Link" + errorMsg);
+        assertEquals("Just now", response.getTimeElapsed(), "Time elapsed" + errorMsg);
+        assertEquals(0, response.getVotes(), "Votes " + errorMsg);
     }
 
     @Test
