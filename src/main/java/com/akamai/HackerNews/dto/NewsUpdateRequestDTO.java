@@ -51,4 +51,6 @@ public class NewsUpdateRequestDTO
     **************************************************************************/
     public String getPost(){return (post);}
     public String getLink(){return (link);}
+    public void setPost(String post){this.post = post;}
+    public void setLink(String link){this.link = link;}
 }
