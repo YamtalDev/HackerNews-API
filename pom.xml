@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.akamai</groupId>
-	<artifactId>MiniHackerNews</artifactId>
+	<artifactId>HackerNews</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>MiniHackerNews</name>
+	<name>HackerNews</name>
 	<description>RESTful API for managing simple text news posts, supporting create, update, read, delete, upvote, and downvote operations.</description>
 	<properties>
 		<java.version>17</java.version>
