@@ -68,7 +68,7 @@ public class NewsPostController
     }
 
     /**************************************************************************
-     * @description : Save a new new post.
+     * @description : Save a new post.
     **************************************************************************/
     @PostMapping("")
     public ResponseEntity<NewsPostResponseDTO> saveNewsPost
@@ -77,7 +77,7 @@ public class NewsPostController
         return (new ResponseEntity<NewsPostResponseDTO>
         (newsService.saveNewPost(newsPost), HttpStatus.CREATED));
     }
-    
+
     /**************************************************************************
      * @description : Retrieve a news post by its ID.
     **************************************************************************/
@@ -132,7 +132,7 @@ public class NewsPostController
         List<NewsPostResponseDTO> newsPosts = newsService.getAllPosts();
         return (new ResponseEntity<List<NewsPostResponseDTO>>(newsPosts, HttpStatus.OK));
     }
-    
+
     /**************************************************************************
      * @description : Retrieve the top news posts by rank.
      * @return      : ResponseEntity List of the top news posts ordered by descending order.
