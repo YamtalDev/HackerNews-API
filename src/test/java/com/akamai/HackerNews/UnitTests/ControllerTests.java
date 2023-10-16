@@ -46,6 +46,11 @@ import com.akamai.HackerNews.dto.NewsPostResponseDTO;
 import com.akamai.HackerNews.dto.NewsUpdateRequestDTO;
 import com.akamai.HackerNews.controller.NewsPostController;
 
+/******************************************************************************
+ * @description: Unit tests for the NewsPostController class. These tests validate
+ * the controller's behavior for handling CRUD operations and managing news posts.
+******************************************************************************/
+
 public class ControllerTests
 {
     @InjectMocks
