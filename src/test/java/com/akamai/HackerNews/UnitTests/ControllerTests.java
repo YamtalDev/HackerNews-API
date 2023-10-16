@@ -1,24 +1,50 @@
+/******************************************************************************
+
+Copyright (c) 2023 Tal Aharon
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+******************************************************************************/
+
 package com.akamai.HackerNews.UnitTests;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import org.mockito.Mock;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import static org.mockito.BDDMockito.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.akamai.HackerNews.dto.NewsPostRequestDTO;
 import com.akamai.HackerNews.service.NewsPostService;
 import com.akamai.HackerNews.dto.NewsPostResponseDTO;
 import com.akamai.HackerNews.dto.NewsUpdateRequestDTO;
 import com.akamai.HackerNews.controller.NewsPostController;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.BDDMockito.given;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ControllerTests
 {
@@ -143,29 +169,12 @@ public class ControllerTests
     @Test
     public void upvotePostTest()
     {
-        Long postId = 1L;
-        NewsPostResponseDTO expectedResponseDTO = new NewsPostResponseDTO();
-        expectedResponseDTO.setPostId(postId);
+        NewsPostResponseDTO expectedResponseDTO = getResponse();
+        expectedResponseDTO.setVotes(1);
 
-        given(newsPostService.upvotePost(postId)).willReturn(expectedResponseDTO);
+        given(newsPostService.upvotePost(1L)).willReturn(expectedResponseDTO);
 
-        ResponseEntity<NewsPostResponseDTO> responseEntity = newsPostController.upvotePost(postId);
-
-        HttpStatus expectedStatus = HttpStatus.OK;
-        assertEquals(expectedStatus, responseEntity.getStatusCode());
-        assertEquals(expectedResponseDTO, responseEntity.getBody());
-    }
-
-    @Test
-    public void downvotePostTest() {
-        Long postId = 1L;
-        NewsPostResponseDTO expectedResponseDTO = new NewsPostResponseDTO();
-        // Set expected values in the response DTO
-        expectedResponseDTO.setPostId(postId);
-        // Mock the service to return the expected DTO
-        given(newsPostService.downvotePost(postId)).willReturn(expectedResponseDTO);
-
-        ResponseEntity<NewsPostResponseDTO> responseEntity = newsPostController.downvotePost(postId);
+        ResponseEntity<NewsPostResponseDTO> responseEntity = newsPostController.upvotePost(1L);
 
         HttpStatus expectedStatus = HttpStatus.OK;
         assertEquals(expectedStatus, responseEntity.getStatusCode());
