@@ -31,6 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 
 import com.akamai.HackerNews.dto.NewsPostResponseDTO;
 
@@ -53,7 +54,6 @@ public class RankedCache
     private final ConcurrentHashMap<Long, CacheEntity> cacheMap;
     private final PriorityBlockingQueue<CacheEntity> cacheQueue;
 
-
     /**************************************************************************
      * @description      : Initializes a new instance of the RankedCache class.
      * @param cacheMap   : The ConcurrentHashMap to store cache entities.
@@ -74,19 +74,22 @@ public class RankedCache
     **************************************************************************/
     public void put(Long key, CacheEntity value)
     {
-        CacheEntity existingEntity = cacheMap.remove(key);
-        if(null != existingEntity)
+        if(cacheQueue.remove(get(key)))
         {
-            cacheQueue.remove(existingEntity);
-        }
-
-        if(maxTopPostsQueueSize <= cacheQueue.size() && lowestRank < value.getRank())
-        {
-            removeLowestRankedEntity();
             cacheQueue.put(value);
         }
 
-        cacheMap.put(key, value);
+        if(maxTopPostsQueueSize == cacheQueue.size() && lowestRank <= value.getRank())
+        {
+            removeLowestRankedEntity();
+            cacheQueue.put(value);
+            updateLowestRank();
+        }
+
+        if(maxCacheSize > cacheMap.size())
+        {
+            cacheMap.put(key, value);
+        }
     }
 
     /**************************************************************************
@@ -114,12 +117,7 @@ public class RankedCache
     **************************************************************************/
     public void remove(Long key)
     {
-        CacheEntity removedValue = cacheMap.remove(key);
-
-        if(null != removedValue)
-        {
-            cacheQueue.remove(removedValue);
-        }
+        cacheQueue.remove(cacheMap.remove(key));
     }
 
     /**************************************************************************
@@ -165,5 +163,16 @@ public class RankedCache
         }
 
         return (lowestRankedEntity);
+    }
+
+    @Async
+    private void updateLowestRank()
+    {
+        CacheEntity lowestRankedEntity = getLowestRankedEntity();
+
+        if(null != lowestRankedEntity)
+        {
+            lowestRank = lowestRankedEntity.getRank();
+        }
     }
 }

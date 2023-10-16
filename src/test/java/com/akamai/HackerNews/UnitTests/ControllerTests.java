@@ -62,8 +62,8 @@ public class ControllerTests
     @Test
     public void saveNewsPostTest()
     {
-        NewsPostRequestDTO requestDTO = getRequest();
-        NewsPostResponseDTO expectedResponseDTO = getResponse();
+        NewsPostRequestDTO requestDTO = getNewRequest();
+        NewsPostResponseDTO expectedResponseDTO = getNewResponse();
 
         given(newsPostService.saveNewPost(requestDTO)).willReturn(expectedResponseDTO);
 
@@ -159,7 +159,7 @@ public class ControllerTests
         List<NewsPostResponseDTO> newsPosts = new ArrayList<NewsPostResponseDTO>();
         for(int i = 0; i < 100; ++i)
         {
-            newsPosts.add(getResponse());
+            newsPosts.add(getNewResponse());
         }
 
         given(newsPostService.getAllPosts()).willReturn(newsPosts);
@@ -174,7 +174,7 @@ public class ControllerTests
     @Test
     public void upvotePostTest()
     {
-        NewsPostResponseDTO expectedResponseDTO = getResponse();
+        NewsPostResponseDTO expectedResponseDTO = getNewResponse();
         expectedResponseDTO.setVotes(1);
 
         given(newsPostService.upvotePost(1L)).willReturn(expectedResponseDTO);
@@ -192,7 +192,7 @@ public class ControllerTests
         MockitoAnnotations.openMocks(this);
     }
 
-    private NewsPostRequestDTO getRequest()
+    private NewsPostRequestDTO getNewRequest()
     {
         NewsPostRequestDTO requestDTO = new NewsPostRequestDTO();
         requestDTO.setPostedBy("Test user");
@@ -201,7 +201,7 @@ public class ControllerTests
         return (requestDTO);
     }
 
-    private NewsPostResponseDTO getResponse()
+    private NewsPostResponseDTO getNewResponse()
     {
         NewsPostResponseDTO expectedResponseDTO = new NewsPostResponseDTO();
         expectedResponseDTO.setPostedBy("Test user");

@@ -49,6 +49,9 @@ public class CacheConfig implements CachingConfigurer
     @Value("${app.cache.top-posts-size}")
     private int maxTopPostsQueueSize;
 
+    @Value("${app.cache.size}")
+    private int maxCacheSize;
+
     /**************************************************************************
      * @description: Configure a ConcurrentHashMap to store cache entries.
      * @return A ConcurrentHashMap for storing cache entries.
@@ -56,7 +59,7 @@ public class CacheConfig implements CachingConfigurer
     @Bean
     public ConcurrentHashMap<Long, CacheEntity> cacheMap()
     {
-        return (new ConcurrentHashMap<Long, CacheEntity>());
+        return (new ConcurrentHashMap<Long, CacheEntity>(maxCacheSize));
     }
 
     /**************************************************************************
