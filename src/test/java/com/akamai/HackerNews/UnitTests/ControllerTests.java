@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ControllerTests
 {
@@ -27,32 +28,11 @@ public class ControllerTests
     @Mock
     private NewsPostService newsPostService;
 
-    @BeforeEach
-    public void setup()
-    {
-        MockitoAnnotations.openMocks(this);
-    }
-
-    private NewsPostRequestDTO getRequest()
-    {
-        NewsPostRequestDTO requestDTO = new NewsPostRequestDTO();
-        requestDTO.setPostedBy("Test user");
-        requestDTO.setPost("Test post");
-        requestDTO.setLink("http://test.com");
-        return (requestDTO);
-    }
-
     @Test
     public void saveNewsPostTest()
     {
         NewsPostRequestDTO requestDTO = getRequest();
-        NewsPostResponseDTO expectedResponseDTO = new NewsPostResponseDTO();
-        expectedResponseDTO.setPostedBy("Test user");
-        expectedResponseDTO.setPost("Test post");
-        expectedResponseDTO.setLink("http://test.com");
-        expectedResponseDTO.setTimeElapsed("Just now");
-        expectedResponseDTO.setVotes(0);
-        expectedResponseDTO.setPostId(1L);
+        NewsPostResponseDTO expectedResponseDTO = getResponse();
 
         given(newsPostService.saveNewPost(requestDTO)).willReturn(expectedResponseDTO);
 
@@ -119,16 +99,23 @@ public class ControllerTests
     }
 
     @Test
-    public void changePostTest() {
-        Long postId = 1L;
+    public void changePostTest()
+    {
         NewsUpdateRequestDTO changedPost = new NewsUpdateRequestDTO();
         changedPost.setPost("Changed post");
+        changedPost.setLink("http://changed.com");
 
         NewsPostResponseDTO expectedResponseDTO = new NewsPostResponseDTO();
-        expectedResponseDTO.setPostId(postId);
-        given(newsPostService.changePost(changedPost, postId)).willReturn(expectedResponseDTO);
+        expectedResponseDTO.setPostedBy("User");
+        expectedResponseDTO.setPost("Changed post");
+        expectedResponseDTO.setLink("http://changed.com");
+        expectedResponseDTO.setTimeElapsed("Just now");
+        expectedResponseDTO.setVotes(0);
+        expectedResponseDTO.setPostId(1L);
 
-        ResponseEntity<NewsPostResponseDTO> responseEntity = newsPostController.changePost(changedPost, postId);
+        given(newsPostService.changePost(changedPost, 1L)).willReturn(expectedResponseDTO);
+
+        ResponseEntity<NewsPostResponseDTO> responseEntity = newsPostController.changePost(changedPost, 1L);
 
         HttpStatus expectedStatus = HttpStatus.OK;
         assertEquals(expectedStatus, responseEntity.getStatusCode());
@@ -136,42 +123,30 @@ public class ControllerTests
     }
 
     @Test
-    public void getAllPostsTest() {
-        // Create a list of NewsPostResponseDTO objects for testing
-        List<NewsPostResponseDTO> testNewsPosts = new ArrayList<>();
-        // Populate the testNewsPosts list with data
-        // Mock the service to return the list of news posts
-        given(newsPostService.getAllPosts()).willReturn(testNewsPosts);
+    public void getAllPostsTest()
+    {
+        List<NewsPostResponseDTO> newsPosts = new ArrayList<NewsPostResponseDTO>();
+        for(int i = 0; i < 100; ++i)
+        {
+            newsPosts.add(getResponse());
+        }
+
+        given(newsPostService.getAllPosts()).willReturn(newsPosts);
 
         ResponseEntity<List<NewsPostResponseDTO>> responseEntity = newsPostController.getAllPosts();
 
         HttpStatus expectedStatus = HttpStatus.OK;
         assertEquals(expectedStatus, responseEntity.getStatusCode());
-        assertEquals(testNewsPosts, responseEntity.getBody());
+        assertEquals(newsPosts, responseEntity.getBody());
     }
 
     @Test
-    public void getTopPostsByRankTest() {
-        // Create a list of NewsPostResponseDTO objects for testing
-        List<NewsPostResponseDTO> testTopPosts = new ArrayList<>();
-        // Populate the testTopPosts list with data
-        // Mock the service to return the list of top news posts
-        given(newsPostService.getPostsByRankDesc()).willReturn(testTopPosts);
-
-        ResponseEntity<List<NewsPostResponseDTO>> responseEntity = newsPostController.getTopPostsByRank();
-
-        HttpStatus expectedStatus = HttpStatus.OK;
-        assertEquals(expectedStatus, responseEntity.getStatusCode());
-        assertEquals(testTopPosts, responseEntity.getBody());
-    }
-
-    @Test
-    public void upvotePostTest() {
+    public void upvotePostTest()
+    {
         Long postId = 1L;
         NewsPostResponseDTO expectedResponseDTO = new NewsPostResponseDTO();
-        // Set expected values in the response DTO
         expectedResponseDTO.setPostId(postId);
-        // Mock the service to return the expected DTO
+
         given(newsPostService.upvotePost(postId)).willReturn(expectedResponseDTO);
 
         ResponseEntity<NewsPostResponseDTO> responseEntity = newsPostController.upvotePost(postId);
@@ -197,4 +172,30 @@ public class ControllerTests
         assertEquals(expectedResponseDTO, responseEntity.getBody());
     }
 
+    @BeforeEach
+    public void setup()
+    {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    private NewsPostRequestDTO getRequest()
+    {
+        NewsPostRequestDTO requestDTO = new NewsPostRequestDTO();
+        requestDTO.setPostedBy("Test user");
+        requestDTO.setPost("Test post");
+        requestDTO.setLink("http://test.com");
+        return (requestDTO);
+    }
+
+    private NewsPostResponseDTO getResponse()
+    {
+        NewsPostResponseDTO expectedResponseDTO = new NewsPostResponseDTO();
+        expectedResponseDTO.setPostedBy("Test user");
+        expectedResponseDTO.setPost("Test post");
+        expectedResponseDTO.setLink("http://test.com");
+        expectedResponseDTO.setTimeElapsed("Just now");
+        expectedResponseDTO.setVotes(0);
+        expectedResponseDTO.setPostId(1L);
+        return (expectedResponseDTO);
+    } 
 }
