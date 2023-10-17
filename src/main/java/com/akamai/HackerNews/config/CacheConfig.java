@@ -70,7 +70,7 @@ public class CacheConfig implements CachingConfigurer
     public PriorityBlockingQueue<CacheEntity> cacheQueue()
     {
         return (new PriorityBlockingQueue<CacheEntity>
-        (maxTopPostsQueueSize, Comparator.comparingDouble(CacheEntity::getRank).reversed()));
+        (maxTopPostsQueueSize, Comparator.comparingDouble(CacheEntity::getRank)));
     }
 
     /**************************************************************************

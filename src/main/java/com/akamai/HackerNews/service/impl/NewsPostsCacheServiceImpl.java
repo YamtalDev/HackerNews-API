@@ -106,7 +106,7 @@ public class NewsPostsCacheServiceImpl implements NewsPostsCacheService
     @Override
     public void putTopPosts(List<NewsPostSchema> topPosts)
     {
-        for(NewsPostSchema topPost : topPosts)
+        for(NewsPostSchema topPost: topPosts)
         {
             put(modelMapper.map(topPost, NewsPostResponseDTO.class), topPost.getRank());
         }
